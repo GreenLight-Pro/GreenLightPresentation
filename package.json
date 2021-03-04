@@ -1,0 +1,24 @@
+{
+  "name": "spinmusicplayerdesktop",
+  "version": "1.0.0",
+  "description": "A desktop media player",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron --trace-warnings index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emanuelfranklyn/SpinMusicPlayerDesktop.git"
+  },
+  "author": "Space_Interprise",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/emanuelfranklyn/SpinMusicPlayerDesktop/issues"
+  },
+  "homepage": "https://github.com/emanuelfranklyn/SpinMusicPlayerDesktop#readme",
+  "dependencies": {
+    "electron": "^12.0.0",
+    "electron-reload": "^1.5.0"
+  }
+}

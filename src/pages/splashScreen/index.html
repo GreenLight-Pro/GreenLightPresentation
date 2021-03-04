@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel='stylesheet' href='./index.css'/>
+    </head>
+    <body>
+        <div class='content'>
+            <div class='dragableBar'></div>
+            <div class='progressBar'></div>
+            <img class='logo' src='../../assets/images/Logo.png'/>
+            <div class='titles'>
+                <h1 class='title1'>Spin</h1>
+                <h1 class='title2'>Music</h1>
+                <h1 class='title3'>Player</h1>
+            </div>
+            <div class='navigation'>
+                <button class='close' id='orange' onclick='window.close()'>X</button>
+                <button class='maximize' onclick='ipcRenderer.send("maximize");'>🗖</button>
+                <button class='minimize' onclick='ipcRenderer.send("minimize");'>🗕</button>
+            </div>
+        </div>
+        <iframe class='ActivePage' src="../home/index.html"></iframe>
+        <script src='./index.js' module></script>
+    </body>
+</html>
