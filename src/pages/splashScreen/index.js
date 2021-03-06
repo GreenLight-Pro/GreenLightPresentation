@@ -1,9 +1,11 @@
+/* eslint-disable no-undef */
 const ipcRenderer = require('electron').ipcRenderer;
 
 var isMaximized = false; 
 
+// eslint-disable-next-line no-unused-vars
 function maximizer() {
-    var returner = ipcRenderer.sendSync("synchronous-message", 'maximize');
+    var returner = ipcRenderer.sendSync('synchronous-message', 'maximize');
     if (returner === 'screen.events.maximize.contract') {
         isMaximized = false;
         document.getElementsByClassName('timeline')[0].style.borderBottomLeftRadius = '1vw';
@@ -25,7 +27,7 @@ var currentFrame = 0;
 
 function animationFrame() {
     currentFrame += 1;
-    if (((maxFrames / 100) * currentFrame)/100 > 90) {
+    if (((maxFrames / 100) * currentFrame) / 100 > 90) {
         timebetweenFrames += currentFrame;
     }
     if (Number(document.getElementsByClassName('progressBar')[0].style.width.split('vw')[0]) >= 100) {
@@ -34,14 +36,14 @@ function animationFrame() {
             document.getElementsByClassName('content')[0].className = 'exitingContent';
             setTimeout(() => {
                 onLoaded();
-            }, 500)
+            }, 500);
         }, timebetweenFrames);
         return;
     }
-    document.getElementsByClassName('progressBar')[0].style.width = ((maxFrames / 100) * currentFrame)/100 + 'vw';
+    document.getElementsByClassName('progressBar')[0].style.width = ((maxFrames / 100) * currentFrame) / 100 + 'vw';
     setTimeout(() => {
         animationFrame();
-    }, timebetweenFrames)
+    }, timebetweenFrames);
 }
 
 animationFrame();

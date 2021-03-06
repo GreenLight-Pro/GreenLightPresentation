@@ -73,6 +73,7 @@ html, body {
     width: 1.5vw; 
     height: 2.5vw;
 }
+
 .iconsArea .iconsButton .icon {
     position: absolute;
     top: 0.75vw;
@@ -82,24 +83,24 @@ html, body {
     color: #fff;
     z-index: 3;
     pointer-events: none;
-  }
+}
 
-  .iconsArea .iconsButton img {
+.iconsArea .iconsButton img {
     position: absolute;
     width: 1.5vw;
     margin-top: 0;
     margin-left: -0.25vw;
     pointer-events: none;
-  }
+}
 
-  .progressbar {
+.progressbar {
       position: absolute;
       width: 50vw;
       margin-left: 25vw;
       margin-top: 1.25vw;
       background-color: #fe721e;
       height: 1vw;
-  }
+}
 
 
 /* Expanded Timeline */
