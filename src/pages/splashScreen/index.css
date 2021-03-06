@@ -1,6 +1,7 @@
 html {
     overflow: hidden;
     background-color: #0000;
+    border-radius: 1vw;
 }
 
 * {
@@ -38,12 +39,11 @@ html {
 
 .content * {
     font-family:Arial, Helvetica, sans-serif;
-    pointer-events: none;
 }
 
 .content {
-    background-color: #fe721e;
-    border-radius: 0;
+    background-color: #1a0022;
+    border-radius: 1vw;
     position: absolute;
     top: 0;
     left: 0;
@@ -59,7 +59,7 @@ html {
 
 .content .progressBar {
     position: absolute;
-    height: 2.5vh;
+    height: 0.5vh;
     background-color: #90f;
     transition: all ease 1.5s;
 }
@@ -82,6 +82,7 @@ html {
 .content .titles {
     margin-top: 45vw;
     width: 100vw;
+    margin-left: -2vw;
 }
 
 .content .title1 {
@@ -131,12 +132,13 @@ html {
 
 @keyframes exitingbackground {
     100% {
-        width: 13vw;
+        width: 12vw;
         height: 3vw;
-        margin-left: 43.5vw;
+        margin-left: 0;
         border-radius: 0;
         border-bottom-right-radius: 2.5vw;
-        border-bottom-left-radius: 2.5vw;
+        border-top-left-radius: 0.5vw;
+        background-color: #a41efe;
     }
 }
 
@@ -152,7 +154,7 @@ html {
 }
 
 .exitingContent {
-    background-color: #fe721e;
+    background-color: #1a0022;
     position: absolute;
     top: 0;
     left: 0vw;
@@ -160,19 +162,24 @@ html {
     height: 100vh;
     animation: exitingbackground 0.5s ease-in-out forwards 0.5s;
     z-index: 9999999999999999999999999999999999;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-app-region: drag;
 }
 
 .exitingContent .dragableBar {
     position: absolute;
     top: 0;
     width: 100vw;
-    left: -43.5vw;
-    background-color: #fe721e;
+    left: 0;
+    background-color: #a41efe;
     height: 0.5vw;
     user-select: none;
     -webkit-user-select: none;
     -webkit-app-region: drag;
     cursor: move;
+    border-top-left-radius: 1vw;
+    border-top-right-radius: 1vw;
 }
 
 .exitingContent .progressBar {
@@ -180,6 +187,8 @@ html {
     height: 2.5vh;
     background-color: #90f;
     animation: exitingprogressBar 0.3s ease-in-out forwards;
+    border-bottom-right-radius: 100vw;
+    border-top-right-radius: 100vw;
 }
 
 .exitingContent .logo {
@@ -196,17 +205,8 @@ html {
     color: #fff;
     height: 3.5vw;
     margin-top: 1vw;
-    margin-left: 1.3vw;
+    margin-left: 0.3vw;
     font-size: 1.3vw;
-}
-
-@keyframes animation {
-  0% {
-    left: 89.5vw;
-  }
-  100% {
-    left: 46vw;
-  }
 }
 
 .exitingContent .navigation {
@@ -221,7 +221,6 @@ html {
     display: flex;
     flex-direction: row-reverse;
     overflow: hidden;
-    animation: animation 0.5s ease-in-out 0.5s forwards;
 }
 
 .exitingContent .navigation button {
@@ -239,38 +238,28 @@ html {
 }
 
 .exitingContent .navigation button:hover {
-    background-color: #296ab456;
+    background-color: #7c29b496;
 }
 
 .exitingContent .navigation button:active {
-    background-color: #296ab4;
+    background-color: #7c29b4;
 }
 
 .exitingContent .navigation #orange {
-    background-color: #fe721e;
+    background-color: #a41efe;
 }
 
 .exitingContent .navigation #orange:hover {
-    background-color: #a34b15;
+    background-color: #601194;
 }
 
 .exitingContent .navigation #orange:active {
-    background-color: #52260b;
-}
-
-@keyframes ActivePageBorderAnimation {
-    0% {
-        border-radius: 2.5vw;
-    }
-    100% {
-        border-radius: 0vw;
-    }
+    background-color: #190427;
 }
 
 .ActivePage {
-    border-radius: 2.5vw;
     width: 100vw;
-    height: calc(100vh - 0.5vw);
+    height: calc(100vh - 4vw);
     position: absolute;
     z-index: 0;
     top: 0.5vw;
@@ -278,5 +267,20 @@ html {
     display: none;
     border: 0;
     opacity: 0;
-    animation: ActivePageBorderAnimation 0.5s ease 0.5s forwards;
+    z-index: 25;
+}
+
+.timeline {
+    width: 100vw;
+    height: 5vw;
+    position: fixed;
+    z-index: 0;
+    bottom: 0;
+    right: 0;
+    display: none;
+    border: 0;
+    opacity: 0;
+    z-index: 50;
+    border-bottom-left-radius: 1vw;
+    border-bottom-right-radius: 1vw;
 }

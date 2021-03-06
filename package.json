@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron --trace-warnings index.js"
+    "start": "electron .",
+    "build": "electron-builder build --win --publish never",
+    "deploy": "electron-builder build --win --publish always"
   },
   "repository": {
     "type": "git",
@@ -18,7 +20,42 @@
   },
   "homepage": "https://github.com/emanuelfranklyn/SpinMusicPlayerDesktop#readme",
   "dependencies": {
-    "electron": "^12.0.0",
-    "electron-reload": "^1.5.0"
+    "chromecast-api": "^0.3.4",
+    "electron-reload": "^1.5.0",
+    "electron-updater": "^4.3.8"
+  },
+  "devDependencies": {
+    "electron-builder": "^22.10.5",
+    "electron": "^12.0.0"
+  },
+  "build": {
+    "appId": "br.com.talesgardem.spinmp",
+    "productName": "Spin Music Player",
+    "copyright": "Copyright © 2021 ${author}",
+    "mac": {
+      "icon": "./src/assets/images/logo.png",
+      "category": "src.app-category.utilities"
+    },
+    "win": {
+      "icon": "./src/assets/images/logo.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "files": [
+      "./build/**/*",
+      "./dist/**/*",
+      "./node_modules/**/*",
+      "./src/**/*",
+      "*.js",
+      "*.html",
+      "*.css",
+      "*.png"
+    ],
+    "directories": {
+      "buildResources": "src"
+    }
   }
 }
