@@ -110,8 +110,111 @@ ipcRenderer.on('app_version', (event, arg) => {
     console.log('Version: ' + arg.version);
 });
 
-ipcRenderer.on('asynchronous-reply', (event, arg) => {
-    console.log(arg);
+// miniNotificationTray
+
+function updateMiniTray() {
+    [...document.getElementsByClassName('traybar')[0].children].forEach((child, index) => {
+        child.style.zIndex = (-10) - index;
+    });
+}
+
+updateMiniTray();
+
+ipcRenderer.on('checkingforupdate', () => {
+    var doc = document.getElementsByClassName('traybar')[0];
+    for (var i = 0; i < doc.childNodes.length; i++) {
+        if (doc.childNodes[i].className == 'smallUpdate') {
+            doc.childNodes[i].style.display = 'block';
+            doc.childNodes[i].style.cursor = 'default';
+            doc.childNodes[i].style.backgroundColor = '#5b108d';
+            doc.childNodes[i].style.width = '20vw';
+            doc.childNodes[i].onclick = () => {};
+            var doc2 = doc.childNodes[i];
+            for (var j = 0; j < doc2.childNodes.length; j++) {
+                if (doc2.childNodes[j].className == 'title') {
+                    doc2.childNodes[j].innerText = 'Searching for updates';
+                    // Updates the icon <--
+                    break;
+                }        
+            }
+            updateMiniTray();
+            break;
+        }        
+    }
 });
-ipcRenderer.send('asynchronous-message', 'updateavaliable');
-ipcRenderer.send('asynchronous-message', 'updatedownloaded');
+
+ipcRenderer.on('updatenotavailable', () => {
+    var doc = document.getElementsByClassName('traybar')[0];
+    for (var i = 0; i < doc.childNodes.length; i++) {
+        if (doc.childNodes[i].className == 'smallUpdate') {
+            doc.childNodes[i].style.opacity = '0';
+            doc.childNodes[i].style.backgroundColor = '#5b108d';
+            doc.childNodes[i].style.width = '25vw';
+            doc.childNodes[i].onclick = () => {};
+            setTimeout(() => {
+                doc.childNodes[i].style.display = 'none';
+                doc.childNodes[i].style.opacity = '1';
+            }, 250);
+            updateMiniTray();
+            break;
+        }        
+    }
+});
+
+ipcRenderer.on('downloadprogress', (percentage) => {
+    var doc = document.getElementsByClassName('traybar')[0];
+    for (var i = 0; i < doc.childNodes.length; i++) {
+        if (doc.childNodes[i].className == 'smallUpdate') {
+            doc.childNodes[i].style.display = 'block';
+            doc.childNodes[i].style.cursor = 'default';
+            doc.childNodes[i].style.backgroundColor = '#5b108d';
+            doc.childNodes[i].style.width = '25vw';
+            doc.childNodes[i].onclick = () => {};
+            var doc2 = doc.childNodes[i];
+            for (var j = 0; j < doc2.childNodes.length; j++) {
+                if (doc2.childNodes[j].className == 'title') {
+                    doc2.childNodes[j].innerText = 'Downloading update: ' + percentage;
+                    // Updates the icon <--
+                    break;
+                }        
+            }
+            updateMiniTray();
+            break;
+        }        
+    }
+});
+
+ipcRenderer.on('updatedownloaded', () => {
+    var doc = document.getElementsByClassName('traybar')[0];
+    for (var i = 0; i < doc.childNodes.length; i++) {
+        if (doc.childNodes[i].className == 'smallUpdate') {
+            doc.childNodes[i].style.display = 'block';
+            doc.childNodes[i].style.cursor = 'pointer';
+            doc.childNodes[i].style.width = '18vw';
+            var blink1 = setInterval(() => {
+                doc.childNodes[i].style.backgroundColor = '#fe721e';
+            }, 500);
+            var blink2 = setInterval(() => {
+                doc.childNodes[i].style.backgroundColor = '#5b108d';
+            }, 1000);
+            doc.childNodes[i].onclick = () => {
+                ipcRenderer.send('installupdate');
+            };
+            setTimeout(() => {
+                clearInterval(blink1);
+                clearInterval(blink2);
+                doc.childNodes[i].style.backgroundColor = '#fe721e';
+            }, 5000);
+            var doc2 = doc.childNodes[i];
+            for (var j = 0; j < doc2.childNodes.length; j++) {
+                if (doc2.childNodes[j].className == 'title') {
+                    doc2.childNodes[j].innerText = 'Update avaliable!';
+                    // Updates the icon <--
+                    break;
+                }        
+            }
+            updateMiniTray();
+            break;
+        }        
+    }
+});

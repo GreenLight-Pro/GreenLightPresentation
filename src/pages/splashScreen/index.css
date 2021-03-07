@@ -8,6 +8,10 @@ html {
     transition: all 0.3s ease;
 }
 
+@keyframes apperFromLeft {
+    0% {margin-left: -100vw;}
+}
+
 @keyframes titleApper {
     0% {
         margin-top: 15vw;
@@ -130,6 +134,18 @@ html {
     display:none;
 }
 
+.content .smallUpdate {
+    display: none;
+}
+
+.content .nodgePlaceHolder {
+    display: none;
+}
+
+.content .traybar {
+    display: none;
+}
+
 @keyframes exitingbackground {
     100% {
         width: 12vw;
@@ -140,6 +156,7 @@ html {
         border-top-left-radius: 0.5vw;
         background-color: #a41efe;
     }
+    101% {background-color: #0000;}
 }
 
 @keyframes exitingprogressBar {
@@ -256,6 +273,49 @@ html {
 .exitingContent .navigation #orange:active {
     background-color: #190427;
 }
+
+.exitingContent .traybar {
+    display: flex;
+    flex-direction: row;
+    width: 100vw;
+    margin-top: 0.5vw;
+}
+
+.exitingContent .nodgePlaceHolder {
+    display: block;
+    width: 12vw;
+    height: 2.5vw;
+    background-color: #a41efe;
+    border-bottom-right-radius: 2.5vw;
+}
+
+.exitingContent .smallUpdate {
+    display: none;
+    color: #fff;
+    background-color: #5b108d;
+    width: 25vw;
+    height: 2.5vw;
+    padding-left: 2.5vw;
+    margin-left: -2vw;
+    border-bottom-right-radius: 2.5vw;
+    animation: apperFromLeft 0.5s ease;
+    cursor: pointer;
+    pointer-events: all;
+}
+
+.exitingContent .smallUpdate .icon {
+    width: 1.5vw;
+    margin-top: 0.25vw;
+}
+
+.exitingContent .smallUpdate .title {
+    position: absolute;
+    font-size: 1.5vw;
+    margin-top: 0.5vw;
+    margin-left: 0.5vw;
+    width: inherit;
+}
+
 
 .ActivePage {
     width: 100vw;

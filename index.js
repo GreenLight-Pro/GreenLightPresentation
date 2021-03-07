@@ -1,32 +1,15 @@
 const path = require('path');
 const electron = require('electron');
-const { app, BrowserWindow, ipcMain, dialog } = electron;
+const { app, BrowserWindow, ipcMain } = electron;
 const { autoUpdater } = require('electron-updater');
+const isDev = require('electron-is-dev');
 
-const log = require('electron-log');
-log.transports.file.level = 'debug';
-autoUpdater.logger = log;
-
-autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
-    const dialogOpts = {
-        type: 'info',
-        buttons: ['Restart', 'Later'],
-        title: 'Application Update',
-        message: process.platform === 'win32' ? releaseNotes : releaseName,
-        detail: 'A new version has been downloaded. Restart the application to apply the updates.'
-    };
-
-    dialog.showMessageBox(dialogOpts).then((returnValue) => {
-        if (returnValue.response === 0) autoUpdater.quitAndInstall();
-    });
-});
-
-autoUpdater.on('error', message => {
-    console.error('There was a problem updating the application');
-    console.error(message);
-});
-
-// require('electron-reload')(__dirname);
+if (isDev) {
+    const log = require('electron-log');
+    log.transports.file.level = 'debug';
+    autoUpdater.logger = log;
+    require('electron-reload')(__dirname);
+}
 
 /*
 const ChromecastAPI = require('chromecast-api')
@@ -93,6 +76,41 @@ function createWindow () {
     /* win.setOverlayIcon(path.resolve(__dirname, 'src', 'assets', 'images','previousbutton.png'), 'Description for overlay')
 
   win.flashFrame(true)*/
+
+    var avaliableUpdate = false;
+    var canUpdate = false;
+
+    autoUpdater.on('checking-for-update', () => {
+        win.webContents.send('checkingforupdate');
+        setTimeout(() => {
+            if (!canUpdate) {
+                win.webContents.send('updatenotavailable');
+            }
+        }, 15000);
+    });
+
+    autoUpdater.on('update-available', () => {
+        canUpdate = true;
+        win.webContents.send('downloadprogress', 0 + '%');
+    });
+
+    // eslint-disable-next-line no-unused-vars
+    autoUpdater.on('download-progress', (progress, bytesPsecound, percent, total, transferred) => {
+        win.webContents.send('downloadprogress', percent.toString() + '%');
+    });
+    
+    autoUpdater.on('update-downloaded', (updateInfo) => {
+        avaliableUpdate = true;
+        win.webContents.send('updatedownloaded', JSON.stringify(updateInfo));
+    });
+
+    ipcMain.on('installupdate', () => {
+        if (avaliableUpdate) {
+            autoUpdater.quitAndInstall(true, true);
+        } else {
+            win.webContents.send('updateerror', 'no update to install');
+        }
+    });
 }
 
 app.whenReady().then(createWindow);
@@ -110,8 +128,10 @@ app.on('activate', () => {
 });
 
 ipcMain.on('app_version', (event) => {
-    setInterval(() => {
-        autoUpdater.checkForUpdatesAndNotify();
-    }, 10000);
+    if (!isDev) {
+        setInterval(() => {
+            autoUpdater.checkForUpdatesAndNotify();
+        }, 780000); // 13 minutes
+    }
     event.sender.send('app_version', { version: app.getVersion() });
 });

@@ -18,6 +18,13 @@
                 <button class='maximize' onclick='maximizer()'>🗖</button>
                 <button class='minimize' onclick='ipcRenderer.send("minimize");'>🗕</button>
             </div>
+            <div class='traybar'>
+                <div class='nodgePlaceHolder'></div>
+                <div class='smallUpdate'>
+                    <img class='icon' src='../../assets/images/'></img>
+                    <span class='title'>Searching update</span>
+                </div>
+            </div>
         </div>
         <iframe class='timeline' src='../../assets/pages/timeline/timeline.html'></iframe>
         <iframe class='ActivePage' src="../home/index.html"></iframe>
