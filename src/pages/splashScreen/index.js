@@ -109,3 +109,9 @@ ipcRenderer.on('app_version', (event, arg) => {
     ipcRenderer.removeAllListeners('app_version');
     console.log('Version: ' + arg.version);
 });
+
+ipcRenderer.on('asynchronous-reply', (event, arg) => {
+    console.log(arg);
+});
+ipcRenderer.send('asynchronous-message', 'updateavaliable');
+ipcRenderer.send('asynchronous-message', 'updatedownloaded');

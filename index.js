@@ -1,8 +1,32 @@
 const path = require('path');
 const electron = require('electron');
-const { app, BrowserWindow, ipcMain } = electron;
-require('electron-reload')(__dirname);
+const { app, BrowserWindow, ipcMain, dialog } = electron;
 const { autoUpdater } = require('electron-updater');
+
+const log = require('electron-log');
+log.transports.file.level = 'debug';
+autoUpdater.logger = log;
+
+autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
+    const dialogOpts = {
+        type: 'info',
+        buttons: ['Restart', 'Later'],
+        title: 'Application Update',
+        message: process.platform === 'win32' ? releaseNotes : releaseName,
+        detail: 'A new version has been downloaded. Restart the application to apply the updates.'
+    };
+
+    dialog.showMessageBox(dialogOpts).then((returnValue) => {
+        if (returnValue.response === 0) autoUpdater.quitAndInstall();
+    });
+});
+
+autoUpdater.on('error', message => {
+    console.error('There was a problem updating the application');
+    console.error(message);
+});
+
+// require('electron-reload')(__dirname);
 
 /*
 const ChromecastAPI = require('chromecast-api')
@@ -69,18 +93,6 @@ function createWindow () {
     /* win.setOverlayIcon(path.resolve(__dirname, 'src', 'assets', 'images','previousbutton.png'), 'Description for overlay')
 
   win.flashFrame(true)*/
-
-    win.once('ready-to-show', () => {
-        autoUpdater.checkForUpdatesAndNotify();
-    });
-
-    autoUpdater.on('update-available', () => {
-        win.webContents.send('update_available');
-    });
-  
-    autoUpdater.on('update-downloaded', () => {
-        win.webContents.send('update_downloaded');
-    });
 }
 
 app.whenReady().then(createWindow);
@@ -98,5 +110,8 @@ app.on('activate', () => {
 });
 
 ipcMain.on('app_version', (event) => {
+    setInterval(() => {
+        autoUpdater.checkForUpdatesAndNotify();
+    }, 10000);
     event.sender.send('app_version', { version: app.getVersion() });
 });
