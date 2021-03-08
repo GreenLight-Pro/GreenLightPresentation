@@ -69,30 +69,28 @@ class timelineHandler extends eventEmmiter{
 const timeline = new timelineHandler();
 
 timeline.on('timeline.events.expand.fullscreen', () => {
-    document.getElementsByClassName('ActivePage')[0].style.height = 'calc(100vh - 0.5vw)';
+    setTimeout(() => {
+        document.getElementsByClassName('ActivePage')[0].style.opacity = '0';
+    }, 500);
     document.getElementsByClassName('timeline')[0].style.height = '100vh';
+    document.getElementsByClassName('blankfieldpainter')[0].style.visibility = 'hidden';
     timeline.send('timeline.events.expand.fullscreen.expandend');
     if (isMaximized) {
         document.getElementsByClassName('timeline')[0].style.borderBottomLeftRadius = '0vw';
         document.getElementsByClassName('timeline')[0].style.borderBottomRightRadius = '0vw';
         document.getElementsByClassName('timeline')[0].style.borderTopRightRadius = '0vw';
         document.getElementsByClassName('timeline')[0].style.borderTopLeftRadius = '0vw';
-        document.getElementsByClassName('ActivePage')[0].style.borderBottomRightRadius = '0vw';
-        document.getElementsByClassName('ActivePage')[0].style.borderBottomLeftRadius = '0vw';
     } else {
         document.getElementsByClassName('timeline')[0].style.borderBottomLeftRadius = '1vw';
         document.getElementsByClassName('timeline')[0].style.borderBottomRightRadius = '1vw';
         document.getElementsByClassName('timeline')[0].style.borderTopRightRadius = '1vw';
         document.getElementsByClassName('timeline')[0].style.borderTopLeftRadius = '1vw';
-        document.getElementsByClassName('ActivePage')[0].style.borderBottomRightRadius = '1vw';
-        document.getElementsByClassName('ActivePage')[0].style.borderBottomLeftRadius = '1vw';
     }
 });
 
 timeline.on('timeline.events.expand.small', () => {
-    document.getElementsByClassName('ActivePage')[0].style.borderBottomRightRadius = '0vw';
-    document.getElementsByClassName('ActivePage')[0].style.borderBottomLeftRadius = '0vw';
-    document.getElementsByClassName('ActivePage')[0].style.height = 'calc(100vh - 4vw)';
+    document.getElementsByClassName('blankfieldpainter')[0].style.visibility = 'visible';
+    document.getElementsByClassName('ActivePage')[0].style.opacity = '1';
     document.getElementsByClassName('timeline')[0].style.height = '5vw';
     timeline.send('timeline.events.expand.small.contract');
 });
@@ -101,6 +99,16 @@ document.getElementsByClassName('timeline')[0].onload = function () {
     const iframeWin = document.getElementsByClassName('timeline')[0].contentWindow;
     iframeWin.require = require;
     iframeWin.timeline = timeline;
+    iframeWin.loadedComplete();
+};
+
+document.getElementsByClassName('ActivePage')[0].onload = function () {
+    const iframeWin = document.getElementsByClassName('ActivePage')[0].contentWindow;
+    iframeWin.require = require;
+    iframeWin.timeline = timeline;
+    iframeWin.path = require('path');
+    const {dialog} = require('electron').remote;
+    iframeWin.dialog = dialog;
     iframeWin.loadedComplete();
 };
 

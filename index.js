@@ -35,6 +35,7 @@ function createWindow () {
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
+            enableRemoteModule: true,
         },
         icon: path.resolve(__dirname, 'src', 'assets', 'images','logo.png'),
         title: 'Spin Music Player',
