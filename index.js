@@ -11,7 +11,7 @@ if (isDev) {
     require('electron-reload')(__dirname);
 }
 
-/*
+/* Chrome cast testing, (all tests complete sucefully! keeping this comment here be the base of chromecast support code)
 const ChromecastAPI = require('chromecast-api')
  
 const client = new ChromecastAPI()

@@ -1,5 +1,6 @@
 * {
     outline: none;
+    transition: all 0.5s ease;
 }
 
 ::-webkit-scrollbar {
@@ -36,25 +37,25 @@
 }
 
 .content .fields {
-    height: 100vw;
     display: flex;
     flex-direction: column;
     margin-left: 2.5%
 }
 
 .content .fields fieldSeparator {
-    width: 95%;
-    height: 0.25%;
+    width: 95vw;
+    height: 0.25vw;
     background-color: #a41efe33;
     border-radius: 100vw;
-    margin-top: 0.5%;
-    margin-bottom: 0.5%;
+    margin-top: 0.5vw;
+    margin-bottom: 0.5vw;
 }
 
 .content .fields .title {
     color: #fff;
     font-size: 2.25vw;
-    margin-left: -1%;
+    margin-left: 0.5vw;
+    position: absolute;
 }
 
 .content .fields button {
@@ -66,6 +67,11 @@
     color: #DDD;
     display: flex;
     flex-direction: column;
+    margin-top: 5.5vw;
+    margin-bottom: 1.5vw;
+    margin-left: 0.5vw;
+    margin-right: 0.5vw;
+    word-break: break-all;
 }
 
 .content .fields button:hover {
@@ -88,15 +94,131 @@
 }
 
 .content .fields button img {
-    width: 11vw;
+    position: absolute;
+    width: 11.5vw;
     height: 11vw;
+    margin-left: 0vw;
+    margin-top: 0.25vw;
 }
 
 .content .fields button .subtext {
     font-size: 1.3vw;
     margin-top: 12vw;
     position: absolute;
-    width: 13vw;
+    width: 12.5vw;
     text-align: center;
-    margin-left: -1vw;
+    margin-left: -0.5vw;
+    overflow: hidden;
+    overflow-y: auto;
+    height: 2.35vw;
+}
+
+.content .fields div {
+    display: flex;
+    flex-direction: row;
+}
+
+@keyframes apperFromBottom {
+    0% {margin-top: 100vh;}
+}
+
+.content .contentBlocker {
+    position: absolute;
+    width: 95vw;
+    height: 95vh;
+    background-color: #18002955;
+    padding-top: 2.5vh;
+    padding-bottom: 2.5vh;
+    padding-left: 2.5vw;
+    padding-right: 2.5vw;
+    z-index: 999999999;
+    border-radius: 3vw;
+    box-shadow: 0px 0px 1.25vw 0.5vw #18002977;
+    animation: apperFromBottom 0.3s ease;
+    display: none;
+    opacity: 0;
+}
+
+.content .contentBlocker .itemViewer {
+    position: absolute;
+    width: 90vw;
+    background-color: #1f0047;
+    height: 90vh;
+    top: 2.5vh;
+    margin: 0;
+    padding: 0;
+    left: 5vw;
+    border-radius: 1vw;
+    z-index: 9999999999;
+}
+
+.content .contentBlocker .itemViewer img {
+    width: 30vw;
+    height: 30vw;
+    max-width: 50vh;
+    max-height: 50vh;
+    margin-left: 5vw;
+    margin-top: 5vw;
+    position: absolute;
+}
+
+.content .contentBlocker .itemViewer .itemViewerTitle {
+    width: 45vw;
+    margin-left: 40vw;
+    text-align: center;
+    margin-top: 5vw;
+    position: absolute;
+    font-size: 3.5vw;
+    color: #fff;
+}
+
+.content .contentBlocker .itemViewer .itemViewerSubTitle {
+    width: 45vw;
+    margin-left: 40vw;
+    text-align: center;
+    margin-top: 9vw;
+    position: absolute;
+    font-size: 1.5vw;
+    color: #868686;
+}
+
+.content .contentBlocker .itemViewer .itemViewerDescription {
+    width: 45vw;
+    margin-left: 40vw;
+    text-align: center;
+    margin-top: 15vw;
+    position: absolute;
+    font-size: 2vw;
+    color: #EEE;
+}
+
+.content .contentBlocker .itemViewer .itemViewerButtonsArea {
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    top: 75vh;
+    left: 5vw;
+}
+
+.content .contentBlocker .itemViewer .itemViewerButtonsArea button {
+    width: 10vw;
+    height: 10vh;
+    font-size: 2vw;
+    background-color: #18002977;
+    border: 0.2vw solid #90f;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 1vw;
+    margin-left: 0.5vw;
+    margin-right: 0.5vw;
+}
+
+.content .contentBlocker .itemViewer .itemViewerButtonsArea button:hover {
+    background-color: #2a0047b2;
+    border: 0.2vw solid #b74aff;
+}
+
+.content .contentBlocker .itemViewer .itemViewerButtonsArea button:active {
+    background-color: #3d0069;
+    border: 0.2vw solid #d89dff;
 }
