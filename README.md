@@ -1,7 +1,5 @@
 # SpinMusicPlayer
-#### Disclaimer: This gif below is pretty bad because my computer sucks and i cannot record a propper gif of my screen, someone who have the program and want to contribute to this project and can record a propper gif just oppen a issue with the title 'Readme: Gif Fix' i will respond as speed as i can and i will add your name below the gif
-##### Note: i tried to make the gif less lagged but it didn't work that well
-<img src="https://media.discordapp.net/attachments/680446019783360606/819719840599506964/SpinMusicPLayerGif.gif">
+<img src="https://media.discordapp.net/attachments/680446019783360606/819956461047775243/Spimp.gif">
 
 ## Summary:
 - [How to install](#install)
