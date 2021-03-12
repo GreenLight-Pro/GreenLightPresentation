@@ -1,5 +1,5 @@
 # SpinMusicPlayer
-<img src="https://media.discordapp.net/attachments/680446019783360606/820002651705180170/windows.gif">
+<img src="https://raw.githubusercontent.com/emanuelfranklyn/SpinMusicPlayerDesktop/main/respositoryResouces/readmegif.gif">
 
 ## Summary:
 - [How to install](#install)
