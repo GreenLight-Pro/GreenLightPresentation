@@ -14,9 +14,19 @@ function resetFields() {
 
 window.loadedComplete = () => {
     console.log('ActivePage javascript loaded!');
-    updateFoldersList();
     const fs = window.require('fs');
     const path = window.require('path');
+
+    const thumbsupply = window.require('thumbsupply');
+    var ffmpeg = window.require('fluent-ffmpeg');
+    const ffmpegPath = path.resolve(window.__dirname, '..', '..', 'assets', 'ffmpeg', 'ffmpeg.exe');
+    const ffprobePath = path.resolve(window.__dirname, '..', '..', 'assets', 'ffmpeg', 'ffprobe.exe');
+    console.log('FFmpeg path: ' + ffmpegPath);
+    console.log('FFprobe path: ' + ffprobePath);
+    ffmpeg.setFfmpegPath(ffmpegPath);
+    ffmpeg.setFfprobePath(ffprobePath);
+    
+    updateFoldersList();
 
     selectFolder = () => {
         window.dialog.showOpenDialog({
@@ -60,7 +70,7 @@ window.loadedComplete = () => {
         fs.readdir(Directory, (err, files) => {
             if (!files) {return;}
             if (readingIndex !== FolderDirIndex) {return resetFields();}
-            files.forEach((file, indexo) => {
+            files.forEach(async (file, indexo) => {
                 if (fs.lstatSync(path.resolve(Directory, file)).isDirectory()) {
                     setTimeout(() => {
                         GenerateAutomaticFields(path.resolve(Directory, file), indexo, readingIndex);
@@ -68,8 +78,32 @@ window.loadedComplete = () => {
                 } else {
                     if (getMimeTypefromString(path.extname(path.resolve(Directory, file)))) {
                         if (getMimeTypefromString(path.extname(path.resolve(Directory, file))) === 'video') {
-                            // eslint-disable-next-line max-len
-                            document.getElementsByClassName('videos')[0].innerHTML += '<button class=""><img class="Icon" src="../../assets/images/"></img><span class="subtext">' + file.substring(0, file.length - path.extname(path.resolve(Directory, file)).length) + '</span></button>';
+                            var imageThumb = '';
+                            thumbsupply.generateThumbnail(path.resolve(Directory, file), {
+                                size: thumbsupply.ThumbSize.MEDIUM, // or ThumbSize.LARGE
+                                timestamp: '10%', // or `30` for 30 seconds
+                                forceCreate: true,
+                                cacheDir: '~/myapp/cache',
+                            })
+                                .then(thumb => {
+                                    // serve thumbnail
+                                    console.log(path.resolve(window.rootPath, thumb));
+                                    imageThumb = thumb;
+                                    proceed();
+                                })
+                                .catch(err => {
+                                    // thumbnail doesn't exist
+                                    console.log(err);
+                                    imageThumb = '../../assets/images/';
+                                    proceed();
+                                });
+
+                            // eslint-disable-next-line no-inner-declarations
+                            function proceed() {
+                                // eslint-disable-next-line max-len
+                                document.getElementsByClassName('videos')[0].innerHTML += '<button class=""><img class="Icon" src="' + imageThumb + '"></img><span class="subtext">' + file.substring(0, file.length - path.extname(path.resolve(Directory, file)).length) + '</span></button>';
+                            
+                            }
                         } else if (getMimeTypefromString(path.extname(path.resolve(Directory, file))) === 'audio') {
                             var imageSrc = '';
                             var titleSrc = '';

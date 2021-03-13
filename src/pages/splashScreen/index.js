@@ -3,6 +3,8 @@ const ipcRenderer = require('electron').ipcRenderer;
 
 var isMaximized = false; 
 
+var rootPath = '';
+
 // eslint-disable-next-line no-unused-vars
 function maximizer() {
     var returner = ipcRenderer.sendSync('synchronous-message', 'maximize');
@@ -95,6 +97,12 @@ timeline.on('timeline.events.expand.small', () => {
     timeline.send('timeline.events.expand.small.contract');
 });
 
+ipcRenderer.send('app_version');
+ipcRenderer.on('app_version', (event, arg) => {
+    ipcRenderer.removeAllListeners('app_version');
+    console.log('Version: ' + arg.version);
+});
+
 document.getElementsByClassName('timeline')[0].onload = function () {
     const iframeWin = document.getElementsByClassName('timeline')[0].contentWindow;
     iframeWin.require = require;
@@ -109,14 +117,10 @@ document.getElementsByClassName('ActivePage')[0].onload = function () {
     iframeWin.path = require('path');
     const {dialog} = require('electron').remote;
     iframeWin.dialog = dialog;
+    iframeWin.__dirname = __dirname;
+    iframeWin.rootPath = rootPath;
     iframeWin.loadedComplete();
 };
-
-ipcRenderer.send('app_version');
-ipcRenderer.on('app_version', (event, arg) => {
-    ipcRenderer.removeAllListeners('app_version');
-    console.log('Version: ' + arg.version);
-});
 
 // miniNotificationTray
 

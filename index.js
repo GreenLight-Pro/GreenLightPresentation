@@ -135,5 +135,5 @@ ipcMain.on('app_version', (event) => {
             autoUpdater.checkForUpdatesAndNotify();
         }, 780000); // 13 minutes
     }
-    event.sender.send('app_version', { version: app.getVersion() });
+    event.sender.send('app_version', { version: app.getVersion(), rootPath: __dirname });
 });
