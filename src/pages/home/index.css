@@ -100,6 +100,7 @@
     height: 11vw;
     margin-left: 0vw;
     margin-top: 0.25vw;
+    object-fit: cover;
 }
 
 .content .fields button .subtext {
@@ -164,6 +165,7 @@
     margin-left: 5vw;
     margin-top: 5vw;
     position: absolute;
+    object-fit: cover;
 }
 
 .content .contentBlocker .itemViewer .itemViewerTitle {

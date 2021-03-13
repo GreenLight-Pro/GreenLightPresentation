@@ -1,7 +1,7 @@
 // https://gist.github.com/jmaciasportela/10250863 || With modifications
 
 /* eslint-disable no-unused-vars */
-// Mime types. Some keys are duplicated.
+// Mime types.
     
 function getMimeTypefromString (extension) {
     var mimes = {

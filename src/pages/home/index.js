@@ -67,16 +67,17 @@ window.loadedComplete = () => {
                     }, 1500 * (index + indexo));
                 } else {
                     if (getMimeTypefromString(path.extname(path.resolve(Directory, file)))) {
-                        console.log('Media File');
                         if (getMimeTypefromString(path.extname(path.resolve(Directory, file))) === 'video') {
                             // eslint-disable-next-line max-len
                             document.getElementsByClassName('videos')[0].innerHTML += '<button class=""><img class="Icon" src="../../assets/images/"></img><span class="subtext">' + file.substring(0, file.length - path.extname(path.resolve(Directory, file)).length) + '</span></button>';
                         } else if (getMimeTypefromString(path.extname(path.resolve(Directory, file))) === 'audio') {
-                            /* var imageSrc = '';
+                            var imageSrc = '';
+                            var titleSrc = '';
                             
-                            var jsmediatags = window.jsmediatags;
-                            jsmediatags.read(encodeURIComponent('file://' + path.resolve(Directory, file)), {
+                            var jsmediatags = window.require('jsmediatags');
+                            jsmediatags.read(path.resolve(Directory, file), {
                                 onSuccess: function(tag) {
+                                    if (!tag) {return;}
                                     var image = tag.tags.picture;
                                     if (image) {
                                         var base64String = '';
@@ -85,15 +86,22 @@ window.loadedComplete = () => {
                                         }
                                         var base64 = 'data:' + image.format + ';base64,' + window.btoa(base64String);
                                         imageSrc = base64;
+                                        titleSrc = tag.tags.title;
+                                        proceed();
                                     }
                                 },
                                 onError: function(error) {
-                                    console.log(error);
+                                    imageSrc = '../../assets/images/';
+                                    titleSrc = file.substring(0, file.length - path.extname(path.resolve(Directory, file)).length);
+                                    proceed();
                                 }
-                            }); */
-                            
-                            // eslint-disable-next-line max-len
-                            document.getElementsByClassName('musics')[0].innerHTML += '<button class=""><img class="Icon" src="../../assets/images/"></img><span class="subtext">' + file.substring(0, file.length - path.extname(path.resolve(Directory, file)).length) + '</span></button>';
+                            });
+
+                            // eslint-disable-next-line no-inner-declarations
+                            function proceed() {
+                                // eslint-disable-next-line max-len
+                                document.getElementsByClassName('musics')[0].innerHTML += '<button class=""><img class="Icon" src="' + imageSrc + '"></img><span class="subtext">' + titleSrc + '</span></button>';
+                            }
 
                         }
                     }
