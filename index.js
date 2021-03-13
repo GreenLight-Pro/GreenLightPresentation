@@ -130,6 +130,7 @@ app.on('activate', () => {
 
 ipcMain.on('app_version', (event) => {
     if (!isDev) {
+        autoUpdater.checkForUpdatesAndNotify();
         setInterval(() => {
             autoUpdater.checkForUpdatesAndNotify();
         }, 780000); // 13 minutes
