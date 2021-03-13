@@ -53,7 +53,6 @@ function createWindow () {
     });
     ipcMain.on('minimize', ()=>{win.minimize();});
 
-    win.webContents.openDevTools();
     win.loadFile('./src/pages/splashScreen/index.html');
     win.removeMenu();
 
@@ -73,6 +72,17 @@ function createWindow () {
         flags: ['disabled'],
         click () { console.log('button2 clicked.'); }
     }]);
+
+    win.webContents.on('before-input-event', (event, input) => {
+        if (input.control && input.shift && input.key.toLowerCase() === 'i') {
+            event.preventDefault();
+            if (win.webContents.isDevToolsOpened()) {
+                win.webContents.closeDevTools();
+            } else {
+                win.webContents.openDevTools();
+            }
+        }
+    });
 
     /* win.setOverlayIcon(path.resolve(__dirname, 'src', 'assets', 'images','previousbutton.png'), 'Description for overlay')
 
