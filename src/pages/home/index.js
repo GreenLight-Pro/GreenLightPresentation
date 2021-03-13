@@ -41,7 +41,7 @@ window.loadedComplete = () => {
     };
 
     updateAutomaticGeneratedFields = () => {
-        if (localStorage.getItem('mediaFolders') === '') {return;}
+        if (!localStorage.getItem('mediaFolders') || localStorage.getItem('mediaFolders') === '') {return;}
         var folders = localStorage.getItem('mediaFolders').split(',');
         var treadtedFolders = [];
         folders.forEach(Path => {treadtedFolders.push(Path.replace(/SData-SemilyCollomI/g, ','));});
