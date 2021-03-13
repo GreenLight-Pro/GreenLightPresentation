@@ -5,6 +5,7 @@
 
 ::-webkit-scrollbar {
     width: 1vw;
+    height: 1vw;
     background: transparent;
 }
 
@@ -68,10 +69,11 @@
     display: flex;
     flex-direction: column;
     margin-top: 5.5vw;
-    margin-bottom: 1.5vw;
+    margin-bottom: 2vw;
     margin-left: 0.5vw;
     margin-right: 0.5vw;
     word-break: break-all;
+    flex-shrink: 0;
 }
 
 .content .fields button:hover {
@@ -94,7 +96,6 @@
 }
 
 .content .fields button img {
-    position: absolute;
     width: 11.5vw;
     height: 11vw;
     margin-left: 0vw;
@@ -103,8 +104,7 @@
 
 .content .fields button .subtext {
     font-size: 1.3vw;
-    margin-top: 12vw;
-    position: absolute;
+    margin-top: 0.65vw;
     width: 12.5vw;
     text-align: center;
     margin-left: -0.5vw;
@@ -116,6 +116,10 @@
 .content .fields div {
     display: flex;
     flex-direction: row;
+    height: 24vw;
+    overflow: hidden;
+    overflow-x: auto;
+    margin-bottom: 1vw;
 }
 
 @keyframes apperFromBottom {
@@ -123,7 +127,7 @@
 }
 
 .content .contentBlocker {
-    position: absolute;
+    position: fixed;
     width: 95vw;
     height: 95vh;
     background-color: #18002955;

@@ -35,7 +35,7 @@
     "appId": "br.com.talesgardem.spinmp",
     "productName": "Spin-Music-Player",
     "copyright": "Copyright © 2021 ${author}",
-    "artifactName": "${productName}-setup-${version}.${ext}",
+    "artifactName": "${productName}-setup.${ext}",
     "publish": {
       "provider": "github"
     },
