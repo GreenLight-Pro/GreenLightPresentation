@@ -76,11 +76,7 @@ function createWindow () {
     win.webContents.on('before-input-event', (event, input) => {
         if (input.control && input.shift && input.key.toLowerCase() === 'i') {
             event.preventDefault();
-            if (win.webContents.isDevToolsOpened()) {
-                win.webContents.closeDevTools();
-            } else {
-                win.webContents.openDevTools();
-            }
+            win.webContents.toggleDevTools();
         }
     });
 
