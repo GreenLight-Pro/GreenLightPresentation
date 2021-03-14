@@ -173,7 +173,7 @@ ipcRenderer.on('updatenotavailable', () => {
     }
 });
 
-ipcRenderer.on('downloadprogress', (percentage) => {
+ipcRenderer.on('downloadprogress', (event, percentage) => {
     var doc = document.getElementsByClassName('traybar')[0];
     for (var i = 0; i < doc.childNodes.length; i++) {
         if (doc.childNodes[i].className == 'smallUpdate') {

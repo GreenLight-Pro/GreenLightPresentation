@@ -81,14 +81,12 @@ window.loadedComplete = () => {
                             var imageThumb = '';
                             thumbsupply.generateThumbnail(path.resolve(Directory, file), {
                                 size: thumbsupply.ThumbSize.MEDIUM, // or ThumbSize.LARGE
-                                timestamp: '10%', // or `30` for 30 seconds
                                 forceCreate: true,
                                 cacheDir: '~/myapp/cache',
                             })
                                 .then(thumb => {
                                     // serve thumbnail
-                                    console.log(path.resolve(window.rootPath, thumb));
-                                    imageThumb = thumb;
+                                    imageThumb = path.resolve(window.rootPath, thumb);
                                     proceed();
                                 })
                                 .catch(err => {
