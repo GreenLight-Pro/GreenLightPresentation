@@ -145,9 +145,10 @@ ipcRenderer.on('checkingforupdate', () => {
             for (var j = 0; j < doc2.childNodes.length; j++) {
                 if (doc2.childNodes[j].className == 'title') {
                     doc2.childNodes[j].innerText = 'Searching for updates';
-                    // Updates the icon <--
-                    break;
-                }        
+                }
+                if (doc2.childNodes[j].className == 'icon') {
+                    doc2.childNodes[j].src = '../../assets/images/searchingForUpdates.png';
+                }   
             }
             updateMiniTray();
             break;
@@ -186,9 +187,10 @@ ipcRenderer.on('downloadprogress', (event, percentage) => {
             for (var j = 0; j < doc2.childNodes.length; j++) {
                 if (doc2.childNodes[j].className == 'title') {
                     doc2.childNodes[j].innerText = 'Downloading update: ' + percentage;
-                    // Updates the icon <--
-                    break;
                 }        
+                if (doc2.childNodes[j].className == 'icon') {
+                    doc2.childNodes[j].src = '../../assets/images/downloadingUpdates.png';
+                }   
             }
             updateMiniTray();
             break;
@@ -221,9 +223,10 @@ ipcRenderer.on('updatedownloaded', () => {
             for (var j = 0; j < doc2.childNodes.length; j++) {
                 if (doc2.childNodes[j].className == 'title') {
                     doc2.childNodes[j].innerText = 'Update avaliable!';
-                    // Updates the icon <--
-                    break;
                 }        
+                if (doc2.childNodes[j].className == 'icon') {
+                    doc2.childNodes[j].src = '../../assets/images/updateAvaliable.png';
+                }   
             }
             updateMiniTray();
             break;

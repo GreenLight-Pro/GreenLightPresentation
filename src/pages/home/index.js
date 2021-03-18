@@ -123,7 +123,7 @@ window.loadedComplete = () => {
                                     }
                                 },
                                 onError: function(error) {
-                                    imageSrc = '../../assets/images/';
+                                    imageSrc = '../../assets/images/defaultMusicPicture.png';
                                     titleSrc = file.substring(0, file.length - path.extname(path.resolve(Directory, file)).length);
                                     proceed();
                                 }
@@ -154,7 +154,7 @@ function updateFoldersList() {
     folders.forEach(Path => {treadtedFolders.push(Path.replace(/SData-SemilyCollomI/g, ','));});
     itemViewerButtonsFunctions = [];
     treadtedFolders.forEach((Folder, index) => {
-        var icon = '../../assets/images/';
+        var icon = '../../assets/images/folderIcon.png';
         var item = {
             icon: icon,
             name: Folder.split('\\')[Folder.split('\\').length - 1],

@@ -103,6 +103,10 @@
     object-fit: cover;
 }
 
+.content .fields .folders .addFolder .Icon {
+    object-fit: contain;
+}
+
 .content .fields button .subtext {
     font-size: 1.3vw;
     margin-top: 0.65vw;
