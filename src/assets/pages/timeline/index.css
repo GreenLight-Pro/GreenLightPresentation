@@ -34,6 +34,7 @@ html, body {
     margin-left: 3.5vw;
     background-color: #a41efe;
     cursor: pointer;
+    border-radius: 100vw;
 }
 
 .expandPlayerButton:before {
@@ -49,11 +50,20 @@ html, body {
     margin-left: 45.5vw;
 }
 
+.MusicIcon {
+    position: absolute;
+    width: 3vw;
+    height: 3vw;
+    object-fit: cover;
+    margin: 0.4vw;
+    margin-left: 1.5vw;
+}
+
 .iconsArea {
     position: absolute;
     display: flex;
     flex-direction: row;
-    margin-left: 8vw;
+    margin-left: 5vw;
     margin-top: -0.25vw;
 }
 
@@ -93,13 +103,46 @@ html, body {
     pointer-events: none;
 }
 
-.progressbar {
-      position: absolute;
-      width: 50vw;
-      margin-left: 25vw;
-      margin-top: 1.25vw;
-      background-color: #fe721e;
-      height: 1vw;
+.progressbarHandler {
+    position: absolute;
+    margin-left: 50vw;
+    margin-top: 1.5vw;
+    transform: translateX(-50%);
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: row;
+}
+
+.progressbarHandler p {
+    font-size: 1.5vw;
+    color: #F0F0FF;
+    margin-top: -0.2vw;
+    margin-left: 1vw;
+    margin-right: 1vw;
+}
+
+.progressbarHandler .progressbar {
+    width: 50vw;
+    height: 1vw;
+    background-color: #fe721e;
+    margin: 0;
+    cursor: pointer;
+    pointer-events: all;
+    position: relative;
+    display: block;
+}
+
+.progressbarHandler .progressbar .progressbarProgress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
+    width: 0;
+    height: 1vw;
+    background-color: #a41efe;
+    cursor: pointer;
+    pointer-events: none;
 }
 
 
@@ -113,5 +156,83 @@ html, body {
     top: 0;
     display: none;
     opacity: 0;
-    background-color: #f00;
+    background-color: #1a0022;
+    background: radial-gradient(circle, #15001c 0%, #21002b 100%);
+}
+
+.expandedTimeline .expandedTimelineCloseBar {
+    height: 0.25vw;
+    width: 90vw;
+    transform: translateX(-50%);
+    margin-left: 50vw;
+    position:absolute;
+    bottom: 4.5vw;
+    left: 0;
+    background-color: #a41efe;
+    border-radius: 100vw;
+    cursor: pointer;
+}
+
+.expandedTimeline .expandedTimelineCloseBar:before {
+    position: absolute;
+    width: 0px;
+    height: 0px;
+    content: '';
+    border-bottom: 1vw solid #0000;
+    border-left: 1vw solid #0000;
+    border-right: 1vw solid #0000;
+    border-top: 1vw solid #a41efe;
+    margin-top: 0.25vw;
+    transform: translateX(-50%);
+    margin-left: 45vw;
+    cursor: pointer;
+}
+
+.expandedTimeline .MediaThumb {
+    width: 40vw;
+    height: 40vw;
+    object-fit: cover;
+    position: absolute;
+    top: 5vw;
+    left: 5vw;
+}
+
+.expandedTimeline .title {
+    color: #F0F0FF;
+    font-size: 4vw;
+    position: absolute;
+    left: 45vw;
+    top: 5vw;
+    width: 50vw;
+    text-align: center;
+}
+
+.expandedTimeline .author {
+    color: #cacad8;
+    font-size: 2.5vw;
+    position: absolute;
+    left: 45vw;
+    top: 15vw;
+    width: 50vw;
+    text-align: center;
+}
+
+.expandedTimeline .controllers {
+    position: absolute;
+    left: 50vw;
+    bottom: 10vw;
+    display: flex;
+    flex-direction: row;
+    transform: translateX(-50%);
+}
+
+.expandedTimeline .controllers .icon {
+    width: 3vw;
+    margin-left: 1vw;
+    margin-right: 1vw;
+    font-size: 3vw;
+    font-weight: bold;
+    color: #fff;
+    z-index: 3;
+    pointer-events: none;
 }

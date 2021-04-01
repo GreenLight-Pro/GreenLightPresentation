@@ -2,6 +2,7 @@
 const ipcRenderer = require('electron').ipcRenderer;
 
 var isMaximized = false; 
+var isTimelineMaximized = false;
 
 var rootPath = '';
 
@@ -71,7 +72,9 @@ class timelineHandler extends eventEmmiter{
 const timeline = new timelineHandler();
 
 timeline.on('timeline.events.expand.fullscreen', () => {
+    isTimelineMaximized = true;
     setTimeout(() => {
+        if (!isTimelineMaximized) {return;}
         document.getElementsByClassName('ActivePage')[0].style.opacity = '0';
     }, 500);
     document.getElementsByClassName('timeline')[0].style.height = '100vh';
@@ -91,6 +94,7 @@ timeline.on('timeline.events.expand.fullscreen', () => {
 });
 
 timeline.on('timeline.events.expand.small', () => {
+    isTimelineMaximized = false;
     document.getElementsByClassName('blankfieldpainter')[0].style.visibility = 'visible';
     document.getElementsByClassName('ActivePage')[0].style.opacity = '1';
     document.getElementsByClassName('timeline')[0].style.height = '5vw';
