@@ -111,6 +111,7 @@ document.getElementsByClassName('timeline')[0].onload = function () {
     const iframeWin = document.getElementsByClassName('timeline')[0].contentWindow;
     iframeWin.require = require;
     iframeWin.timeline = timeline;
+    iframeWin.ipcRenderer = ipcRenderer;
     iframeWin.loadedComplete();
 };
 
@@ -123,6 +124,7 @@ document.getElementsByClassName('ActivePage')[0].onload = function () {
     iframeWin.dialog = dialog;
     iframeWin.__dirname = __dirname;
     iframeWin.rootPath = rootPath;
+    iframeWin.ipcRenderer = ipcRenderer;
     iframeWin.loadedComplete();
 };
 

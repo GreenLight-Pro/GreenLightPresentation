@@ -98,13 +98,20 @@ window.loadedComplete = () => {
 
                             // eslint-disable-next-line no-inner-declarations
                             function proceed() {
+                                var ContentData = {
+                                    type: 'video',
+                                    thumb: imageThumb,
+                                    title: file.substring(0, file.length - path.extname(path.resolve(Directory, file)).length),
+                                    author: 'No Author',
+                                };
                                 // eslint-disable-next-line max-len
-                                document.getElementsByClassName('videos')[0].innerHTML += '<button class=""><img class="Icon" src="' + imageThumb + '"></img><span class="subtext">' + file.substring(0, file.length - path.extname(path.resolve(Directory, file)).length) + '</span></button>';
+                                document.getElementsByClassName('videos')[0].innerHTML += '<button class="" onclick="window.ipcRenderer.emit(`media.playcontent`, ' + JSON.stringify(ContentData).replace(/"/g, '\'') + ');"><img class="Icon" src="' + imageThumb + '"></img><span class="subtext">' + file.substring(0, file.length - path.extname(path.resolve(Directory, file)).length) + '</span></button>';
                             
                             }
                         } else if (getMimeTypefromString(path.extname(path.resolve(Directory, file))) === 'audio') {
                             var imageSrc = '';
                             var titleSrc = '';
+                            var authorSrc = '';
                             
                             var jsmediatags = window.require('jsmediatags');
                             jsmediatags.read(path.resolve(Directory, file), {
@@ -119,20 +126,28 @@ window.loadedComplete = () => {
                                         var base64 = 'data:' + image.format + ';base64,' + window.btoa(base64String);
                                         imageSrc = base64;
                                         titleSrc = tag.tags.title;
+                                        authorSrc = tag.tags.author;
                                         proceed();
                                     }
                                 },
                                 onError: function(error) {
                                     imageSrc = '../../assets/images/defaultMusicPicture.png';
                                     titleSrc = file.substring(0, file.length - path.extname(path.resolve(Directory, file)).length);
+                                    authorSrc = 'No author';
                                     proceed();
                                 }
                             });
 
                             // eslint-disable-next-line no-inner-declarations
                             function proceed() {
+                                var ContentData = {
+                                    type: 'audio',
+                                    thumb: imageSrc,
+                                    title: titleSrc,
+                                    author: authorSrc,
+                                };
                                 // eslint-disable-next-line max-len
-                                document.getElementsByClassName('musics')[0].innerHTML += '<button class=""><img class="Icon" src="' + imageSrc + '"></img><span class="subtext">' + titleSrc + '</span></button>';
+                                document.getElementsByClassName('musics')[0].innerHTML += '<button class="" onclick="window.ipcRenderer.emit(`media.playcontent`, ' + JSON.stringify(ContentData).replace(/"/g, '\'') + ');"><img class="Icon" src="' + imageSrc + '"></img><span class="subtext">' + titleSrc + '</span></button>';
                             }
 
                         }

@@ -40,4 +40,12 @@ window.loadedComplete = () => {
             document.getElementsByTagName('body')[0].style.backgroundColor = '#0000';
         }, 750);
     });
+
+    window.ipcRenderer.on('media.playcontent', (content) => {
+        console.log(content);
+        if (content.thumb.startsWith('.')) {content.thumb = '../' + content.thumb;}
+        document.getElementsByClassName('MusicIcon')[0].src = content.thumb;
+        document.getElementsByClassName('MediaThumb')[0].src = content.thumb;
+        document.getElementsByClassName('title')[0].innerText = content.title;
+    });
 };
