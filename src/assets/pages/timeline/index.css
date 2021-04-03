@@ -200,9 +200,9 @@ html, body {
 .expandedTimeline .title {
     color: #F0F0FF;
     font-size: 4vw;
-    position: absolute;
-    left: 45vw;
-    top: 5vw;
+    position: relative;
+    margin-left: 45vw;
+    margin-top: 5vw;
     width: 50vw;
     text-align: center;
 }
@@ -210,11 +210,10 @@ html, body {
 .expandedTimeline .author {
     color: #cacad8;
     font-size: 2.5vw;
-    position: absolute;
-    left: 45vw;
-    top: 15vw;
+    position: relative;
     width: 50vw;
     text-align: center;
+    margin-left: 45vw;
 }
 
 .expandedTimeline .controllers {

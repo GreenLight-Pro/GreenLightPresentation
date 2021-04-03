@@ -44,8 +44,15 @@ window.loadedComplete = () => {
     window.ipcRenderer.on('media.playcontent', (content) => {
         console.log(content);
         if (content.thumb.startsWith('.')) {content.thumb = '../' + content.thumb;}
+        content.title = content.title.replace(/<{InsertApostrofuHere}>/g, '\'');
+        content.filePath = content.filePath.replace(/<{InsertApostrofuHere}>/g, '\'');
         document.getElementsByClassName('MusicIcon')[0].src = content.thumb;
         document.getElementsByClassName('MediaThumb')[0].src = content.thumb;
         document.getElementsByClassName('title')[0].innerText = content.title;
+        var audio = new Audio(content.filePath);
+        audio.ondurationchange = (value, value2) => {
+            console.log(value);
+            console.log(value2);
+        };
     });
 };

@@ -177,7 +177,7 @@
     margin-left: 40vw;
     text-align: center;
     margin-top: 5vw;
-    position: absolute;
+    position: relative;
     font-size: 3.5vw;
     color: #fff;
 }
@@ -186,8 +186,8 @@
     width: 45vw;
     margin-left: 40vw;
     text-align: center;
-    margin-top: 9vw;
-    position: absolute;
+    position: relative;
+    margin-top: -2vw;
     font-size: 1.5vw;
     color: #868686;
 }
@@ -196,10 +196,10 @@
     width: 45vw;
     margin-left: 40vw;
     text-align: center;
-    margin-top: 15vw;
-    position: absolute;
+    position: relative;
     font-size: 2vw;
     color: #EEE;
+    margin-top: 3vw;
 }
 
 .content .contentBlocker .itemViewer .itemViewerButtonsArea {

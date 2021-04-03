@@ -101,8 +101,10 @@ window.loadedComplete = () => {
                                 var ContentData = {
                                     type: 'video',
                                     thumb: imageThumb,
-                                    title: file.substring(0, file.length - path.extname(path.resolve(Directory, file)).length),
+                                    // eslint-disable-next-line max-len
+                                    title: file.substring(0, file.length - path.extname(path.resolve(Directory, file)).length).replace(/'/g, '<{InsertApostrofuHere}>'),
                                     author: 'No Author',
+                                    filePath: path.resolve(Directory, file).replace(/'/g, '<{InsertApostrofuHere}>'),
                                 };
                                 // eslint-disable-next-line max-len
                                 document.getElementsByClassName('videos')[0].innerHTML += '<button class="" onclick="window.ipcRenderer.emit(`media.playcontent`, ' + JSON.stringify(ContentData).replace(/"/g, '\'') + ');"><img class="Icon" src="' + imageThumb + '"></img><span class="subtext">' + file.substring(0, file.length - path.extname(path.resolve(Directory, file)).length) + '</span></button>';
@@ -132,6 +134,7 @@ window.loadedComplete = () => {
                                 },
                                 onError: function(error) {
                                     imageSrc = '../../assets/images/defaultMusicPicture.png';
+                                    // eslint-disable-next-line max-len
                                     titleSrc = file.substring(0, file.length - path.extname(path.resolve(Directory, file)).length);
                                     authorSrc = 'No author';
                                     proceed();
@@ -143,8 +146,9 @@ window.loadedComplete = () => {
                                 var ContentData = {
                                     type: 'audio',
                                     thumb: imageSrc,
-                                    title: titleSrc,
+                                    title: titleSrc.replace(/'/g, '<{InsertApostrofuHere}>'),
                                     author: authorSrc,
+                                    filePath: path.resolve(Directory, file).replace(/'/g, '<{InsertApostrofuHere}>'),
                                 };
                                 // eslint-disable-next-line max-len
                                 document.getElementsByClassName('musics')[0].innerHTML += '<button class="" onclick="window.ipcRenderer.emit(`media.playcontent`, ' + JSON.stringify(ContentData).replace(/"/g, '\'') + ');"><img class="Icon" src="' + imageSrc + '"></img><span class="subtext">' + titleSrc + '</span></button>';
