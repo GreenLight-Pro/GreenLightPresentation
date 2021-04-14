@@ -97,7 +97,7 @@ window.loadedComplete = () => {
                                 .catch(err => {
                                     // thumbnail doesn't exist
                                     console.log(err);
-                                    imageThumb = '../../assets/images/';
+                                    imageThumb = '../../assets/images/defaultMusicPicture.png';
                                     proceed();
                                 });
 
@@ -137,10 +137,15 @@ window.loadedComplete = () => {
                                         for (var i = 0; i < image.data.length; i++) {
                                             base64String += String.fromCharCode(image.data[i]);
                                         }
-                                        var base64 = 'data:' + image.format + ';base64,' + window.btoa(base64String);
+                                        var base64;
+                                        if (base64String !== '') {
+                                            base64 = 'data:' + image.format + ';base64,' + window.btoa(base64String);
+                                        } else {
+                                            base64 = '../../assets/images/defaultMusicPicture.png';
+                                        }
                                         imageSrc = base64;
                                         titleSrc = tag.tags.title || file;
-                                        authorSrc = tag.tags.author;
+                                        authorSrc = tag.tags.artist;
                                         proceed();
                                     }
                                 },
@@ -159,7 +164,7 @@ window.loadedComplete = () => {
                                     type: 'audio',
                                     thumb: imageSrc,
                                     title: titleSrc.replace(/'/g, '<{InsertApostrofuHere}>'),
-                                    author: authorSrc,
+                                    author: authorSrc || 'No author',
                                     filePath: path.resolve(Directory, file).replace(/'/g, '<{InsertApostrofuHere}>'),
                                 };
                                 // eslint-disable-next-line max-len
