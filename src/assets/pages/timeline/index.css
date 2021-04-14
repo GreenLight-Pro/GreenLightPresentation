@@ -195,6 +195,8 @@ html, body {
     position: absolute;
     top: 5vw;
     left: 5vw;
+    background-color: #a41efe11;
+    border-radius: 1vw;
 }
 
 .expandedTimeline .title {

@@ -1,9 +1,13 @@
 /* eslint-disable no-undef, no-unused-vars */
 
+// https://stackoverflow.com/questions/3231459/create-unique-id-with-javascript/3231532
+function uniqueid(){
+    return Date.now().toString(36) + Math.random().toString(36).substr(2);
+}
+
 var selectFolder = () => {};
 var updateAutomaticGeneratedFields = () => {};
 var itemViewerButtonsFunctions = [];
-var FolderDirIndex = 0;
 
 function resetFields() {
     document.getElementsByClassName('albums')[0].innerHTML = '<h1 class="title">Albuns</h1>';
@@ -56,25 +60,26 @@ window.loadedComplete = () => {
         var treadtedFolders = [];
         folders.forEach(Path => {treadtedFolders.push(Path.replace(/SData-SemilyCollomI/g, ','));});
         resetFields();
-        FolderDirIndex += 1;
-        treadtedFolders.forEach((Folder, index) => {
+        treadtedFolders.forEach((Folder) => {
             setTimeout(() => {
-                GenerateAutomaticFields(Folder, 1, FolderDirIndex);
-            }, 500 * index);
+                GenerateAutomaticFields(Folder, uniqueid());
+            }, 3000);
         });
     };
     updateAutomaticGeneratedFields();
 
-    function GenerateAutomaticFields(Directory, index, readingIndex) {
-        index = index || 1;
-        fs.readdir(Directory, (err, files) => {
+    function GenerateAutomaticFields(Directory, identifiyer) {
+        window.ipcRenderer.send('SubProcess.Fs.ReadDirAsync', [Directory, identifiyer]);
+        window.ipcRenderer.on('SubProcess.Fs.ReadDirAsync.Results', (event, files) => {generator(files);});
+        function generator(files) {
+            window.ipcRenderer.removeListener('SubProcess.Fs.ReadDirAsync.Results', (event, files) => {generator(files);});
             if (!files) {return;}
-            if (readingIndex !== FolderDirIndex) {return resetFields();}
-            files.forEach(async (file, indexo) => {
+            files = JSON.parse(files);
+            if (files[1] !== identifiyer) {return;}
+            files = files[0];
+            files.forEach(async (file) => {
                 if (fs.lstatSync(path.resolve(Directory, file)).isDirectory()) {
-                    setTimeout(() => {
-                        GenerateAutomaticFields(path.resolve(Directory, file), indexo, readingIndex);
-                    }, 1500 * (index + indexo));
+                    GenerateAutomaticFields(path.resolve(Directory, file), uniqueid());
                 } else {
                     if (getMimeTypefromString(path.extname(path.resolve(Directory, file)))) {
                         if (getMimeTypefromString(path.extname(path.resolve(Directory, file))) === 'video') {
@@ -118,7 +123,14 @@ window.loadedComplete = () => {
                             var jsmediatags = window.require('jsmediatags');
                             jsmediatags.read(path.resolve(Directory, file), {
                                 onSuccess: function(tag) {
-                                    if (!tag) {return;}
+                                    if (!tag) {
+                                        imageSrc = '../../assets/images/defaultMusicPicture.png';
+                                        titleSrc = file.substring(0, file.length - path.extname(path.resolve(Directory, file)).length);
+                                        authorSrc = 'No author';
+                                        console.log('[JSMediaTags] No tag founded! ' + path.resolve(Directory, file));
+                                        proceed();
+                                        return;
+                                    }
                                     var image = tag.tags.picture;
                                     if (image) {
                                         var base64String = '';
@@ -127,12 +139,12 @@ window.loadedComplete = () => {
                                         }
                                         var base64 = 'data:' + image.format + ';base64,' + window.btoa(base64String);
                                         imageSrc = base64;
-                                        titleSrc = tag.tags.title;
+                                        titleSrc = tag.tags.title || file;
                                         authorSrc = tag.tags.author;
                                         proceed();
                                     }
                                 },
-                                onError: function(error) {
+                                onError: function() {
                                     imageSrc = '../../assets/images/defaultMusicPicture.png';
                                     // eslint-disable-next-line max-len
                                     titleSrc = file.substring(0, file.length - path.extname(path.resolve(Directory, file)).length);
@@ -158,7 +170,7 @@ window.loadedComplete = () => {
                     }
                 }
             });
-        });
+        }
     }
 };
 
