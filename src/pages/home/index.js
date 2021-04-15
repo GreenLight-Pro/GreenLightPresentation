@@ -81,8 +81,8 @@ window.loadedComplete = () => {
                 if (fs.lstatSync(path.resolve(Directory, file)).isDirectory()) {
                     GenerateAutomaticFields(path.resolve(Directory, file), uniqueid());
                 } else {
-                    if (getMimeTypefromString(path.extname(path.resolve(Directory, file)))) {
-                        if (getMimeTypefromString(path.extname(path.resolve(Directory, file))) === 'video') {
+                    if (getMimeTypefromString(getExtName(file))) {
+                        if (getMimeTypefromString(getExtName(file)) === 'video') {
                             var imageThumb = '';
                             thumbsupply.generateThumbnail(path.resolve(Directory, file), {
                                 size: thumbsupply.ThumbSize.MEDIUM, // or ThumbSize.LARGE
@@ -115,7 +115,7 @@ window.loadedComplete = () => {
                                 document.getElementsByClassName('videos')[0].innerHTML += '<button class="" onclick="window.ipcRenderer.emit(`media.playcontent`, ' + JSON.stringify(ContentData).replace(/"/g, '\'') + ');"><img class="Icon" src="' + imageThumb + '"></img><span class="subtext">' + file.substring(0, file.length - path.extname(path.resolve(Directory, file)).length) + '</span></button>';
                             
                             }
-                        } else if (getMimeTypefromString(path.extname(path.resolve(Directory, file))) === 'audio') {
+                        } else if (getMimeTypefromString(getExtName(file)) === 'audio') {
                             var imageSrc = '';
                             var titleSrc = '';
                             var authorSrc = '';
@@ -239,4 +239,12 @@ function createItemViewer(item) {
     });
     document.getElementsByClassName('contentBlocker')[0].style.display = 'block';
     document.getElementsByClassName('contentBlocker')[0].style.opacity = 1;
+}
+
+function getExtName(fileName) {
+    var file = fileName.toString();
+    var lastDotIndex = file.lastIndexOf('.');
+    var ext = file.slice(lastDotIndex);
+    console.log(ext);
+    return ext;
 }

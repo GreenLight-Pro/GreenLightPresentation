@@ -51,11 +51,45 @@ window.loadedComplete = () => {
         document.getElementsByClassName('author')[0].innerText = content.author;
         var audio = new Audio(content.filePath);
         audio.ondurationchange = (value) => {
-            var durationParsed = value.path[0].duration / 60;
-            // eslint-disable-next-line max-len
-            var MinuteDuration = Number(Math.floor(Number(durationParsed)).toString().split('.')[0]) + Math.round(Number(Number(durationParsed).toFixed(2).toString().split('.')[1]) / 60);
-            var secoundsDuration = (Number(Number(durationParsed).toFixed(2).toString().split('.')[1]) / 60).toFixed(2).split('.')[1];
-            document.getElementsByClassName('TotalTime')[0].innerText = (MinuteDuration + ':' + secoundsDuration);
+            document.getElementsByClassName('TotalTime')[0].innerText = getTime(value.path[0].duration);
         };
     });
 };
+
+// --[Below code by Lobo Metalurgico]
+// github.com/loboMetalurgico
+function getTime(Time) {
+    let totalSeconds = Math.floor(Time);
+    const days = Math.floor(totalSeconds / 86400);
+    totalSeconds %= 86400;
+    var hours = Math.floor(totalSeconds / 3600);
+    totalSeconds %= 3600;
+    var minutes = Math.floor(totalSeconds / 60);
+    var seconds = Math.floor(totalSeconds % 60);
+
+    var time;
+
+    if (seconds <= 9) {
+        seconds = '0' + seconds.toString();
+    }
+
+    if (days >= 1) {
+        if (minutes <= 9) {
+            minutes = '0' + minutes.toString();
+        }
+        if (hours <= 9) {
+            hours = '0' + hours.toString();
+        }
+        time = `${days}:${hours}:${minutes}:${seconds}`;
+    } else if (hours >= 1) {
+        if (minutes <= 9) {
+            minutes = '0' + minutes.toString();
+        }
+        time = `${hours}:${minutes}:${seconds}`;
+    } else if (minutes >= 1) {
+        time = `${minutes}:${seconds}`;
+    } else {
+        time = `0:${seconds}`;
+    }
+    return time;
+}

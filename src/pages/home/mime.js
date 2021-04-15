@@ -37,6 +37,7 @@ function getMimeTypefromString (extension) {
         '.midi': 'audio',
         '.mjf': 'audio',
         '.mjpg': 'video',
+        '.mkv': 'video',
         '.mod': 'audio',
         '.moov': 'video',
         '.mov': 'video',
