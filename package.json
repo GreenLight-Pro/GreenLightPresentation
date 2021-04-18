@@ -1,6 +1,6 @@
 {
   "name": "spinmusicplayerdesktop",
-  "version": "v1.0.0-beta-1.1",
+  "version": "v1.0.0-beta-1.2",
   "description": "A desktop media player",
   "main": "index.js",
   "scripts": {
