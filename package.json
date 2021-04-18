@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron --trace-deprecation .",
-    "build": "electron-builder"
+    "start": "electron --trace-deprecation ."
   },
   "repository": {
     "type": "git",
@@ -37,7 +36,7 @@
     "appId": "br.com.talesgardem.spinmp",
     "productName": "Spin-Music-Player",
     "copyright": "Copyright © 2021 ${author}",
-    "artifactName": "${productName}-setup.${ext}",
+    "artifactName": "${productName}-setup-${version}-${os}-${arch}.${ext}",
     "publish": {
       "provider": "github"
     },
@@ -47,6 +46,12 @@
     },
     "win": {
       "icon": "./src/assets/images/logo.png"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "zip"
+      ]
     },
     "files": [
       "./build/**/*",
