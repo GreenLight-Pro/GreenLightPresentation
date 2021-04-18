@@ -22,13 +22,7 @@ window.loadedComplete = () => {
     const path = window.require('path');
 
     const thumbsupply = window.require('thumbsupply');
-    var ffmpeg = window.require('fluent-ffmpeg');
-    const ffmpegPath = path.resolve(window.__dirname, '..', '..', 'assets', 'ffmpeg', 'ffmpeg.exe');
-    const ffprobePath = path.resolve(window.__dirname, '..', '..', 'assets', 'ffmpeg', 'ffprobe.exe');
-    console.log('FFmpeg path: ' + ffmpegPath);
-    console.log('FFprobe path: ' + ffprobePath);
-    ffmpeg.setFfmpegPath(ffmpegPath);
-    ffmpeg.setFfprobePath(ffprobePath);
+    var ffmpeg = window.ffmpeg;
     
     updateFoldersList();
 
@@ -97,7 +91,7 @@ window.loadedComplete = () => {
                                 .catch(err => {
                                     // thumbnail doesn't exist
                                     console.log(err);
-                                    imageThumb = '../../assets/images/defaultMusicPicture.png';
+                                    imageThumb = '../../assets/images/';
                                     proceed();
                                 });
 
@@ -245,6 +239,5 @@ function getExtName(fileName) {
     var file = fileName.toString();
     var lastDotIndex = file.lastIndexOf('.');
     var ext = file.slice(lastDotIndex);
-    console.log(ext);
     return ext;
 }

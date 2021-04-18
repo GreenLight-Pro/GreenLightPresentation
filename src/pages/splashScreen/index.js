@@ -1,5 +1,14 @@
 /* eslint-disable no-undef */
 const ipcRenderer = require('electron').ipcRenderer;
+const path = require('path');
+
+var ffmpeg = require('fluent-ffmpeg');
+const ffmpegPath = path.resolve(__dirname, '..', '..', 'assets', 'ffmpeg', 'ffmpeg.exe');
+const ffprobePath = path.resolve(__dirname, '..', '..', 'assets', 'ffmpeg', 'ffprobe.exe');
+console.log('FFmpeg path: ' + ffmpegPath);
+console.log('FFprobe path: ' + ffprobePath);
+ffmpeg.setFfmpegPath(ffmpegPath);
+ffmpeg.setFfprobePath(ffprobePath);
 
 var isMaximized = false; 
 var isTimelineMaximized = false;
@@ -110,8 +119,10 @@ ipcRenderer.on('app_version', (event, arg) => {
 document.getElementsByClassName('timeline')[0].onload = function () {
     const iframeWin = document.getElementsByClassName('timeline')[0].contentWindow;
     iframeWin.require = require;
+    iframeWin.__dirname = __dirname;
     iframeWin.timeline = timeline;
     iframeWin.ipcRenderer = ipcRenderer;
+    iframeWin.ffmpeg = ffmpeg;
     iframeWin.loadedComplete();
 };
 
@@ -119,11 +130,12 @@ document.getElementsByClassName('ActivePage')[0].onload = function () {
     const iframeWin = document.getElementsByClassName('ActivePage')[0].contentWindow;
     iframeWin.require = require;
     iframeWin.timeline = timeline;
-    iframeWin.path = require('path');
+    iframeWin.path = path;
     const {dialog} = require('electron').remote;
     iframeWin.dialog = dialog;
     iframeWin.__dirname = __dirname;
     iframeWin.rootPath = rootPath;
+    iframeWin.ffmpeg = ffmpeg;
     iframeWin.ipcRenderer = ipcRenderer;
     iframeWin.loadedComplete();
 };

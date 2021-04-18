@@ -1,8 +1,39 @@
 /* eslint-disable no-undef */
 
 var isMaximized = false;
+var isAudio = false;
+const audio = document.getElementsByClassName('PlayAudioFiles')[0];
+const video = document.getElementsByClassName('PlayVideoFiles')[0];
+
+// eslint-disable-next-line no-unused-vars
+function mediaPlayPauseHandler() {
+    if (isAudio) {
+        if (audio.paused) {
+            audio.play();
+        } else {
+            audio.pause();
+        }
+    }
+}
+
+function progressBarClickPositionHandler(event) {
+    if (audio.readyState <= 2) {return;}
+    var clickPosition = event.clientX - event.srcElement.offsetLeft;
+    var elementSize = event.srcElement.offsetWidth;
+    var percentage = ((clickPosition / elementSize) * 100).toFixed(3);
+    var currentTime = audio.currentTime;
+    var fullTime = audio.duration;
+    if (!(isNaN(currentTime) && isNaN(fullTime))) {
+        audio.currentTime = (percentage / 100) * fullTime;
+    }
+}
+
+document.getElementsByClassName('ProgressBarArea')[0].onclick = progressBarClickPositionHandler;
+document.getElementsByClassName('progressbar')[0].onclick = progressBarClickPositionHandler;
 
 window.loadedComplete = () => {
+    const path = window.require('path');
+
     document.getElementsByClassName('expandPlayerButton')[0].onclick = () => {
         window.timeline.send('timeline.events.expand.fullscreen');
     };
@@ -42,22 +73,111 @@ window.loadedComplete = () => {
     });
 
     window.ipcRenderer.on('media.playcontent', (content) => {
-        if (content.thumb.startsWith('.')) {content.thumb = '../' + content.thumb;}
-        content.title = content.title.replace(/<{InsertApostrofuHere}>/g, '\'');
-        content.filePath = content.filePath.replace(/<{InsertApostrofuHere}>/g, '\'');
-        document.getElementsByClassName('MusicIcon')[0].src = content.thumb;
-        document.getElementsByClassName('MediaThumb')[0].src = content.thumb;
-        document.getElementsByClassName('title')[0].innerText = content.title;
-        document.getElementsByClassName('author')[0].innerText = content.author;
-        var audio = new Audio(content.filePath);
-        audio.ondurationchange = (value) => {
-            document.getElementsByClassName('TotalTime')[0].innerText = getTime(value.path[0].duration);
-        };
+        var picture = content.thumb;
+        if (picture.startsWith('../')) {
+            var uri = path.resolve(window.__dirname, content.thumb);
+            toDataURL(uri, (data) => {
+                picture = data;
+                proceed();
+            }, 'png');
+        } else {
+            proceed();
+        }
+        function proceed() {
+            content.title = content.title.replace(/<{InsertApostrofuHere}>/g, '\'');
+            content.filePath = content.filePath.replace(/<{InsertApostrofuHere}>/g, '\'');
+            document.getElementsByClassName('MusicIcon')[0].src = picture;
+            document.getElementsByClassName('MediaThumb')[0].src = picture;
+            document.getElementsByClassName('title')[0].innerText = content.title;
+            document.getElementsByClassName('author')[0].innerText = content.author;
+            if (content.type === 'audio') {
+                isAudio = true;
+                video.pause();
+                video.src = '';
+
+                audio.src = content.filePath;
+                audio.onplay = () => {
+                    document.getElementById('playbutton').children[0].src = '../../images/pausebutton.png';
+                    document.getElementById('Eplaybutton').children[0].src = '../../images/pausebutton.png';
+                };
+                audio.onpause = () => {
+                    document.getElementById('playbutton').children[0].src = '../../images/playbutton.png';
+                    document.getElementById('Eplaybutton').children[0].src = '../../images/playbutton.png';
+                };
+                audio.onloadeddata = (event) => {
+                    audio.play().then(() => {
+                        if ('mediaSession' in navigator) {
+                            navigator.mediaSession.metadata = new MediaMetadata({
+                                title: content.title + (content.author !== 'No author' ? (' - ' + content.author) : ''),
+                                artist: 'Spin Music Player',
+                                album: 'No album',
+                                artwork: [
+                                // eslint-disable-next-line max-len
+                                    { src: picture, sizes: '512x512', type: ('image/' + getExtName(picture).slice(1)) },
+                                ]
+                            });
+                        }
+                  
+                        navigator.mediaSession.setActionHandler('play', function() {
+                            audio.play();
+                        });
+                        navigator.mediaSession.setActionHandler('pause', function() {
+                            audio.pause();
+                        });
+                    });
+                    var duration = getTime(event.path[0].duration);
+                    document.getElementsByClassName('TotalTime')[0].innerText = duration;
+                    document.getElementsByClassName('FinishTime')[0].innerText = duration;
+                };
+            } else {
+                isAudio = false;
+                audio.pause();
+                audio.src = '';
+            }
+        }
     });
+
+    audio.ontimeupdate = () => {
+        var currentTime = audio.currentTime;
+        var fullTime = audio.duration;
+        var percentage = ((currentTime / fullTime) * 100).toFixed(3);
+        document.getElementsByClassName('currentTime')[0].innerText = getTime(currentTime);
+        document.getElementsByClassName('StartedTime')[0].innerText = getTime(currentTime);
+        document.getElementsByClassName('progressbarProgress')[0].style.setProperty('--Percentagem', percentage);
+        document.getElementsByClassName('ProgressBarField')[0].style.setProperty('--Percentagem', percentage);
+    };
 };
 
+function getExtName(fileName) {
+    var file = fileName.toString();
+    var lastDotIndex = file.lastIndexOf('.');
+    var ext = file.slice(lastDotIndex);
+    return ext;
+}
+
+// https://stackoverflow.com/questions/6150289/how-can-i-convert-an-image-into-base64-string-using-javascript
+function toDataURL(src, callback, outputFormat) {
+    var img = new Image();
+    img.crossOrigin = 'Anonymous';
+    img.onload = function() {
+        var canvas = document.createElement('CANVAS');
+        var ctx = canvas.getContext('2d');
+        var dataURL;
+        canvas.height = this.naturalHeight;
+        canvas.width = this.naturalWidth;
+        ctx.drawImage(this, 0, 0);
+        dataURL = canvas.toDataURL(outputFormat);
+        callback(dataURL);
+    };
+    img.src = src;
+    if (img.complete || img.complete === undefined) {
+        img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
+        img.src = src;
+    }
+}
+
 // --[Below code by Lobo Metalurgico]
-// github.com/loboMetalurgico
+// https://www.github.com/loboMetalurgico
 function getTime(Time) {
     let totalSeconds = Math.floor(Time);
     const days = Math.floor(totalSeconds / 86400);

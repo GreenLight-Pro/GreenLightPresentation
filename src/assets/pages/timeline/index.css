@@ -1,13 +1,28 @@
+:root {
+    /* --[colors]-- */
+    --Orange: #fe721e;
+    --WhiteSnow: #f0f0ff;
+    --GraySnow: #a5a5a5;
+    --Purple: #a41efe;
+
+    /* --[Elements]-- */
+    --ProgressBarBackgroundColor: var(--Orange);
+    --MusicTitleColor: var(--WhiteSnow);
+    --MusicAuthorColor: var(--GraySnow);
+    --Icons: var(--WhiteSnow);
+    --Buttons: var(--Purple);
+}
+
 * {
     transition: all 0.5s ease;
     font-family:Arial, Helvetica, sans-serif;
 }
 
 ::-webkit-scrollbar {
-    width: 0;  /* Remove scrollbar space */
-    background: transparent;  /* Optional: just make scrollbar invisible */
+    width: 0;
+    background: transparent;
 }
-/* Optional: show position indicator in red */
+
 ::-webkit-scrollbar-thumb {
     background: #0000;
 }
@@ -32,7 +47,7 @@ html, body {
     height: 0.25vw;
     width: 93vw;
     margin-left: 3.5vw;
-    background-color: #a41efe;
+    background-color: var(--Buttons);
     cursor: pointer;
     border-radius: 100vw;
 }
@@ -42,7 +57,7 @@ html, body {
     width: 0px;
     height: 0px;
     content: '';
-    border-bottom: 1vw solid #a41efe;
+    border-bottom: 1vw solid var(--Buttons);
     border-left: 1vw solid #0000;
     border-right: 1vw solid #0000;
     border-top: 1vw solid #0000;
@@ -69,10 +84,10 @@ html, body {
 
 .iconsArea .iconsButton {
     margin-top: 0.5vw;
-    margin-left: 1vw;
-    margin-right: 1vw;
+    margin-left: 0.5vw;
+    margin-right: 0.5vw;
     position: relative;
-    width: 1vw; 
+    width: 2vw; 
     height: 2vw;
     cursor: pointer;
 }
@@ -90,7 +105,7 @@ html, body {
     left: 0.5vw;
     font-size: 1.3vw;
     font-weight: bold;
-    color: #fff;
+    color: var(--Icons);
     z-index: 3;
     pointer-events: none;
 }
@@ -116,7 +131,7 @@ html, body {
 
 .progressbarHandler p {
     font-size: 1.5vw;
-    color: #F0F0FF;
+    color: var(--Icons);
     margin-top: -0.2vw;
     margin-left: 1vw;
     margin-right: 1vw;
@@ -125,7 +140,7 @@ html, body {
 .progressbarHandler .progressbar {
     width: 50vw;
     height: 1vw;
-    background-color: #fe721e;
+    background-color: var(--ProgressBarBackgroundColor);
     margin: 0;
     cursor: pointer;
     pointer-events: all;
@@ -134,17 +149,21 @@ html, body {
 }
 
 .progressbarHandler .progressbar .progressbarProgress {
+    --Percentagem: 0;
+    width: calc(calc(var(--Percentagem) / 100) * 50vw);
     position: absolute;
     top: 0;
     left: 0;
     margin: 0;
-    width: 0;
     height: 1vw;
-    background-color: #a41efe;
+    background-color: var(--Buttons);
     cursor: pointer;
     pointer-events: none;
 }
 
+.timelineExpanded {
+    display: none;
+}
 
 /* Expanded Timeline */
 
@@ -168,7 +187,7 @@ html, body {
     position:absolute;
     bottom: 4.5vw;
     left: 0;
-    background-color: #a41efe;
+    background-color: var(--Buttons);
     border-radius: 100vw;
     cursor: pointer;
 }
@@ -181,7 +200,7 @@ html, body {
     border-bottom: 1vw solid #0000;
     border-left: 1vw solid #0000;
     border-right: 1vw solid #0000;
-    border-top: 1vw solid #a41efe;
+    border-top: 1vw solid var(--Buttons);
     margin-top: 0.25vw;
     transform: translateX(-50%);
     margin-left: 45vw;
@@ -200,17 +219,18 @@ html, body {
 }
 
 .expandedTimeline .title {
-    color: #F0F0FF;
+    color: var(--MusicTitleColor);
     font-size: 4vw;
     position: relative;
     margin-left: 45vw;
     margin-top: 5vw;
     width: 50vw;
     text-align: center;
+    word-break: break-all;
 }
 
 .expandedTimeline .author {
-    color: #cacad8;
+    color: var(--MusicAuthorColor);
     font-size: 2.5vw;
     position: relative;
     width: 50vw;
@@ -227,13 +247,52 @@ html, body {
     transform: translateX(-50%);
 }
 
+.expandedTimeline .controllers .expandedIconsButton {
+    cursor: pointer;
+}
+
 .expandedTimeline .controllers .icon {
     width: 3vw;
     margin-left: 1vw;
     margin-right: 1vw;
     font-size: 3vw;
     font-weight: bold;
-    color: #fff;
+    color: var(--Icons);
     z-index: 3;
     pointer-events: none;
+}
+
+.expandedTimeline .timelineExpanded {
+    display: flex;
+    position: absolute;
+    bottom: 8vh;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 5vh;
+}
+
+.expandedTimeline .ProgressBarArea {
+    width: 80vw;
+    background-color: var(--ProgressBarBackgroundColor);
+    height: 2.5vh;
+    cursor: pointer;
+    display: inline;
+}
+
+.expandedTimeline .ProgressBarArea .ProgressBarField  {
+    --Percentagem: 0;
+    position: absolute;
+    width: calc(calc(var(--Percentagem) / 100) * 80vw);
+    height: 2.5vh;
+    background-color: var(--Buttons);
+    pointer-events: none;
+}
+
+.expandedTimeline span {
+    display: inline;
+    color: var(--Icons);
+    font-size: 2vw;
+    margin-left: 1vw;
+    margin-right: 1vw;
 }

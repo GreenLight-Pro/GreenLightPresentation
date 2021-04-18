@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title>Spin Music Player</title>
         <link rel='stylesheet' href='./index.css'/>
+        <audio class='PlayAudioFiles'></audio>
+        <video class='PlayVideoFiles'></video>
     </head>
     <body>
         <div class='timeline'>
@@ -10,7 +13,7 @@
             <div class='iconsArea'>
                 <div class='iconsButton'><div class='icon'>A</div></div>
                 <div class='iconsButton'><img class='icon' src='../../images/previousbutton.png'></img></div>
-                <div class='iconsButton' id='playbutton'><img class='icon' src='../../images/playbutton.png'></img></div>
+                <div class='iconsButton' id='playbutton' onclick='mediaPlayPauseHandler();'><img class='icon' src='../../images/playbutton.png'></img></div>
                 <div class='iconsButton'><img class='icon' src='../../images/nextbutton.png'></img></div>
                 <div class='iconsButton'><div class='icon'>A</div></div>
             </div>
@@ -30,9 +33,16 @@
             <div class='controllers'>
                 <div class='expandedIconsButton'><div class='icon'>A</div></div>
                 <div class='expandedIconsButton'><img class='icon' src='../../images/previousbutton.png'></img></div>
-                <div class='expandedIconsButton' id='playbutton'><img class='icon' src='../../images/playbutton.png'></img></div>
+                <div class='expandedIconsButton' id='Eplaybutton' onclick='mediaPlayPauseHandler();' ><img class='icon' src='../../images/playbutton.png'></img></div>
                 <div class='expandedIconsButton'><img class='icon' src='../../images/nextbutton.png'></img></div>
                 <div class='expandedIconsButton'><div class='icon'>A</div></div>
+            </div>
+            <div class='timelineExpanded'>
+                <span class='StartedTime'>0:00</span>
+                <div class='ProgressBarArea'>
+                    <div class='ProgressBarField'></div>
+                </div>
+                <span class='FinishTime'>0:00</span>
             </div>
         </div>
         <script src='./index.js'></script>
