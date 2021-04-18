@@ -9,7 +9,7 @@
 ## Install
 ### Install using installer:
 
-[Download the installer](https://github.com/emanuelfranklyn/SpinMusicPlayerDesktop/releases/download/latest/Spin-Music-Player-Setup.exe)
+[Windows installer](https://github.com/emanuelfranklyn/SpinMusicPlayerDesktop/releases/download/v1.0.0-beta-1.2/Spin-Music-Player-setup-1.0.0-beta-1.2-win.exe)
 
 ## Contributors
 
