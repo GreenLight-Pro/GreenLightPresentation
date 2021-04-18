@@ -30,6 +30,15 @@ function progressBarClickPositionHandler(event) {
 
 document.getElementsByClassName('ProgressBarArea')[0].onclick = progressBarClickPositionHandler;
 document.getElementsByClassName('progressbar')[0].onclick = progressBarClickPositionHandler;
+document.getElementsByClassName('ProgressBarArea')[0].addEventListener('mousedown', function() {
+    document.addEventListener('mousemove', progressBarClickPositionHandler);
+});
+document.getElementsByClassName('progressbar')[0].addEventListener('mousedown', function() {
+    document.addEventListener('mousemove', progressBarClickPositionHandler);
+});
+document.addEventListener('mouseup', function() {
+    document.removeEventListener('mousemove', progressBarClickPositionHandler);
+});
 
 window.loadedComplete = () => {
     const path = window.require('path');

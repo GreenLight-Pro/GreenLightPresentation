@@ -16,6 +16,9 @@
 * {
     transition: all 0.5s ease;
     font-family:Arial, Helvetica, sans-serif;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    user-select: none;
 }
 
 ::-webkit-scrollbar {
@@ -118,26 +121,32 @@ html, body {
     pointer-events: none;
 }
 
-.progressbarHandler {
+.progressbarPlaceHolder {
+    display: flex;
+    justify-content: center;
+    width: 100vw;
     position: absolute;
-    margin-left: 50vw;
-    margin-top: 1.5vw;
-    transform: translateX(-50%);
+    margin: 0;
     left: 0;
-    top: 0;
+    pointer-events: none;
+}
+
+.progressbarPlaceHolder .progressbarHandler {
+    margin-top: 1.5vw;
     display: flex;
     flex-direction: row;
 }
 
-.progressbarHandler p {
+.progressbarPlaceHolder .progressbarHandler p {
     font-size: 1.5vw;
     color: var(--Icons);
     margin-top: -0.2vw;
     margin-left: 1vw;
     margin-right: 1vw;
+    user-select: text;
 }
 
-.progressbarHandler .progressbar {
+.progressbarPlaceHolder .progressbarHandler .progressbar {
     width: 50vw;
     height: 1vw;
     background-color: var(--ProgressBarBackgroundColor);
@@ -148,7 +157,7 @@ html, body {
     display: block;
 }
 
-.progressbarHandler .progressbar .progressbarProgress {
+.progressbarPlaceHolder .progressbarHandler .progressbar .progressbarProgress {
     --Percentagem: 0;
     width: calc(calc(var(--Percentagem) / 100) * 50vw);
     position: absolute;
@@ -190,6 +199,7 @@ html, body {
     background-color: var(--Buttons);
     border-radius: 100vw;
     cursor: pointer;
+    overflow: visible;
 }
 
 .expandedTimeline .expandedTimelineCloseBar:before {
@@ -227,6 +237,7 @@ html, body {
     width: 50vw;
     text-align: center;
     word-break: break-all;
+    user-select: text;
 }
 
 .expandedTimeline .author {
@@ -236,6 +247,7 @@ html, body {
     width: 50vw;
     text-align: center;
     margin-left: 45vw;
+    user-select: text;
 }
 
 .expandedTimeline .controllers {
@@ -295,4 +307,5 @@ html, body {
     font-size: 2vw;
     margin-left: 1vw;
     margin-right: 1vw;
+    user-select: text;
 }
