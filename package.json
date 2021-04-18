@@ -1,11 +1,12 @@
 {
   "name": "spinmusicplayerdesktop",
-  "version": "v1.0.0-beta-1.2",
+  "version": "v1.0.0-beta-1.3",
   "description": "A desktop media player",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron --trace-deprecation ."
+    "start": "electron --trace-deprecation .",
+    "builder": "electron-builder"
   },
   "repository": {
     "type": "git",
@@ -45,9 +46,15 @@
       "allowToChangeInstallationDirectory": true
     },
     "win": {
-      "icon": "./src/assets/images/logo.png"
+      "icon": "./src/assets/images/logo.png",
+      "target": [ 
+        "portable",
+        "nsis"
+      ]
     },
     "linux": {
+      "category": "AudioVideo",
+      "icon": "./src/assets/images/logo.png",
       "target": [
         "AppImage",
         "zip"
