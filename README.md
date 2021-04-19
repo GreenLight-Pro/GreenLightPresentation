@@ -13,7 +13,12 @@
 
 ## Contributors
 
-| [<img src="" witdh="115"><br><sub></sub>](https://github.com/) |
+| [<img src="https://avatars.githubusercontent.com/u/43734867?s=128&v=4" witdh="115"><br><sub>Lobo Metalúrgico</sub>](https://github.com/LoboMetalurgico) |
+| :---: |
+
+### Owner
+
+| [<img src="https://avatars.githubusercontent.com/u/44732812?s=128&v=4" witdh="115"><br><sub>Space_Interprise</sub>](https://github.com/emanuelfranklyn) |
 | :---: |
 
 ## License
