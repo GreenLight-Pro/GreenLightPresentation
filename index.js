@@ -9,6 +9,7 @@ const isDev = require('electron-is-dev');
 var fsThread;
 
 function generateFsThread() {
+    //  deepcode ignore IndirectCommandInjection: Use the enviroment variable __dirname in this situation has been considerated safe 
     fsThread = spawn(path.join(__dirname, 'child.js'));
     function disconnectHandler() {
         fsThread.removeAllListeners();
