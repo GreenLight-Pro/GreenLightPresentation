@@ -4,6 +4,38 @@ var isMaximized = false;
 var isAudio = false;
 const audio = document.getElementsByClassName('PlayAudioFiles')[0];
 const video = document.getElementsByClassName('PlayVideoFiles')[0];
+var volumeBefore = 0;
+var haveMute = false;
+
+document.getElementsByClassName('volumeIcon')[0].onclick = () => {
+    if (haveMute) {
+        audio.volume = volumeBefore;
+        document.getElementsByClassName('volumeIcon')[0].src = '../../images/soundIcon.png';
+        haveMute = false;
+        UpdateVolumeHandler();
+    } else {
+        volumeBefore = audio.volume;
+        audio.volume = 0;
+        document.getElementsByClassName('volumeIcon')[0].src = '../../images/noSoundIcon.png';
+        haveMute = true;
+        UpdateVolumeHandler();
+    }
+};
+
+function UpdateVolumeHandler() {
+    if (audio.volume > 0) {
+        document.getElementsByClassName('volumeIcon')[0].src = '../../images/soundIcon.png';
+    } else {
+        document.getElementsByClassName('volumeIcon')[0].src = '../../images/noSoundIcon.png';
+    }
+    var maxSize = document.getElementsByClassName('volumeBarProgress')[0].offsetWidth;
+    var ballSize = document.getElementsByClassName('volumeBarProgressHandler')[0].offsetWidth;
+    document.getElementsByClassName('volumeBarProgressHandler')[0].style.marginLeft = ((audio.volume * maxSize) - (ballSize / 2)) + 'px';
+}
+
+audio.volume = 1;
+haveMute = false;
+UpdateVolumeHandler();
 
 // eslint-disable-next-line no-unused-vars
 function mediaPlayPauseHandler() {
@@ -15,6 +47,22 @@ function mediaPlayPauseHandler() {
         }
     }
 }
+
+function volumeClickPositionHandler(event) {
+    if (event.srcElement.className !== 'volumeBarProgress') {return;}
+    var clickPosition = event.clientX - event.srcElement.offsetLeft;
+    var elementSize = event.srcElement.offsetWidth;
+    var percentage = ((clickPosition / elementSize) * 100).toFixed(3);
+    if ((percentage / 1000) > 1) {percent = 100;}
+    audio.volume = (percentage / 100) - 8;
+    UpdateVolumeHandler();
+}
+
+document.getElementsByClassName('volumeBarProgress')[0].onclick = volumeClickPositionHandler;
+
+document.getElementsByClassName('volumeBarProgress')[0].addEventListener('mousedown', function() {
+    document.addEventListener('mousemove', volumeClickPositionHandler);
+});
 
 function progressBarClickPositionHandler(event) {
     if (audio.readyState <= 2) {return;}
@@ -30,6 +78,7 @@ function progressBarClickPositionHandler(event) {
 
 document.getElementsByClassName('ProgressBarArea')[0].onclick = progressBarClickPositionHandler;
 document.getElementsByClassName('progressbar')[0].onclick = progressBarClickPositionHandler;
+
 document.getElementsByClassName('ProgressBarArea')[0].addEventListener('mousedown', function() {
     document.addEventListener('mousemove', progressBarClickPositionHandler);
 });
@@ -38,6 +87,7 @@ document.getElementsByClassName('progressbar')[0].addEventListener('mousedown', 
 });
 document.addEventListener('mouseup', function() {
     document.removeEventListener('mousemove', progressBarClickPositionHandler);
+    document.removeEventListener('mousemove', volumeClickPositionHandler);
 });
 
 window.loadedComplete = () => {

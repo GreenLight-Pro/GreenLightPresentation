@@ -82,7 +82,7 @@ html, body {
     display: flex;
     flex-direction: row;
     margin-left: 5vw;
-    margin-top: -0.25vw;
+    margin-top: 0vw;
 }
 
 .iconsArea .iconsButton {
@@ -167,6 +167,49 @@ html, body {
     height: 1vw;
     background-color: var(--Buttons);
     cursor: pointer;
+    pointer-events: none;
+}
+
+.volumeControlPlaceHolder {
+    position: absolute;
+    left: 80vw;
+    width: 100%;
+}
+
+.volumeControlPlaceHolder .volumeControlHandler {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    margin-top: 1vw;
+}
+
+.volumeControlPlaceHolder .volumeControlHandler * {
+    display: inline-block;
+}
+
+.volumeControlPlaceHolder .volumeControlHandler .volumeIcon {
+    width: 1.75vw;
+    height: 1.75vw;
+    cursor: pointer;
+}
+
+.volumeControlPlaceHolder .volumeControlHandler .volumeBar .volumeBarProgress {
+    width: 10vw;
+    height: 0.35vw;
+    background-color: var(--Icons);
+    border-radius: 100vw;
+    margin-bottom: 0.35vw;
+    margin-left: 0.25vw;
+    cursor: pointer;
+}
+
+.volumeControlPlaceHolder .volumeControlHandler .volumeBar .volumeBarProgress .volumeBarProgressHandler {
+    width: 1.5vw;
+    height: 1.5vw;
+    background-color: var(--Icons);
+    border-radius: 100vw;
+    position: absolute;
+    margin-top: -0.5vw;
     pointer-events: none;
 }
 
