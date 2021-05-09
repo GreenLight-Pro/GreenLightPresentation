@@ -17,20 +17,23 @@ document.getElementsByClassName('volumeIcon')[0].onclick = () => {
         volumeBefore = audio.volume;
         audio.volume = 0;
         document.getElementsByClassName('volumeIcon')[0].src = '../../images/noSoundIcon.png';
+        document.getElementsByClassName('volumeBarProgressWhiteArea')[0].style.width = '0px';
         haveMute = true;
         UpdateVolumeHandler();
     }
 };
 
 function UpdateVolumeHandler() {
+    var maxSize = document.getElementsByClassName('volumeBarProgress')[0].offsetWidth;
+    var ballSize = document.getElementsByClassName('volumeBarProgressHandler')[0].offsetWidth;
+    document.getElementsByClassName('volumeBarProgressWhiteArea')[0].style.width = ((audio.volume * maxSize) - (ballSize / 2)) + 'px';
+    document.getElementsByClassName('volumeBarProgressHandler')[0].style.marginLeft = ((audio.volume * maxSize) - (ballSize / 2)) + 'px';
     if (audio.volume > 0) {
         document.getElementsByClassName('volumeIcon')[0].src = '../../images/soundIcon.png';
     } else {
+        document.getElementsByClassName('volumeBarProgressWhiteArea')[0].style.width = '0px';
         document.getElementsByClassName('volumeIcon')[0].src = '../../images/noSoundIcon.png';
     }
-    var maxSize = document.getElementsByClassName('volumeBarProgress')[0].offsetWidth;
-    var ballSize = document.getElementsByClassName('volumeBarProgressHandler')[0].offsetWidth;
-    document.getElementsByClassName('volumeBarProgressHandler')[0].style.marginLeft = ((audio.volume * maxSize) - (ballSize / 2)) + 'px';
 }
 
 audio.volume = 1;

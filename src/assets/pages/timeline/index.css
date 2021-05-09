@@ -83,6 +83,7 @@ html, body {
     flex-direction: row;
     margin-left: 5vw;
     margin-top: 0vw;
+    height: inherit;
 }
 
 .iconsArea .iconsButton {
@@ -91,7 +92,6 @@ html, body {
     margin-right: 0.5vw;
     position: relative;
     width: 2vw; 
-    height: 2vw;
     cursor: pointer;
 }
 
@@ -196,11 +196,20 @@ html, body {
 .volumeControlPlaceHolder .volumeControlHandler .volumeBar .volumeBarProgress {
     width: 10vw;
     height: 0.35vw;
-    background-color: var(--Icons);
+    background-color: var(--MusicAuthorColor);
     border-radius: 100vw;
     margin-bottom: 0.35vw;
     margin-left: 0.25vw;
     cursor: pointer;
+}
+
+.volumeControlPlaceHolder .volumeControlHandler .volumeBar .volumeBarProgress .volumeBarProgressWhiteArea{
+    height: 0.35vw;
+    background-color: var(--Icons);
+    border-radius: 100vw;
+    margin-bottom: 0.35vw;
+    position: absolute;
+    pointer-events: none;
 }
 
 .volumeControlPlaceHolder .volumeControlHandler .volumeBar .volumeBarProgress .volumeBarProgressHandler {
