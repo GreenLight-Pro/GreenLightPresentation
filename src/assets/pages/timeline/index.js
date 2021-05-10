@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 
 var isMaximized = false;
-var isAudio = false;
+var isAudio = true;
 const audio = document.getElementsByClassName('PlayAudioFiles')[0];
 const video = document.getElementsByClassName('PlayVideoFiles')[0];
 var volumeBefore = 0;
@@ -10,12 +10,14 @@ var haveMute = false;
 document.getElementsByClassName('volumeIcon')[0].onclick = () => {
     if (haveMute) {
         audio.volume = volumeBefore;
+        video.volume = volumeBefore;
         document.getElementsByClassName('volumeIcon')[0].src = '../../images/soundIcon.png';
         haveMute = false;
         UpdateVolumeHandler();
     } else {
         volumeBefore = audio.volume;
         audio.volume = 0;
+        video.volume = 0;
         document.getElementsByClassName('volumeIcon')[0].src = '../../images/noSoundIcon.png';
         document.getElementsByClassName('volumeBarProgressWhiteArea')[0].style.width = '0px';
         haveMute = true;
@@ -36,7 +38,18 @@ function UpdateVolumeHandler() {
     }
 }
 
+function TimeUpdater(audio) {
+    var currentTime = audio.currentTime;
+    var fullTime = audio.duration;
+    var percentage = ((currentTime / fullTime) * 100).toFixed(3);
+    document.getElementsByClassName('currentTime')[0].innerText = getTime(currentTime);
+    document.getElementsByClassName('StartedTime')[0].innerText = getTime(currentTime);
+    document.getElementsByClassName('progressbarProgress')[0].style.setProperty('--Percentagem', percentage);
+    document.getElementsByClassName('ProgressBarField')[0].style.setProperty('--Percentagem', percentage);
+}
+
 audio.volume = 1;
+video.volume = 1;
 haveMute = false;
 UpdateVolumeHandler();
 
@@ -48,6 +61,12 @@ function mediaPlayPauseHandler() {
         } else {
             audio.pause();
         }
+    } else {
+        if (video.paused) {
+            video.play();
+        } else {
+            video.pause();
+        }
     }
 }
 
@@ -58,6 +77,7 @@ function volumeClickPositionHandler(event) {
     var percentage = ((clickPosition / elementSize) * 100).toFixed(3);
     if ((percentage / 1000) > 1) {percent = 100;}
     audio.volume = (percentage / 100) - 8;
+    video.volume = (percentage / 100) - 8;
     UpdateVolumeHandler();
 }
 
@@ -68,14 +88,25 @@ document.getElementsByClassName('volumeBarProgress')[0].addEventListener('moused
 });
 
 function progressBarClickPositionHandler(event) {
-    if (audio.readyState <= 2) {return;}
+    if ((isAudio && audio.readyState <= 2) || (!isAudio && video.readyState <= 2)) {return;}
     var clickPosition = event.clientX - event.srcElement.offsetLeft;
     var elementSize = event.srcElement.offsetWidth;
     var percentage = ((clickPosition / elementSize) * 100).toFixed(3);
-    var currentTime = audio.currentTime;
-    var fullTime = audio.duration;
+    var currentTime = 0;
+    var fullTime = 0;
+    if (isAudio) {
+        currentTime = audio.currentTime;
+        fullTime = audio.duration;
+    } else {
+        currentTime = video.currentTime;
+        fullTime = video.duration;
+    }
     if (!(isNaN(currentTime) && isNaN(fullTime))) {
-        audio.currentTime = (percentage / 100) * fullTime;
+        if (isAudio) {
+            audio.currentTime = (percentage / 100) * fullTime;
+        } else {
+            video.currentTime = (percentage / 100) * fullTime;
+        }
     }
 }
 
@@ -96,6 +127,43 @@ document.addEventListener('mouseup', function() {
 window.loadedComplete = () => {
     const path = window.require('path');
 
+    function PlayMedia(audio, content, picture) {
+        audio.src = content.filePath;
+        audio.onplay = () => {
+            document.getElementById('playbutton').children[0].src = '../../images/pausebutton.png';
+            document.getElementById('Eplaybutton').children[0].src = '../../images/pausebutton.png';
+        };
+        audio.onpause = () => {
+            document.getElementById('playbutton').children[0].src = '../../images/playbutton.png';
+            document.getElementById('Eplaybutton').children[0].src = '../../images/playbutton.png';
+        };
+        audio.onloadeddata = (event) => {
+            audio.play().then(() => {
+                if ('mediaSession' in navigator) {
+                    navigator.mediaSession.metadata = new MediaMetadata({
+                        title: content.title + (content.author !== 'No author' ? (' - ' + content.author) : ''),
+                        artist: 'Spin Music Player',
+                        album: 'No album',
+                        artwork: [
+                            // eslint-disable-next-line max-len
+                            { src: picture, sizes: '512x512', type: ('image/' + getExtName(picture).slice(1)) },
+                        ]
+                    });
+                }
+                  
+                navigator.mediaSession.setActionHandler('play', function() {
+                    audio.play();
+                });
+                navigator.mediaSession.setActionHandler('pause', function() {
+                    audio.pause();
+                });
+            });
+            var duration = getTime(event.path[0].duration);
+            document.getElementsByClassName('TotalTime')[0].innerText = duration;
+            document.getElementsByClassName('FinishTime')[0].innerText = duration;
+        };
+    }
+
     document.getElementsByClassName('expandPlayerButton')[0].onclick = () => {
         window.timeline.send('timeline.events.expand.fullscreen');
     };
@@ -113,6 +181,10 @@ window.loadedComplete = () => {
             document.getElementsByClassName('timeline')[0].style.opacity = 0;
             document.getElementsByClassName('timeline')[0].style.display = 'none';
         }, 500);
+
+        if (!isAudio) {
+            document.getElementsByClassName('PlayVideoFiles')[0].style.display = 'block';
+        }
     });
 
     document.getElementsByClassName('expandedTimelineCloseBar')[0].onclick = () => {
@@ -132,6 +204,8 @@ window.loadedComplete = () => {
             if (isMaximized) {return;}
             document.getElementsByTagName('body')[0].style.backgroundColor = '#0000';
         }, 750);
+
+        document.getElementsByClassName('PlayVideoFiles')[0].style.display = 'none';
     });
 
     window.ipcRenderer.on('media.playcontent', (content) => {
@@ -156,58 +230,20 @@ window.loadedComplete = () => {
                 isAudio = true;
                 video.pause();
                 video.src = '';
-
-                audio.src = content.filePath;
-                audio.onplay = () => {
-                    document.getElementById('playbutton').children[0].src = '../../images/pausebutton.png';
-                    document.getElementById('Eplaybutton').children[0].src = '../../images/pausebutton.png';
-                };
-                audio.onpause = () => {
-                    document.getElementById('playbutton').children[0].src = '../../images/playbutton.png';
-                    document.getElementById('Eplaybutton').children[0].src = '../../images/playbutton.png';
-                };
-                audio.onloadeddata = (event) => {
-                    audio.play().then(() => {
-                        if ('mediaSession' in navigator) {
-                            navigator.mediaSession.metadata = new MediaMetadata({
-                                title: content.title + (content.author !== 'No author' ? (' - ' + content.author) : ''),
-                                artist: 'Spin Music Player',
-                                album: 'No album',
-                                artwork: [
-                                // eslint-disable-next-line max-len
-                                    { src: picture, sizes: '512x512', type: ('image/' + getExtName(picture).slice(1)) },
-                                ]
-                            });
-                        }
-                  
-                        navigator.mediaSession.setActionHandler('play', function() {
-                            audio.play();
-                        });
-                        navigator.mediaSession.setActionHandler('pause', function() {
-                            audio.pause();
-                        });
-                    });
-                    var duration = getTime(event.path[0].duration);
-                    document.getElementsByClassName('TotalTime')[0].innerText = duration;
-                    document.getElementsByClassName('FinishTime')[0].innerText = duration;
-                };
+                document.getElementsByClassName('PlayVideoFiles')[0].style.display = 'none';
+                PlayMedia(audio, content, picture);
             } else {
                 isAudio = false;
                 audio.pause();
                 audio.src = '';
+
+                PlayMedia(video, content, picture);
             }
         }
     });
 
-    audio.ontimeupdate = () => {
-        var currentTime = audio.currentTime;
-        var fullTime = audio.duration;
-        var percentage = ((currentTime / fullTime) * 100).toFixed(3);
-        document.getElementsByClassName('currentTime')[0].innerText = getTime(currentTime);
-        document.getElementsByClassName('StartedTime')[0].innerText = getTime(currentTime);
-        document.getElementsByClassName('progressbarProgress')[0].style.setProperty('--Percentagem', percentage);
-        document.getElementsByClassName('ProgressBarField')[0].style.setProperty('--Percentagem', percentage);
-    };
+    audio.ontimeupdate = () => {TimeUpdater(audio);};
+    video.ontimeupdate = () => {TimeUpdater(video);};
 };
 
 function getExtName(fileName) {
