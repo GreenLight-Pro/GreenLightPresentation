@@ -47,11 +47,23 @@ html, body {
     justify-content: center;
     opacity: 0;
     pointer-events: none;
+    overflow: visible;
 }
 
 #AltPopupDiv span {
     font-size: 2vw;
-    padding: 0.5vw;
+    padding: 1vw;
+}
+
+#AltPopupDiv #AltPopupDotEffect {
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    bottom: 0;
+    margin-bottom: -2vw;
+    z-index: 99;
+    border: 1vw solid #0000;
+    border-top: 1vw solid #DDD;
 }
 
 .PlayAudioFiles {
@@ -280,11 +292,9 @@ html, body {
 .expandedTimeline .expandedTimelineCloseBar {
     height: 0.25vw;
     width: 90vw;
-    transform: translateX(-50%);
-    margin-left: 50vw;
+    left: 5vw;
     position:absolute;
     bottom: 4.5vw;
-    left: 0;
     background-color: var(--Buttons);
     border-radius: 100vw;
     cursor: pointer;
@@ -367,9 +377,8 @@ html, body {
     display: flex;
     position: absolute;
     bottom: 8vh;
-    justify-content: center;
-    align-items: center;
-    width: 100vw;
+    width: 92vw;
+    padding-left: 4vw;
     height: 5vh;
 }
 
@@ -379,6 +388,7 @@ html, body {
     height: 2.5vh;
     cursor: pointer;
     display: inline;
+
 }
 
 .expandedTimeline .ProgressBarArea .ProgressBarField  {

@@ -11,19 +11,26 @@ var AltPopupTimeout = setTimeout(()=>{},1);
 
 // AltText
 document.onmouseover = (event) => {
-    document.onmouseleave();
     if (isMaximized && event.target && event.target.attributes && event.target.attributes.alt) {
-        AltPopupTimeout = setTimeout(() => {
+        // eslint-disable-next-line no-inner-declarations
+        function adjustPosition() {
             // eslint-disable-next-line max-len
             document.getElementById('AltPopupDiv').style.left = ((event.target.offsetLeft + (event.target.offsetWidth / 2)) - (document.getElementById('AltPopupDiv').offsetWidth / 2)) + 'px';
             var TopOffset = event.target.offsetTop;
             if (TopOffset === 0 && event.target.offsetParent && event.target.offsetParent.offsetTop) {
                 TopOffset = event.target.offsetParent.offsetTop;
             }
-            document.getElementById('AltPopupDiv').style.top = (TopOffset - document.getElementById('AltPopupDiv').offsetHeight) + 'px';
+            // eslint-disable-next-line max-len
+            document.getElementById('AltPopupDiv').style.top = (TopOffset - (document.getElementById('AltPopupDiv').offsetHeight + (0.01 * window.innerWidth))) + 'px';
             document.getElementById('AltPopupSpan').innerText = event.target.attributes.alt.value;
             document.getElementById('AltPopupDiv').style.opacity = 1;
+        }
+        AltPopupTimeout = setTimeout(() => {
+            adjustPosition();
+            adjustPosition();
         }, 500);
+    } else {
+        document.onmouseleave();
     }
 };
 
