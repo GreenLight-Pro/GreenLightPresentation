@@ -34,6 +34,26 @@ html, body {
     background-color: #0000;
 }
 
+#AltPopupDiv {
+    position:fixed;
+    z-index: 99;
+    min-width: 10vw;
+    min-height: 4vw;
+    background-color: #DDD;
+    color: #222;
+    border-radius: 1vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+}
+
+#AltPopupDiv span {
+    font-size: 2vw;
+    padding: 0.5vw;
+}
+
 .PlayAudioFiles {
     display: none;
 }
@@ -321,11 +341,11 @@ html, body {
 
 .expandedTimeline .controllers {
     position: absolute;
-    left: 50vw;
     bottom: 10vw;
     display: flex;
     flex-direction: row;
-    transform: translateX(-50%);
+    justify-content: center;
+    width: 100%;
 }
 
 .expandedTimeline .controllers .expandedIconsButton {

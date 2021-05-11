@@ -7,6 +7,31 @@ const video = document.getElementsByClassName('PlayVideoFiles')[0];
 var volumeBefore = 0;
 var haveMute = false;
 
+var AltPopupTimeout = setTimeout(()=>{},1);
+
+// AltText
+document.onmouseover = (event) => {
+    document.onmouseleave();
+    if (isMaximized && event.target && event.target.attributes && event.target.attributes.alt) {
+        AltPopupTimeout = setTimeout(() => {
+            // eslint-disable-next-line max-len
+            document.getElementById('AltPopupDiv').style.left = ((event.target.offsetLeft + (event.target.offsetWidth / 2)) - (document.getElementById('AltPopupDiv').offsetWidth / 2)) + 'px';
+            var TopOffset = event.target.offsetTop;
+            if (TopOffset === 0 && event.target.offsetParent && event.target.offsetParent.offsetTop) {
+                TopOffset = event.target.offsetParent.offsetTop;
+            }
+            document.getElementById('AltPopupDiv').style.top = (TopOffset - document.getElementById('AltPopupDiv').offsetHeight) + 'px';
+            document.getElementById('AltPopupSpan').innerText = event.target.attributes.alt.value;
+            document.getElementById('AltPopupDiv').style.opacity = 1;
+        }, 500);
+    }
+};
+
+document.onmouseleave = () => {
+    clearTimeout(AltPopupTimeout);
+    document.getElementById('AltPopupDiv').style.opacity = 0;
+};
+
 document.getElementsByClassName('volumeIcon')[0].onclick = () => {
     if (haveMute) {
         audio.volume = volumeBefore;

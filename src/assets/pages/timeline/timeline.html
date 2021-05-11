@@ -5,6 +5,7 @@
         <link rel='stylesheet' href='./index.css'/>
         <audio class='PlayAudioFiles'></audio>
         <video class='PlayVideoFiles'></video>
+        <div id='AltPopupDiv'><span id='AltPopupSpan'>Text</span></div>
     </head>
     <body>
         <div class='timeline'>
@@ -45,10 +46,12 @@
             <h2 class='author'>[Music Author]</h2>
             <div class='controllers'>
                 <div class='expandedIconsButton'><div class='icon'>A</div></div>
-                <div class='expandedIconsButton'><img class='icon' src='../../images/previousbutton.png'></img></div>
-                <div class='expandedIconsButton' id='Eplaybutton' onclick='mediaPlayPauseHandler();' ><img class='icon' src='../../images/playbutton.png'></img></div>
-                <div class='expandedIconsButton'><img class='icon' src='../../images/nextbutton.png'></img></div>
+                <div class='expandedIconsButton' alt='Previous'><img class='icon' src='../../images/previousbutton.png'></img></div>
+                <div class='expandedIconsButton' alt='Play/Pause' id='Eplaybutton' onclick='mediaPlayPauseHandler();' ><img class='icon' src='../../images/playbutton.png'></img></div>
+                <div class='expandedIconsButton' alt='Next'><img class='icon' src='../../images/nextbutton.png'></img></div>
                 <div class='expandedIconsButton'><div class='icon'>A</div></div>
+                <div class='expandedIconsButton' alt='Theather Mode'><img class='icon' src='../../images/theatherModeIcon.png'></img></div>
+                <div class='expandedIconsButton' alt='FullScreen Mode'><img class='icon' src='../../images/fullScreenModeIcon.png'></img></div>
             </div>
             <div class='timelineExpanded'>
                 <span class='StartedTime'>0:00</span>
