@@ -65,6 +65,7 @@ function onLoaded() {
     document.getElementsByClassName('ActivePage')[0].style.opacity = '1';
     document.getElementsByClassName('timeline')[0].style.display = 'block';
     document.getElementsByClassName('timeline')[0].style.opacity = '1';
+    ipcRenderer.send('spinmp.loading.Loaded');
 }
 
 const eventEmmiter = require('events');

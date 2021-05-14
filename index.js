@@ -5,6 +5,30 @@ const electron = require('electron');
 const { app, BrowserWindow, ipcMain } = electron;
 const { autoUpdater } = require('electron-updater');
 const isDev = require('electron-is-dev');
+const Discord = require('discord-rpc');
+const clientId = '842784561317937162';
+
+// Discord Rich Presence
+var activityCache;
+var setActivity = (args) => {
+    activityCache = args;
+};
+
+const rpc = new Discord.Client({ transport: 'ipc' });
+rpc.login({ clientId }).then(() => {
+    rpc.setActivity({
+        details: 'Starting up...',
+        largeImageKey: 'logo',
+        largeImageText: 'Spin Music Player',
+        startTimestamp: Date.now(),
+    });
+    if (activityCache) {
+        rpc.setActivity(activityCache);
+    }
+    setActivity = (args) => {
+        rpc.setActivity(args);
+    };
+});
 
 var fsThread;
 
@@ -79,10 +103,12 @@ function createWindow () {
         flags: ['disabled'],
         click () { console.log('button0 clicked.'); }
     }, {
-        tooltip: 'Play',
+        tooltip: 'PlayPause',
         icon: path.resolve(__dirname, 'src', 'assets', 'images','playbutton.png'),
-        flags: ['disabled'],
-        click () { console.log('button1 clicked'); }
+        // flags: ['disabled'],
+        click () { 
+            win.webContents.send('spinmp.timeline.pausePlay');
+        }
     }, {
         tooltip: 'next',
         icon: path.resolve(__dirname, 'src', 'assets', 'images','nextbutton.png'),
@@ -163,4 +189,17 @@ ipcMain.on('app_version', (event) => {
         }, 780000); // 13 minutes
     }
     event.sender.send('app_version', { version: app.getVersion(), rootPath: __dirname });
+});
+
+ipcMain.on('spinmp.loading.Loaded', () => {
+    setActivity({
+        details: 'Idle',
+        largeImageKey: 'logo',
+        state: `${rpc.user.username} is searching his files, or just AFK`,
+        startTimestamp: Date.now(),
+    });
+});
+
+ipcMain.on('spinmp.setActivity', (event, data) => {
+    setActivity(data);
 });

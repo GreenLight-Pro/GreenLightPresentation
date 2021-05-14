@@ -85,19 +85,61 @@ video.volume = 1;
 haveMute = false;
 UpdateVolumeHandler();
 
+var updateActivity = (args) => {
+    if (window.ipcRenderer) {
+        window.ipcRenderer.send('spinmp.setActivity', args);
+    }
+};
+
 // eslint-disable-next-line no-unused-vars
-function mediaPlayPauseHandler() {
+function mediaPlayPauseHandler(ignoreChange = false) {
     if (isAudio) {
-        if (audio.paused) {
-            audio.play();
+        if ((!ignoreChange && audio.paused) || (ignoreChange && !audio.paused)) {
+            if (!ignoreChange) {audio.play();}
+            updateActivity({
+                details: document.getElementsByClassName('title')[0].innerText,
+                largeImageKey: 'defaultmusicpicture',
+                largeImageText: 'Listening to a song',
+                smallImageKey: 'playbutton',
+                smallImageText: 'Playing',
+                state: document.getElementsByClassName('author')[0].innerText,
+                startTimestamp: Date.now(),
+                endTimestamp: (Date.now() + Number(((audio.duration - audio.currentTime) * 1000).toFixed(0))),
+            });
         } else {
-            audio.pause();
+            if (!ignoreChange) {audio.pause();}
+            updateActivity({
+                details: document.getElementsByClassName('title')[0].innerText,
+                largeImageKey: 'defaultmusicpicture',
+                largeImageText: 'Listening to a song',
+                smallImageKey: 'pausebutton',
+                smallImageText: 'Paused',
+                state: document.getElementsByClassName('author')[0].innerText,
+            });
         }
     } else {
-        if (video.paused) {
-            video.play();
+        if ((!ignoreChange && video.paused) || (ignoreChange && !video.paused)) {
+            if (!ignoreChange) {video.play();}
+            updateActivity({
+                details: document.getElementsByClassName('title')[0].innerText,
+                largeImageKey: audio.localName === 'audio' ? 'defaultmusicpicture' : 'defaultvideopicture',
+                largeImageText: audio.localName === 'audio' ? 'Listening to a song' : 'Watching to a video',
+                smallImageKey: 'playbutton',
+                smallImageText: 'Playing',
+                state: document.getElementsByClassName('author')[0].innerText,
+                startTimestamp: Date.now(),
+                endTimestamp: (Date.now() + Number(((video.duration - video.currentTime) * 1000).toFixed(0))),
+            });
         } else {
-            video.pause();
+            if (!ignoreChange) {video.pause();}
+            updateActivity({
+                details: document.getElementsByClassName('title')[0].innerText,
+                largeImageKey: 'defaultvideopicture',
+                largeImageText: 'Watching to a video',
+                smallImageKey: 'pausebutton',
+                smallImageText: 'Paused',
+                state: document.getElementsByClassName('author')[0].innerText,
+            });
         }
     }
 }
@@ -139,6 +181,7 @@ function progressBarClickPositionHandler(event) {
         } else {
             video.currentTime = (percentage / 100) * fullTime;
         }
+        mediaPlayPauseHandler(true);
     }
 }
 
@@ -158,6 +201,8 @@ document.addEventListener('mouseup', function() {
 
 window.loadedComplete = () => {
     const path = window.require('path');
+
+    window.ipcRenderer.on('spinmp.timeline.pausePlay', () => {mediaPlayPauseHandler();});
 
     function PlayMedia(audio, content, picture) {
         audio.src = content.filePath;
@@ -193,6 +238,16 @@ window.loadedComplete = () => {
             var duration = getTime(event.path[0].duration);
             document.getElementsByClassName('TotalTime')[0].innerText = duration;
             document.getElementsByClassName('FinishTime')[0].innerText = duration;
+            updateActivity({
+                details: content.title,
+                largeImageKey: audio.localName === 'audio' ? 'defaultmusicpicture' : 'defaultvideopicture',
+                largeImageText: audio.localName === 'audio' ? 'Listening to a song' : 'Watching to a video',
+                smallImageKey: 'playbutton',
+                smallImageText: 'Playing',
+                state: content.author,
+                startTimestamp: Date.now(),
+                endTimestamp: (Date.now() + Number((event.path[0].duration * 1000).toFixed(0))),
+            });
         };
     }
 
