@@ -1,3 +1,7 @@
+const defaultVideoPicture = '../../assets/images/defaultVideoPicture.png';
+const defaultMusicPicture = '../../assets/images/defaultMusicPicture.png';
+const tagReaderTimeoutTime = 5000;
+
 /* eslint-disable no-undef, no-unused-vars */
 
 // https://stackoverflow.com/questions/3231459/create-unique-id-with-javascript/3231532
@@ -82,21 +86,20 @@ window.loadedComplete = () => {
                                 size: thumbsupply.ThumbSize.MEDIUM, // or ThumbSize.LARGE
                                 forceCreate: true,
                                 cacheDir: '~/myapp/cache',
-                            })
-                                .then(thumb => {
-                                    // serve thumbnail
-                                    imageThumb = path.resolve(window.rootPath, thumb);
-                                    proceed();
-                                })
-                                .catch(err => {
-                                    // thumbnail doesn't exist
-                                    console.log(err);
-                                    imageThumb = '../../assets/images/';
-                                    proceed();
-                                });
+                            }).then(thumb => {
+                                // serve thumbnail
+                                imageThumb = path.resolve(window.rootPath, thumb);
+                                proceed();
+                            }).catch(err => {
+                                // thumbnail doesn't exist
+                                console.log(err);
+                                imageThumb = defaultVideoPicture;
+                                proceed();
+                            });
 
                             // eslint-disable-next-line no-inner-declarations
                             function proceed() {
+                                if (!fs.existsSync(imageThumb)) {imageThumb = defaultVideoPicture;}
                                 var ContentData = {
                                     type: 'video',
                                     thumb: imageThumb,
@@ -113,16 +116,22 @@ window.loadedComplete = () => {
                             var imageSrc = '';
                             var titleSrc = '';
                             var authorSrc = '';
-                            
                             var jsmediatags = window.require('jsmediatags');
+                            // eslint-disable-next-line no-inner-declarations
+                            function DefaultResult() {
+                                imageSrc = defaultMusicPicture;
+                                // eslint-disable-next-line max-len
+                                titleSrc = file.substring(0, file.length - path.extname(path.resolve(Directory, file)).length);
+                                authorSrc = 'No author';
+                                proceed();
+                            }
+                            var jsMediaTagsTimeout = setTimeout(DefaultResult, tagReaderTimeoutTime);
                             jsmediatags.read(path.resolve(Directory, file), {
                                 onSuccess: function(tag) {
+                                    clearTimeout(jsMediaTagsTimeout);
                                     if (!tag) {
-                                        imageSrc = '../../assets/images/defaultMusicPicture.png';
-                                        titleSrc = file.substring(0, file.length - path.extname(path.resolve(Directory, file)).length);
-                                        authorSrc = 'No author';
                                         console.log('[JSMediaTags] No tag founded! ' + path.resolve(Directory, file));
-                                        proceed();
+                                        DefaultResult();
                                         return;
                                     }
                                     var image = tag.tags.picture;
@@ -135,21 +144,17 @@ window.loadedComplete = () => {
                                         if (base64String !== '') {
                                             base64 = 'data:' + image.format + ';base64,' + window.btoa(base64String);
                                         } else {
-                                            base64 = '../../assets/images/defaultMusicPicture.png';
+                                            base64 = defaultMusicPicture;
                                         }
                                         imageSrc = base64;
                                         titleSrc = tag.tags.title || file;
                                         authorSrc = tag.tags.artist;
                                         proceed();
+                                    } else {
+                                        DefaultResult();
                                     }
                                 },
-                                onError: function() {
-                                    imageSrc = '../../assets/images/defaultMusicPicture.png';
-                                    // eslint-disable-next-line max-len
-                                    titleSrc = file.substring(0, file.length - path.extname(path.resolve(Directory, file)).length);
-                                    authorSrc = 'No author';
-                                    proceed();
-                                }
+                                onError: () => {clearTimeout(jsMediaTagsTimeout);DefaultResult();},
                             });
 
                             // eslint-disable-next-line no-inner-declarations

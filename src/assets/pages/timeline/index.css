@@ -14,7 +14,7 @@
 }
 
 * {
-    transition: all 0.5s ease;
+    transition: all 0.25s ease;
     font-family:Arial, Helvetica, sans-serif;
     overflow-y: hidden;
     overflow-x: hidden;
@@ -32,6 +32,42 @@
 
 html, body {
     background-color: #0000;
+}
+
+#AltPopupDiv {
+    position:fixed;
+    z-index: 99;
+    min-width: 10vw;
+    min-height: 4vw;
+    background-color: #DDD;
+    color: #222;
+    border-radius: 1vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    overflow: visible;
+}
+
+#AltPopupDiv span {
+    font-size: 2vw;
+    padding: 1vw;
+}
+
+#AltPopupDiv #AltPopupDotEffect {
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    bottom: 0;
+    margin-bottom: -2vw;
+    z-index: 99;
+    border: 1vw solid #0000;
+    border-top: 1vw solid #DDD;
+}
+
+.PlayAudioFiles {
+    display: none;
 }
 
 .timeline {
@@ -82,7 +118,8 @@ html, body {
     display: flex;
     flex-direction: row;
     margin-left: 5vw;
-    margin-top: -0.25vw;
+    margin-top: 0vw;
+    height: inherit;
 }
 
 .iconsArea .iconsButton {
@@ -91,7 +128,6 @@ html, body {
     margin-right: 0.5vw;
     position: relative;
     width: 2vw; 
-    height: 2vw;
     cursor: pointer;
 }
 
@@ -170,6 +206,71 @@ html, body {
     pointer-events: none;
 }
 
+.volumeControlPlaceHolder {
+    position: absolute;
+    left: 80vw;
+    width: 100%;
+}
+
+.volumeControlPlaceHolder .volumeControlHandler {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    margin-top: 1vw;
+}
+
+.volumeControlPlaceHolder .volumeControlHandler * {
+    display: inline-block;
+}
+
+.volumeControlPlaceHolder .volumeControlHandler .volumeIcon {
+    width: 1.75vw;
+    height: 1.75vw;
+    cursor: pointer;
+}
+
+.volumeControlPlaceHolder .volumeControlHandler .volumeBar .volumeBarProgress {
+    width: 10vw;
+    height: 0.35vw;
+    background-color: var(--MusicAuthorColor);
+    border-radius: 100vw;
+    margin-bottom: 0.35vw;
+    margin-left: 0.25vw;
+    cursor: pointer;
+}
+
+.volumeControlPlaceHolder .volumeControlHandler .volumeBar .volumeBarProgress .volumeBarProgressWhiteArea{
+    height: 0.35vw;
+    background-color: var(--Icons);
+    border-radius: 100vw;
+    margin-bottom: 0.35vw;
+    position: absolute;
+    pointer-events: none;
+}
+
+.volumeControlPlaceHolder .volumeControlHandler .volumeBar .volumeBarProgress .volumeBarProgressHandler {
+    width: 1.5vw;
+    height: 1.5vw;
+    background-color: var(--Icons);
+    border-radius: 100vw;
+    position: absolute;
+    margin-top: -0.5vw;
+    pointer-events: none;
+}
+
+.PlayVideoFiles {
+    display:none;
+    width: 40vw;
+    height: 40vw;
+    position: absolute;
+    top: 5vw;
+    left: 5vw;
+    background-color: #000000EE;
+    border-radius: 1vw;
+    z-index: 5;
+    object-fit: contain;
+}
+
 .timelineExpanded {
     display: none;
 }
@@ -191,11 +292,9 @@ html, body {
 .expandedTimeline .expandedTimelineCloseBar {
     height: 0.25vw;
     width: 90vw;
-    transform: translateX(-50%);
-    margin-left: 50vw;
+    left: 5vw;
     position:absolute;
     bottom: 4.5vw;
-    left: 0;
     background-color: var(--Buttons);
     border-radius: 100vw;
     cursor: pointer;
@@ -252,11 +351,11 @@ html, body {
 
 .expandedTimeline .controllers {
     position: absolute;
-    left: 50vw;
     bottom: 10vw;
     display: flex;
     flex-direction: row;
-    transform: translateX(-50%);
+    justify-content: center;
+    width: 100%;
 }
 
 .expandedTimeline .controllers .expandedIconsButton {
@@ -278,9 +377,8 @@ html, body {
     display: flex;
     position: absolute;
     bottom: 8vh;
-    justify-content: center;
-    align-items: center;
-    width: 100vw;
+    width: 92vw;
+    padding-left: 4vw;
     height: 5vh;
 }
 
@@ -290,6 +388,7 @@ html, body {
     height: 2.5vh;
     cursor: pointer;
     display: inline;
+
 }
 
 .expandedTimeline .ProgressBarArea .ProgressBarField  {
