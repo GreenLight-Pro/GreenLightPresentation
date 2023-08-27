@@ -1,0 +1,5 @@
+.vscode/
+node-modules/
+app/
+**/*.js
+next-env.d.ts
