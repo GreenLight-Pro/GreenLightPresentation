@@ -1,1 +1,3 @@
-export type { IPageProps } from './IPageProps';
+export * from './IMainLayoutProps';
+export * from './components/';
+export * from './IPageProps';

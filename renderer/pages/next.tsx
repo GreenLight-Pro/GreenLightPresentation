@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, JSX } from 'react';
 import Link from 'next/link';
 import { IPageProps } from '../interfaces';
 
-function Next({ props }: { props: IPageProps }): React.JSX.Element {
+function Next({ props }: { props: IPageProps }): JSX.Element {
   useEffect(() => {
     props.title.set('Next');
   }, []);

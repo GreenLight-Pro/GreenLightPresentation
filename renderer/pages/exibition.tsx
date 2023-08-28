@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, JSX } from 'react';
 
 import styles from '../styles/exibition.module.css';
 import { IPageProps } from '../interfaces';
 
-export default function Exibition({ props }: { props: IPageProps }): React.JSX.Element {
+export default function Exibition({ props }: { props: IPageProps }): JSX.Element {
   useEffect(() => {
-    props.title.set('Exibition', true);
+    props.title.set('Exibition');
+    props.app.setLoadingProgress(1);
+    props.page.setLoadingProgress(1);
   }, []);
 
   return <div id={styles.fullscreen}>

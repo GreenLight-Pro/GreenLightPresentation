@@ -85,26 +85,51 @@ export class Window {
     this.state.x = x;
     this.state.y = y;
     this.window.setPosition(x, y, false);
-    this.saveState();
+    return this.saveState();
   }
 
   public saveState(): void {
     if (!this.window.isMinimized() && !this.window.isMaximized()) {
       Object.assign(this.state, this.getCurrentPosition());
     }
-    this.store.set(this.key, this.state);
+    return this.store.set(this.key, this.state);
   }
 
   public setAlwaysOnTop(isAlwaysOnTop: boolean): void {
-    this.window.setAlwaysOnTop(isAlwaysOnTop);
+    return this.window.setAlwaysOnTop(isAlwaysOnTop);
+  }
+
+  public minimize(): void {
+    return this.window.minimize();
+  }
+
+  public maximize(): void {
+    return this.window.maximize();
+  }
+
+  public unmaximize(): void {
+    return this.window.unmaximize();
   }
 
   public close(): void {
-    this.window.close();
+    return this.window.close();
+  }
+
+  public destroy(): void {
+    if (this.windowInstance.isDestroyed()) return;
+    return this.window.destroy();
   }
 
   public setFullScreen(isFullScreen: boolean): void {
-    this.window.setFullScreen(isFullScreen);
+    return this.window.setFullScreen(isFullScreen);
+  }
+
+  public setResizable(isResizable: boolean): void {
+    return this.window.setResizable(isResizable);
+  }
+
+  public isFullScreenable(): boolean {
+    return this.window.isFullScreenable();
   }
 
   /**
@@ -114,10 +139,10 @@ export class Window {
    **/
   public async loadURL(url: string): Promise<void> {
     if (this.backend.isProduction()) {
-      await this.window.loadURL(`app://.${url}.html`);
+      return this.window.loadURL(`app://.${url}.html`);
     } else {
       const port = process.argv[2];
-      await this.window.loadURL(`http://localhost:${port}${url}`);
+      return this.window.loadURL(`http://localhost:${port}${url}`);
     }
   }
 

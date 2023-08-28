@@ -8,8 +8,18 @@ export class StopExibition extends BaseEventStructure {
   }
 
   override async execute(receivedEvent: IpcMainEvent): Promise<void> {
-    this.backend.getExibitionWindow().close();
+    const screen = this.backend.getExibitionWindow();
+    if (!screen || screen.windowInstance.isDestroyed()) {
+      this.backend.getLogger().warn('An attempt to close the exibiiton window was made, but it  wasn\'t open!');
+      receivedEvent.reply('exibition.stop.done');
+      return;
+    }
+    this.backend.getLogger().info('Closing exibition window');
     this.backend.setExibitionWindow(null);
+    screen.close();
+
+    // If close not worked
+    screen.destroy();
     receivedEvent.reply('exibition.stop.done');
   }
 }

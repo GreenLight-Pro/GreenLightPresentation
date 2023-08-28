@@ -1,3 +1,25 @@
+:root {
+  /* Colors */
+  --dark-purple: #0F001C;
+  --light-purple: #DFB6FF;
+  --bright-red: #FF000F;
+  --bright-magenta: #FF00C7;
+  --bright-blue: #00B2FF;
+  --bright-orange: #FF7A00;
+  --white: #edf6fc;
+  --white-8-transparency: #edf6fc14;
+  --white-12-transparency: rgba(237, 246, 252, 0.12);
+  --white-16-transparency: rgba(237, 246, 252, 0.16);
+  --black: #181818;
+  --black-8-transparency: #18181814;
+  --black-12-transparency: rgba(24, 24, 24, 0.12);
+  --black-16-transparency: rgba(24, 24, 24, 0.16);
+
+  /* Values */
+  --application-border-radius: 1.5rem;
+  --box-background-blur-amount: 4rem;
+}
+
 html, body {
   height: 100%;
   width: 100%;
@@ -6,20 +28,44 @@ html, body {
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
   color: #fff;
-  background-color: #222;
   overflow: hidden;
   display: block;
+  background: transparent;
+  border-radius: var(--application-border-radius);
+}
+
+.dark {
+  --background-color: var(--dark-purple);
+  --text-color: var(--white);
+  --box-8-background-color: var(--white-8-transparency);
+  --box-12-background-color: var(--white-12-transparency);
+  --box-16-background-color: var(--white-16-transparency);
+  --player-border-color: var(--white);
+  --splash-background-color: var(--dark-purple);
+  --splash-progressbar-background-color: var(--white);
+  --splash-progressbar-fill-color: var(--bright-blue);
+}
+
+.light {
+  --background-color: var(--light-purple);
+  --text-color: var(--black);
+  --box-8-background-color: var(--black-8-transparency);
+  --box-12-background-color: var(--black-12-transparency);
+  --box-16-background-color: var(--black-16-transparency);
+  --player-border-color: transparent;
+  --splash-background-color: var(--light-purple);
+  --splash-progressbar-background-color: var(--black);
+  --splash-progressbar-fill-color: var(--bright-blue);
 }
 
 #mainApplication {
-  background-color: #222;
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
+  inset: 0;
   overflow: hidden;
-  position: fixed;
   z-index: 1;
+  position: absolute;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border-radius: var(--application-border-radius);
 }
 
 #mainApplication.hideCursor, #mainApplication.hideCursor * {

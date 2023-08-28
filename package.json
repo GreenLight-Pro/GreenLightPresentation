@@ -2,7 +2,7 @@
   "private": true,
   "name": "spin-music-player",
   "description": "A powerful media player",
-  "version": "1.0.0",
+  "version": "2.0.0-ALPHA.0",
   "author": "PromisePending Team",
   "contributors": [
     "LoboMetalurgico",

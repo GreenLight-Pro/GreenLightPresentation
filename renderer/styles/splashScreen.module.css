@@ -1,0 +1,37 @@
+#splashScreen {
+  position: fixed;
+  z-index: 99999;
+  inset: 0;
+  background-color: var(--splash-background-color);
+  display: none;
+  border-radius: var(--application-border-radius);
+}
+
+#splashScreen.showSplashScreen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#progressbar {
+  width: 75%;
+  height: 1rem;
+  background-color: var(--splash-progressbar-background-color);
+  position: relative;
+  border-radius: 100vmax;
+  border: 0.1rem solid var(--splash-progressbar-border-color);
+  box-sizing: border-box;
+}
+
+#progressbarFill {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: var(--loading-progress);
+  background-color: var(--splash-progressbar-fill-color);
+  border-radius: 100vmax;
+  animation: progress 3s ease-in-out;
+}

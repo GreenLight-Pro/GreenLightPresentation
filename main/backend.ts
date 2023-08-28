@@ -43,6 +43,8 @@ export class Backend {
     this.controllerWindow = new Window(this, 'controller', {
       width: 1000,
       height: 600,
+      frame: false,
+      transparent: true,
     });
     this.controllerWindow.windowInstance.removeMenu();
     this.controllerWindow.loadURL('/home');
@@ -50,6 +52,21 @@ export class Backend {
     globalShortcut.register('Control+Shift+I', () => {
       if (this.isProd) return false;
       this.controllerWindow.windowInstance.webContents.toggleDevTools();
+    });
+
+    this.controllerWindow.windowInstance.on('close', (event: IpcMainEvent) => {
+      if (this.exibitionWindow && !this.exibitionWindow.windowInstance.isDestroyed()) {
+        event.preventDefault();
+        // Ask user if he really wants to close the application
+        this.exibitionWindow.windowInstance.webContents.send('app.stop.ask');
+      }
+    });
+
+    this.controllerWindow.windowInstance.once('closed', () => {
+      if (this.exibitionWindow) {
+        this.exibitionWindow.destroy();
+      }
+      process.exit(0);
     });
   }
 
