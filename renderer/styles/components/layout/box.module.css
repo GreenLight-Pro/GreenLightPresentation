@@ -4,4 +4,11 @@
   height: 100%;
   border-radius: 2vmax;
   backdrop-filter: blur(var(--box-background-blur-amount));
+  overflow: hidden;
+  transition: background 0.25s ease-in-out;
+  position: relative;
+}
+
+.box.lowQuality {
+  backdrop-filter: none !important;
 }

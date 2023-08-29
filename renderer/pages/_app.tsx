@@ -1,45 +1,44 @@
-import { IPageProps, Themes, boxBrightness, IMainLayoutProps } from '../interfaces';
+import { IPageProps, Themes, boxBrightness, IMainLayoutProps, QualityLevels } from '../interfaces';
 import React, { JSX, useEffect, useRef, useState, cloneElement, ReactElement, DragEvent } from 'react';
-import { BasePage, Box } from '../components';
+import { BasePage, Box, SplashScreen, SideBar } from '../components';
 import type { AppProps } from 'next/app';
 import electron from 'electron';
 import Head from 'next/head';
 
-import controllerStyles from '../styles/controller.module.css';
-import splashScreenStyles from '../styles/splashScreen.module.css';
+import styles from '../styles/controller.module.css';
 import '../styles/globals.css';
 
 function Main({ data, children }: IMainLayoutProps): JSX.Element {
   const props = data;
+
   useEffect(() => {
-    props.title.set('Home');
     if (window) {
       window.scrollTo(0, 0);
     }
   }, []);
 
   return (
-    <BasePage>
-      <div id={controllerStyles.mainGrid} className={[props.player.playing ? controllerStyles.playing : ''].join(' ')} style={{
+    <BasePage styles={props.style}>
+      <div id={styles.mainGrid} className={[props.player.playing ? styles.playing : '', props.app.loaded ? '' : styles.hide].join(' ')} style={{
         ['--playing-media' as any]: props.player.playing ? '1' : '0',
+        ['--side-bar-size' as any]: props.sidebar.open ? 'var(--expanded-side-bar-size)' : 'var(--shrinked-side-bar-size)',
       }}>
-        <Box gridContainer='header' id={controllerStyles.header} background={boxBrightness.bg16}>
-          <h1 id={controllerStyles.appTitle}>{props.title.current}</h1>
-          <div id={controllerStyles.appControls}>
-            <div id={controllerStyles.appControlMinimize} className={controllerStyles.appControl} onClick={():void => { props.backend.ipc.current.send('controller.minimize'); }}></div>
-            <div id={controllerStyles.appControlMaximize} className={controllerStyles.appControl} onClick={():void => { props.backend.ipc.current.send('controller.maximize'); }}></div>
-            <div id={controllerStyles.appControlClose} className={controllerStyles.appControl} onClick={():void => { props.backend.ipc.current.send('controller.close'); }}></div>
-          </div>
-          <div id={controllerStyles.dragwindow}></div>
+        <Box gridContainer='header' id={styles.header} background={boxBrightness.bg16} styles={props.style}>
+          <div id={styles.dragwindow}></div>
+          <h1 id={styles.appTitle}>{props.title.current}</h1>
         </Box>
-        <Box gridContainer='sidebar' background={boxBrightness.bg12}>
-
-        </Box>
-        <Box gridContainer='main'>
-          {cloneElement(children[0] as ReactElement<IPageProps>, data) }
-          {cloneElement(children[1] as ReactElement<IPageProps>, data) }
-        </Box>
-        <Box id={controllerStyles.player} gridContainer='media' background={boxBrightness.bg16}>
+        <div id={styles.mainAreaItems}>
+          <Box gridContainer='sidebar' id={styles.sidebar} background={boxBrightness.bg12} styles={props.style}>
+            <SideBar props={props} />
+          </Box>
+          <Box gridContainer='main' styles={props.style}>
+            <div className={props.app.loaded ? '' : styles.hide}>
+              {cloneElement(children[0] as ReactElement<IPageProps>, data) }
+              {cloneElement(children[1] as ReactElement<IPageProps>, data) }
+            </div>
+          </Box>
+        </div>
+        <Box id={styles.player} gridContainer='media' background={boxBrightness.bg16} styles={props.style}>
 
         </Box>
       </div>
@@ -57,32 +56,31 @@ function preventDragHandler(e: DragEvent): void {
   e.preventDefault();
 }
 
-function SplashScreen({ props, context }: { props: IPageProps, context: string }): JSX.Element {
-  return (<div id={splashScreenStyles.splashScreen} className={(context === 'app' ? props.app.loaded : props.page.loaded) ? '' : splashScreenStyles.showSplashScreen} style={{
-    ['--loading-progress' as any]: ((context === 'app' ? props.app.loadingProgress : props.page.loadingProgress) * 100) + '%',
-  }}>
-    <div id={splashScreenStyles.progressbar}>
-      <div id={splashScreenStyles.progressbarFill}></div>
-    </div>
-  </div>);
-}
-
 export default function App({ Component, pageProps }: AppProps): JSX.Element {
   const [isController, setIsController] = useState<boolean>(false);
+  const [isMaximized, setIsMaximized] = useState<boolean>(false);
   const [appLoadProgress, setAppLoadProgress] = useState<number>(0);
   const [pageLoadProgress, setPageLoadProgress] = useState<number>(0);
+  const [isSideBarExpandend, setIsSideBarExpandend] = useState<boolean>(false);
 
   const [title, setTitle] = useState<string>('');
   const [isPresenting, setIsPresenting] = useState<boolean>(false);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [theme, setTheme] = useState<Themes>(Themes.Dark);
+  const [qualityLevel, setQualityLevel] = useState<QualityLevels>(QualityLevels.high);
   const hasIpc = !!ipcRenderer;
   const ipc = useRef(ipcRenderer);
 
-  if (hasIpc && ipcRenderer) {
+  if (hasIpc) {
+    ipcRenderer.removeAllListeners('app.stop.ask');
+    ipcRenderer.removeAllListeners('exibition.maximize.done.maximized');
+    ipcRenderer.removeAllListeners('exibition.maximize.done.unmaximized');
     ipcRenderer.on('app.stop.ask', () => {
       ipcRenderer.send('app.stop.answer', true);
     });
+
+    ipcRenderer.on('exibition.maximize.done.maximized', () => { setIsMaximized(true); });
+    ipcRenderer.on('exibition.maximize.done.unmaximized', () => { setIsMaximized(false); });
   }
 
   const updatedPageProps: IPageProps = {
@@ -95,9 +93,15 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
       connected: hasIpc,
       ipc,
     },
-    theme: {
-      current: theme,
-      set: (value: Themes): void => { setTheme(value); },
+    style: {
+      theme: {
+        current: theme,
+        set: (value: Themes): void => { setTheme(value); },
+      },
+      qualityLevel: {
+        current: qualityLevel,
+        set: (value: QualityLevels): void => { setQualityLevel(value); },
+      },
     },
     presenting: {
       current: isPresenting,
@@ -122,21 +126,36 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
       loadingProgress: pageLoadProgress,
       setLoadingProgress: (value: number): void => { setPageLoadProgress(value); },
     },
+    sidebar: {
+      open: isSideBarExpandend,
+      setOpen: (value: boolean): void => { setIsSideBarExpandend(value); },
+    },
   };
 
   return (
-    <div id="mainApplication" className={theme} unselectable='on' onDragStart={preventDragHandler} onSelect={(): boolean => { return false; }}>
+    <div id="mainApplication" className={[theme, qualityLevel].join(' ')} unselectable='on' onDragStart={preventDragHandler} onSelect={(): boolean => { return false; }} style={{
+      ['--is-maximized' as any]: isMaximized ? '1' : '0',
+    }}>
       <Head>
         <title>{generateTitle(title, isPresenting)}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" href="/images/logo.png" />
       </Head>
       <SplashScreen props={updatedPageProps} context={'app'}/>
       {isController
         ? <Main data={updatedPageProps}>
           <SplashScreen props={updatedPageProps} context={'page'}/>
-          <Component props={updatedPageProps} />
+          <Component props={updatedPageProps}/>
         </Main>
         : <Component props={updatedPageProps} />
       }
+      {isController
+        ? <div id={styles.appControls}>
+          <div id={styles.appControlMinimize} className={styles.appControl} onClick={():void => { if (hasIpc) ipcRenderer.send('controller.minimize'); }}></div>
+          <div id={styles.appControlMaximize} className={styles.appControl} onClick={():void => { if (hasIpc) ipcRenderer.send('controller.maximize'); }}></div>
+          <div id={styles.appControlClose} className={styles.appControl} onClick={():void => { if (hasIpc) ipcRenderer.send('controller.close'); }}></div>
+        </div>
+        : false}
     </div>
   );
 }

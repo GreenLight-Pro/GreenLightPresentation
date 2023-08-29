@@ -5,6 +5,22 @@ export enum Themes {
   Light = 'light',
 }
 
+export enum QualityLevels {
+  low = 'lowQuality', // Remove all expensive effects like blur
+  high = 'highQuality', // Add all expensive effects like blur
+}
+
+export interface IStylesProps {
+  theme: {
+    current: string,
+    set: (theme: Themes) => void,
+  },
+  qualityLevel: {
+    current: QualityLevels,
+    set: (qualityLevel: QualityLevels) => void,
+  },
+}
+
 export interface IPageProps extends AppInitialProps {
   title: {
     current: string,
@@ -14,10 +30,7 @@ export interface IPageProps extends AppInitialProps {
     ipc: any;
     connected: boolean;
   },
-  theme: {
-    current: string,
-    set: (theme: Themes) => void,
-  },
+  style: IStylesProps,
   presenting: {
     current: boolean,
     set: (presenting: boolean) => void,
@@ -40,5 +53,9 @@ export interface IPageProps extends AppInitialProps {
     loaded: boolean,
     loadingProgress: number,
     setLoadingProgress: (loadingProgress: number) => void,
+  },
+  sidebar: {
+    open: boolean,
+    setOpen: (open: boolean) => void,
   }
 }

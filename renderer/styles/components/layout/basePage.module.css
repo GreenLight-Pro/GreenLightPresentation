@@ -7,7 +7,7 @@
   border-radius: var(--application-border-radius);
 }
 
-#backgroundEffects {
+#backgroundEffects.highQuality {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -15,7 +15,57 @@
   border-radius: var(--application-border-radius);
   filter: blur(18vmax) contrast(150%) brightness(150%);
   overflow: hidden;
+  /* animation: spinEffects 60s infinite linear; */
 }
+
+#backgroundEffects.lowQuality  {
+  display: none;
+}
+
+/* @keyframes spinEffects {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes sphereRandomMoveAnimation {
+  0% {
+    transform: translate(0, 0);
+  }
+  10% {
+    transform: translate(27%, 68%);
+  }
+  20% {
+    transform: translate(-45%, 7%);
+  }
+  30% {
+    transform: translate(-13%, -74%);
+  }
+  40% {
+    transform: translate(45%, -7%);
+  }
+  50% {
+    transform: translate(-36%, 27%);
+  }
+  60% {
+    transform: translate(18%, 45%);
+  }
+  70% {
+    transform: translate(39%, -63%);
+  }
+  80% {
+    transform: translate(-27%, -27%);
+  }
+  90% {
+    transform: translate(-63%, 39%);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+} */
 
 .sphere {
   position: absolute;
@@ -28,12 +78,14 @@
   background-color: var(--bright-orange);
   bottom: -10%;
   left: -10%;
+  /* animation: sphereRandomMoveAnimation 60s infinite linear; */
 }
 
 .sphereP2 {
   width: 25vmax;
   background-color: var(--bright-red);
   inset: 37.5%;
+  /* animation: sphereRandomMoveAnimation 60s infinite linear reverse; */
 }
 
 .sphereP3 {
@@ -41,6 +93,7 @@
   background-color: var(--bright-blue);
   bottom: -10%;
   right: 0;
+  /* animation: sphereRandomMoveAnimation 100s infinite linear; */
 }
 
 .sphereP4 {
@@ -48,4 +101,5 @@
   background-color: var(--bright-magenta);
   top: -17.5%;
   right: -7.5%;
+  /* animation: sphereRandomMoveAnimation 60s infinite linear alternate; */
 }

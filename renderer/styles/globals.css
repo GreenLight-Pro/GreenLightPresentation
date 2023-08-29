@@ -6,6 +6,8 @@
   --bright-magenta: #FF00C7;
   --bright-blue: #00B2FF;
   --bright-orange: #FF7A00;
+  --bright-yellow: #FFD500;
+  --bright-green: #00FF00;
   --white: #edf6fc;
   --white-8-transparency: #edf6fc14;
   --white-12-transparency: rgba(237, 246, 252, 0.12);
@@ -16,8 +18,23 @@
   --black-16-transparency: rgba(24, 24, 24, 0.16);
 
   /* Values */
-  --application-border-radius: 1.5rem;
+  --base-application-border-radius: 1.5rem;
   --box-background-blur-amount: 4rem;
+
+  --expanded-side-bar-size: 25%;
+  --shrinked-side-bar-size: 3rem;
+
+  --border-size: 0.5rem;
+  --header-size: 2rem;
+  --player-size: 3rem;
+  --app-controls-gap: 0.5rem;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  transition: background 0.5s ease-in-out, color 0.5s ease-in-out, border-radius 0.5s ease-in-out;
 }
 
 html, body {
@@ -37,6 +54,8 @@ html, body {
 .dark {
   --background-color: var(--dark-purple);
   --text-color: var(--white);
+  --side-bar-button-background-color: var(--white-16-transparency);
+  --side-bar-icon-color: var(--white);
   --box-8-background-color: var(--white-8-transparency);
   --box-12-background-color: var(--white-12-transparency);
   --box-16-background-color: var(--white-16-transparency);
@@ -44,11 +63,14 @@ html, body {
   --splash-background-color: var(--dark-purple);
   --splash-progressbar-background-color: var(--white);
   --splash-progressbar-fill-color: var(--bright-blue);
+  --splash-appname-color: var(--white);
 }
 
 .light {
   --background-color: var(--light-purple);
   --text-color: var(--black);
+  --side-bar-button-background-color: var(--black-16-transparency);
+  --side-bar-icon-color: var(--black);
   --box-8-background-color: var(--black-8-transparency);
   --box-12-background-color: var(--black-12-transparency);
   --box-16-background-color: var(--black-16-transparency);
@@ -56,6 +78,13 @@ html, body {
   --splash-background-color: var(--light-purple);
   --splash-progressbar-background-color: var(--black);
   --splash-progressbar-fill-color: var(--bright-blue);
+  --splash-appname-color: var(--black);
+}
+
+.lowQuality *, *.lowQuality {
+  transition: none !important;
+  animation-duration: 0s !important;
+  animation-play-state: paused !important;
 }
 
 #mainApplication {
@@ -63,9 +92,11 @@ html, body {
   overflow: hidden;
   z-index: 1;
   position: absolute;
-  background-color: var(--background-color);
+  background: var(--background-color);
   color: var(--text-color);
   border-radius: var(--application-border-radius);
+  transition: background 0.5s ease-in-out, color 0.5s ease-in-out, border-radius 0.5s ease-in-out;
+  --application-border-radius: calc((1 - var(--is-maximized)) * var(--base-application-border-radius));
 }
 
 #mainApplication.hideCursor, #mainApplication.hideCursor * {
