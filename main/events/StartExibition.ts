@@ -23,6 +23,8 @@ export class StartExibition extends BaseEventStructure {
     const exibitionWindow = new Window(this.backend, 'exibition', {
       width: 800,
       height: 600,
+      minWidth: 800,
+      minHeight: 600,
       show: false,
       minimizable: false,
       maximizable: false,

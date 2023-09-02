@@ -41,10 +41,12 @@ export class Backend {
 
   private async start(): Promise<void> {
     this.controllerWindow = new Window(this, 'controller', {
-      width: 1000,
+      width: 800,
       height: 600,
       frame: false,
       transparent: true,
+      minHeight: 600,
+      minWidth: 800,
     });
     this.controllerWindow.windowInstance.removeMenu();
     this.controllerWindow.loadURL('/home');

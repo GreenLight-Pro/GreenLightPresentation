@@ -1,19 +1,12 @@
 import { IPageProps, QualityLevels, Themes } from '../interfaces';
-import React, { useEffect, JSX } from 'react';
-import styles from '../styles/home.module.css';
+import React, { JSX } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { BasePage } from '../components';
 
 function Home({ props }: { props: IPageProps }): JSX.Element {
-  useEffect(() => {
-    props.title.set('Home');
-    props.controller.setIsController(true);
-    props.app.setLoadingProgress(1);
-    props.page.setLoadingProgress(1);
-  }, []);
-
   return (
-    <>
+    <BasePage {...props} pageTitle='Home'>
       <button onClick={(): void => {
         if (props.backend.connected) {
           props.backend.ipc.current.send('exibition.start');
@@ -36,7 +29,6 @@ function Home({ props }: { props: IPageProps }): JSX.Element {
       <button onClick={(): void => {
         props.sidebar.setOpen(!props.sidebar.open);
       }}>{props.sidebar.open ? 'close' : 'open'} sidebar</button>
-
       <button onClick={(): void => {
         if (props.style.theme.current === Themes.Dark) {
           props.style.theme.set(Themes.Light);
@@ -68,7 +60,7 @@ function Home({ props }: { props: IPageProps }): JSX.Element {
       }}>
         <Image src="/images/logo.png" alt='Logo' width={100} height={100} />
       </Link>
-    </>
+    </BasePage>
   );
 }
 

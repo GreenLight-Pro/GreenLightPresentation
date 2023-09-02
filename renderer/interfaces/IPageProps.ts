@@ -45,9 +45,12 @@ export interface IPageProps extends AppInitialProps {
     setIsController: (isController: boolean) => void,
   },
   app: {
+    _loadedWithAnimation: boolean,
+    _setLoadedWithAnimation: (loadedWithAnimation: boolean) => void,
     loaded: boolean,
     loadingProgress: number,
     setLoadingProgress: (loadingProgress: number) => void,
+    isFocused: boolean,
   },
   page: {
     loaded: boolean,

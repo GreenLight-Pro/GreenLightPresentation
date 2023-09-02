@@ -9,9 +9,10 @@ export default function Exibition({ props }: { props: IPageProps }): JSX.Element
     props.app.setLoadingProgress(1);
     props.page.setLoadingProgress(1);
     props.style.qualityLevel.set(QualityLevels.low);
+    props.controller.setIsController(false);
   }, []);
 
   return <div id={styles.fullscreen}>
-    <h1>This is the exibition Screen</h1>
+    <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/EGeV0rJqlCs?si=n7ZM8qknFTiEgk_v&amp;controls=0&autoplay=1&loop=1" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
   </div>;
 }

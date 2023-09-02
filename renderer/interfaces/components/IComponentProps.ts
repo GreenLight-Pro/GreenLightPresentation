@@ -7,5 +7,5 @@ export interface IComponentProps {
 
 export interface ILayoutComponentProps extends IComponentProps {
   children: ReactNode;
-  styles: IStylesProps;
+  style: IStylesProps;
 }

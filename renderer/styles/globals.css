@@ -1,6 +1,6 @@
 :root {
   /* Colors */
-  --dark-purple: #0F001C;
+  --dark-purple: #230028;
   --light-purple: #DFB6FF;
   --bright-red: #FF000F;
   --bright-magenta: #FF00C7;
@@ -8,6 +8,7 @@
   --bright-orange: #FF7A00;
   --bright-yellow: #FFD500;
   --bright-green: #00FF00;
+  --gray: #8E8E8E;
   --white: #edf6fc;
   --white-8-transparency: #edf6fc14;
   --white-12-transparency: rgba(237, 246, 252, 0.12);
@@ -34,7 +35,6 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  transition: background 0.5s ease-in-out, color 0.5s ease-in-out, border-radius 0.5s ease-in-out;
 }
 
 html, body {
@@ -48,46 +48,53 @@ html, body {
   overflow: hidden;
   display: block;
   background: transparent;
-  border-radius: var(--application-border-radius);
 }
 
 .dark {
   --background-color: var(--dark-purple);
   --text-color: var(--white);
+  
   --side-bar-button-background-color: var(--white-16-transparency);
   --side-bar-icon-color: var(--white);
+  
   --box-8-background-color: var(--white-8-transparency);
   --box-12-background-color: var(--white-12-transparency);
   --box-16-background-color: var(--white-16-transparency);
+  
   --player-border-color: var(--white);
-  --splash-background-color: var(--dark-purple);
-  --splash-progressbar-background-color: var(--white);
-  --splash-progressbar-fill-color: var(--bright-blue);
-  --splash-appname-color: var(--white);
+
+  --loading-background-color: var(--dark-purple);
+  --loading-progressbar-background-color: var(--white-16-transparency);
+  --loading-progressbar-fill-color: var(--light-purple);
+  --loading-appname-color: var(--white);
+
+  --unfocused-control-buttons-color: var(--gray);
 }
 
 .light {
   --background-color: var(--light-purple);
   --text-color: var(--black);
+  
   --side-bar-button-background-color: var(--black-16-transparency);
   --side-bar-icon-color: var(--black);
+  
   --box-8-background-color: var(--black-8-transparency);
   --box-12-background-color: var(--black-12-transparency);
   --box-16-background-color: var(--black-16-transparency);
+  
   --player-border-color: transparent;
-  --splash-background-color: var(--light-purple);
-  --splash-progressbar-background-color: var(--black);
-  --splash-progressbar-fill-color: var(--bright-blue);
-  --splash-appname-color: var(--black);
-}
+  
+  --loading-background-color: var(--light-purple);
+  --loading-progressbar-background-color: var(--black-16-transparency);
+  --loading-progressbar-fill-color: var(--dark-purple);
+  --loading-appname-color: var(--black);
 
-.lowQuality *, *.lowQuality {
-  transition: none !important;
-  animation-duration: 0s !important;
-  animation-play-state: paused !important;
+  --unfocused-control-buttons-color: var(--gray);
 }
 
 #mainApplication {
+  --application-border-radius: calc((1 - var(--is-maximized)) * var(--base-application-border-radius));
+
   inset: 0;
   overflow: hidden;
   z-index: 1;
@@ -95,8 +102,10 @@ html, body {
   background: var(--background-color);
   color: var(--text-color);
   border-radius: var(--application-border-radius);
-  transition: background 0.5s ease-in-out, color 0.5s ease-in-out, border-radius 0.5s ease-in-out;
-  --application-border-radius: calc((1 - var(--is-maximized)) * var(--base-application-border-radius));
+}
+
+#mainApplication.highQuality {
+transition: background 0.5s ease-in-out, color 0.5s ease-in-out, border-radius 0.5s ease-in-out;
 }
 
 #mainApplication.hideCursor, #mainApplication.hideCursor * {

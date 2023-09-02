@@ -34,6 +34,8 @@ export class Window {
     this.window = new BrowserWindow(browserOptions);
 
     this.window.on('close', () => { this.saveState(); });
+    this.window.on('blur', () => { this.window.webContents.send('window.state.blur'); });
+    this.window.on('focus', () => { this.window.webContents.send('window.state.focus'); });
   }
 
   public restore(): void {

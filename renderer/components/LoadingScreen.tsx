@@ -2,11 +2,11 @@ import { IPageProps, QualityLevels } from '../interfaces';
 import { JSX, useEffect, useState } from 'react';
 import Image from 'next/image';
 
-import styles from '../styles/splashScreen.module.css';
+import styles from '../styles/loadingScreen.module.css';
 
 var exitAnimationDuration = 1;
 
-export function SplashScreen({ props, context }: { props: IPageProps, context: string }): JSX.Element {
+export function LoadingScreen({ props, context }: { props: IPageProps, context: string }): JSX.Element {
   const ctx = context === 'app' ? props.app : props.page;
   if (context !== 'app') exitAnimationDuration = 0.5;
   const [loadedWithAnimation, setLoadedWithAnimation] = useState<boolean>(false);
@@ -18,6 +18,7 @@ export function SplashScreen({ props, context }: { props: IPageProps, context: s
         setLoadedWithAnimation(true);
         setExitAnimationCompleteness(1);
         internalExitAnimationCompleteness = 1;
+        if (context === 'app') props.app._setLoadedWithAnimation(true);
       } else {
         internalExitAnimationCompleteness += 1 / (exitAnimationDuration * 60);
         setExitAnimationCompleteness(internalExitAnimationCompleteness);
@@ -25,20 +26,31 @@ export function SplashScreen({ props, context }: { props: IPageProps, context: s
         requestAnimationFrame(internalAnimationHandler);
       }
     }
-    if (!ctx.loaded) {
-      setLoadedWithAnimation(false);
-      setExitAnimationCompleteness(0);
-    }
-    if (ctx.loaded && !loadedWithAnimation) {
-      if (props.style.qualityLevel.current === QualityLevels.low) {
-        setLoadedWithAnimation(true);
-        setExitAnimationCompleteness(1);
-      } else {
+
+    if (context !== 'app' && !props.app.loaded) {
+      setLoadedWithAnimation(true);
+      setExitAnimationCompleteness(1);
+      if (context === 'app') props.app._setLoadedWithAnimation(true);
+      internalExitAnimationCompleteness = 1;
+    } else {
+      if (!ctx.loaded) {
+        setLoadedWithAnimation(false);
         setExitAnimationCompleteness(0);
-        internalAnimationHandler();
+        if (context === 'app') props.app._setLoadedWithAnimation(false);
+      }
+      if (ctx.loaded && !loadedWithAnimation) {
+        if (props.style.qualityLevel.current === QualityLevels.low) {
+          setLoadedWithAnimation(true);
+          setExitAnimationCompleteness(1);
+          if (context === 'app') props.app._setLoadedWithAnimation(true);
+        } else {
+          setExitAnimationCompleteness(0);
+          internalAnimationHandler();
+          if (context === 'app') props.app._setLoadedWithAnimation(false);
+        }
       }
     }
-  }, [ctx.loadingProgress]);
+  }, [ctx.loadingProgress, props.app.loaded]);
   return (<div id={styles.splashScreen} className={loadedWithAnimation ? '' : styles.showSplashScreen} style={{
     ['--loading-progress' as any]: (ctx.loadingProgress * 100) + '%',
     ['--exit-animation-progress' as any]: exitAnimationCompleteness,
@@ -50,7 +62,6 @@ export function SplashScreen({ props, context }: { props: IPageProps, context: s
       <h1 id={styles.appname}>SpinMediaPlayer</h1>
     </div>
     <div id={styles.progressBarContainer}>
-      <span>Loading...</span>
       <div id={styles.progressbar}>
         <div id={styles.progressbarFill}></div>
       </div>

@@ -3,12 +3,13 @@
   width: 100%;
   height: 100%;
   border-radius: 2vmax;
-  backdrop-filter: blur(var(--box-background-blur-amount));
+  backdrop-filter: none;
   overflow: hidden;
-  transition: background 0.25s ease-in-out;
   position: relative;
+  padding: var(--border-size);
 }
 
-.box.lowQuality {
-  backdrop-filter: none !important;
+.box.highQuality {
+  transition: background 0.25s ease-in-out;
+  backdrop-filter: blur(var(--box-background-blur-amount));
 }

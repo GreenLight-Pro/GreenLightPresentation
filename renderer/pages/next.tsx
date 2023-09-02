@@ -1,28 +1,14 @@
-import React, { useEffect, JSX } from 'react';
+import React, { JSX } from 'react';
 import Link from 'next/link';
 import { IPageProps } from '../interfaces';
+import { BasePage } from '../components';
 
-function Next({ props }: { props: IPageProps }): JSX.Element {
-  useEffect(() => {
-    props.title.set('Next');
-    props.app.setLoadingProgress(1);
-    props.page.setLoadingProgress(1);
-  }, []);
-
+export default function Next({ props }: { props: IPageProps }): JSX.Element {
   return (
-    <React.Fragment>
-      <div>
-        <p>
-                    ⚡ Electron + Next.js ⚡ -
-          <Link href="/home" onClick={(): void => {
-            props.page.setLoadingProgress(0);
-          }}>
-            Go to home page
-          </Link>
-        </p>
-      </div>
-    </React.Fragment>
+    <BasePage {...props} pageTitle='Next'>
+      <Link href="/home" onClick={(): void => { props.page.setLoadingProgress(0); }}>
+        Go to home page
+      </Link>
+    </BasePage>
   );
 }
-
-export default Next;

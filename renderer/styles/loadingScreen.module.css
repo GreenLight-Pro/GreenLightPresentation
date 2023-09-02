@@ -2,7 +2,7 @@
   position: absolute;
   z-index: 99999;
   inset: 0;
-  background-color: var(--splash-background-color);
+  background-color: var(--loading-background-color);
   display: none;
   opacity: calc(1 - var(--exit-animation-progress));
 }
@@ -17,28 +17,47 @@
 #progressBarContainer {
   width: 75%;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 #progressbar {
-  width: 100%;
-  height: 1rem;
-  background-color: var(--splash-progressbar-background-color);
+  width: calc(100% * (1 - (4 * var(--exit-animation-progress))));
+  height: .25rem;
+  background-color: var(--loading-progressbar-background-color);
   position: relative;
   border-radius: 100vmax;
-  border: 0.1rem solid var(--splash-progressbar-border-color);
+  border: 0.1rem solid var(--loading-progressbar-border-color);
   box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  overflow: hidden;
 }
 
 #progressbarFill {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
   height: 100%;
   width: var(--loading-progress);
-  background-color: var(--splash-progressbar-fill-color);
+  background: var(--loading-progressbar-fill-color);
+  /* background: linear-gradient(45deg, transparent 5%,
+  var(--loading-progressbar-fill-color) 15%, var(--loading-progressbar-fill-color) 50%, 
+    transparent 50%, transparent 65%, 
+    var(--loading-progressbar-fill-color) 65%);
+  background-size:2rem 2rem; */
   border-radius: 100vmax;
-  animation: progress 3s ease-in-out;
+  /* animation: progress 0s linear infinite; */
+}
+
+@keyframes progress {
+  0% {
+    background-position-x: -2rem;
+  }
+  100% {
+    background-position-x: 0;
+  }
 }
 
 #appLogoContainer {
@@ -89,10 +108,11 @@
 #appname {
   font-size: 2rem;
   font-weight: bold;
-  color: var(--splash-appname-color);
+  color: var(--loading-appname-color);
   margin: 0;
   padding: 0;
   animation: appNameRevealAnimation 1s ease-out;
+  transform: translateY(calc((var(--exit-animation-progress) * 8) * 100%));
 }
 
 @keyframes appNameRevealAnimation {

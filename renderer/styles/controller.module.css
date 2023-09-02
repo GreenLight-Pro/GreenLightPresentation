@@ -97,7 +97,10 @@
   height: 100%;
   aspect-ratio: 1;
   border-radius: 50%;
-  transition: filter 0.25s ease-in-out;
+}
+
+.highQuality .appControl {
+  transition: filter 0.25s ease-in-out, background 0.5s ease-in-out;
 }
 
 .appControl:hover {
@@ -120,3 +123,35 @@
   background: var(--bright-blue);
 }
 
+#appControls.unfocused .appControl {
+  background: var(--unfocused-control-buttons-color) !important;
+}
+
+#basePage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#backgroundEffects {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+#backgroundImage {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  object-fit: cover;
+  object-position: center;
+}

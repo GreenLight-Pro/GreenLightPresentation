@@ -1,3 +1,3 @@
 export * from './layout/';
-export * from './SplashScreen';
+export * from './LoadingScreen';
 export * from './SideBar';
