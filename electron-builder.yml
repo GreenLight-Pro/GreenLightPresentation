@@ -24,10 +24,12 @@ linux:
     - target: AppImage
       arch:
         - x64
-        - ia32
     - target: deb
       arch:
         - x64
-        - ia32
   category: AudioVideo
+mac:
+  target:
+    - target: dmg
+  category: public.app-category.entertainment
 publish: null

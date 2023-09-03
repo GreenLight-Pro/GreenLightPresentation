@@ -16,8 +16,11 @@ jobs:
       run: npm run build
     - uses: actions/upload-artifact@v3
       if: success()
+      name: Linux
       with:
-        path: dist/*.exe
+          path: |
+            dist/*.deb
+            dist/*.appimage
 
   build_on_mac:
     runs-on: macos-latest
@@ -33,6 +36,7 @@ jobs:
       run: npm run build
     - uses: actions/upload-artifact@v3
       if: success()
+      name: macOS
       with:
         path: dist/*.dmg
 
@@ -50,7 +54,6 @@ jobs:
       run: npm run build
     - uses: actions/upload-artifact@v3
       if: success()
+      name: Windows
       with:
-          path: |
-            dist/*.deb
-            dist/*.appimage
+        path: dist/*.exe
