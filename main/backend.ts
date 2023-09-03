@@ -44,7 +44,6 @@ export class Backend {
       width: 800,
       height: 600,
       frame: false,
-      transparent: true,
       minHeight: 600,
       minWidth: 800,
     });

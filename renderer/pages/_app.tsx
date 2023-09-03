@@ -147,7 +147,7 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
   };
 
   return (
-    <div id="mainApplication" className={[theme, qualityLevel].join(' ')} unselectable='on' onDragStart={preventDragHandler} onSelect={(): boolean => { return false; }} style={{
+    <div id="mainApplication" className={[theme, qualityLevel, isFocused ? '' : 'unfocused', isPresenting ? 'presenting' : ''].join(' ')} unselectable='on' onDragStart={preventDragHandler} onSelect={(): boolean => { return false; }} style={{
       ['--is-maximized' as any]: isMaximized ? '1' : '0',
     }}>
       <Head>

@@ -4,18 +4,17 @@
   inset: 0;
   background-color: var(--loading-background-color);
   display: none;
-  opacity: calc(1 - var(--exit-animation-progress));
+  opacity: calc(2 - var(--exit-animation-progress));
 }
 
 #splashScreen.showSplashScreen {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
+  display: block;
 }
 
 #progressBarContainer {
-  width: 75%;
+  position: absolute;
+  top: 0;
+  width: 100%;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -24,8 +23,8 @@
 }
 
 #progressbar {
-  width: calc(100% * (1 - (4 * var(--exit-animation-progress))));
-  height: .25rem;
+  width: 100%;
+  height: 0.25rem;
   background-color: var(--loading-progressbar-background-color);
   position: relative;
   border-radius: 100vmax;
@@ -36,6 +35,7 @@
   justify-content: flex-start;
   align-items: center;
   overflow: hidden;
+  transition: width 0.5s ease-out;
 }
 
 #progressbarFill {
@@ -49,6 +49,7 @@
   background-size:2rem 2rem; */
   border-radius: 100vmax;
   /* animation: progress 0s linear infinite; */
+  transition: width 0.25s ease-out;
 }
 
 @keyframes progress {
@@ -63,6 +64,8 @@
 #appLogoContainer {
   width: 50%;
   height: 50%;
+  inset: 25%;
+  position: absolute;
 }
 
 #appLogo {
@@ -70,7 +73,7 @@
   height: 100%;
   object-fit: contain;
   position: relative;
-  animation: logoIdleAnimation 5s ease-in-out infinite, logoInAnimation 1s ease-out;
+  animation: logoIdleAnimation 5s ease-in-out infinite, logoInAnimation var(--logo-should-play-animation) ease-out;
 }
 
 @keyframes logoInAnimation {
@@ -98,28 +101,32 @@
   overflow: hidden;
   width: 100%;
   height: 3rem;
+  position: absolute;
+  bottom: 1rem;
+  left: 0;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   text-align: center;
+  opacity: calc(1 - var(--exit-animation-progress));
 }
 
 #appname {
   font-size: 2rem;
   font-weight: bold;
   color: var(--loading-appname-color);
-  margin: 0;
+  margin-top: 3rem;
   padding: 0;
-  animation: appNameRevealAnimation 1s ease-out;
-  transform: translateY(calc((var(--exit-animation-progress) * 8) * 100%));
+  animation: appNameRevealAnimation 0.25s ease-out 0.5s forwards;
+  transition: transform 0.25s ease-out 0.5s;
 }
 
 @keyframes appNameRevealAnimation {
   0% {
-    transform: translateY(-100vh);
+    transform: translateY(0);
   }
   100% {
-    transform: translateY(0);
+    transform: translateY(-3rem);
   }
 }

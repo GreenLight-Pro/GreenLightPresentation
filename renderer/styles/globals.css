@@ -8,7 +8,11 @@
   --bright-orange: #FF7A00;
   --bright-yellow: #FFD500;
   --bright-green: #00FF00;
+  --bright-cyan: #00FFB2;
+  --bright-greenish-yellow: #B2FF00;
   --gray: #8E8E8E;
+  --light-gray: #C4C4C4;
+  --dark-gray: #4D4D4D;
   --white: #edf6fc;
   --white-8-transparency: #edf6fc14;
   --white-12-transparency: rgba(237, 246, 252, 0.12);
@@ -68,7 +72,10 @@ html, body {
   --loading-progressbar-fill-color: var(--light-purple);
   --loading-appname-color: var(--white);
 
-  --unfocused-control-buttons-color: var(--gray);
+  --unfocused-control-buttons-color: var(--light-gray);
+  --close-control-button-color: var(--bright-orange);
+  --maximize-control-button-color: var(--bright-blue);
+  --minimize-control-button-color: var(--light-purple);
 }
 
 .light {
@@ -89,23 +96,28 @@ html, body {
   --loading-progressbar-fill-color: var(--dark-purple);
   --loading-appname-color: var(--black);
 
-  --unfocused-control-buttons-color: var(--gray);
+  --unfocused-control-buttons-color: var(--dark-gray);
+  --close-control-button-color: var(--bright-red);
+  --maximize-control-button-color: var(--bright-yellow);
+  --minimize-control-button-color: var(--bright-greenish-yellow);
 }
 
 #mainApplication {
-  --application-border-radius: calc((1 - var(--is-maximized)) * var(--base-application-border-radius));
-
   inset: 0;
   overflow: hidden;
   z-index: 1;
   position: absolute;
   background: var(--background-color);
   color: var(--text-color);
-  border-radius: var(--application-border-radius);
 }
 
 #mainApplication.highQuality {
-transition: background 0.5s ease-in-out, color 0.5s ease-in-out, border-radius 0.5s ease-in-out;
+transition: background 0.5s ease-in-out, color 0.5s ease-in-out, border-radius 0.5s ease-in-out, filter 0.5s ease-in-out, scale 0.5s ease-in-out;
+}
+
+#mainApplication.unfocused:not(:hover, :focus-within, .presenting) {
+  filter: saturate(0.5) blur(0.5px);
+  scale: 1.005;
 }
 
 #mainApplication.hideCursor, #mainApplication.hideCursor * {

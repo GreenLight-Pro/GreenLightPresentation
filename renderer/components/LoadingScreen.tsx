@@ -14,24 +14,23 @@ export function LoadingScreen({ props, context }: { props: IPageProps, context: 
   useEffect(() => {
     var internalExitAnimationCompleteness = 0;
     function internalAnimationHandler(): void {
-      if (internalExitAnimationCompleteness >= 1) {
+      if (internalExitAnimationCompleteness >= 2) {
         setLoadedWithAnimation(true);
-        setExitAnimationCompleteness(1);
-        internalExitAnimationCompleteness = 1;
+        setExitAnimationCompleteness(2);
+        internalExitAnimationCompleteness = 2;
         if (context === 'app') props.app._setLoadedWithAnimation(true);
       } else {
-        internalExitAnimationCompleteness += 1 / (exitAnimationDuration * 60);
+        internalExitAnimationCompleteness += 1 / ((exitAnimationDuration / 2) * 60);
         setExitAnimationCompleteness(internalExitAnimationCompleteness);
         // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-undef
         requestAnimationFrame(internalAnimationHandler);
       }
     }
-
     if (context !== 'app' && !props.app.loaded) {
       setLoadedWithAnimation(true);
-      setExitAnimationCompleteness(1);
+      setExitAnimationCompleteness(2);
       if (context === 'app') props.app._setLoadedWithAnimation(true);
-      internalExitAnimationCompleteness = 1;
+      internalExitAnimationCompleteness = 2;
     } else {
       if (!ctx.loaded) {
         setLoadedWithAnimation(false);
@@ -41,7 +40,7 @@ export function LoadingScreen({ props, context }: { props: IPageProps, context: 
       if (ctx.loaded && !loadedWithAnimation) {
         if (props.style.qualityLevel.current === QualityLevels.low) {
           setLoadedWithAnimation(true);
-          setExitAnimationCompleteness(1);
+          setExitAnimationCompleteness(2);
           if (context === 'app') props.app._setLoadedWithAnimation(true);
         } else {
           setExitAnimationCompleteness(0);
@@ -50,10 +49,12 @@ export function LoadingScreen({ props, context }: { props: IPageProps, context: 
         }
       }
     }
-  }, [ctx.loadingProgress, props.app.loaded]);
+  }, [ctx.loaded, props.app.loaded]);
   return (<div id={styles.splashScreen} className={loadedWithAnimation ? '' : styles.showSplashScreen} style={{
     ['--loading-progress' as any]: (ctx.loadingProgress * 100) + '%',
     ['--exit-animation-progress' as any]: exitAnimationCompleteness,
+    ['--progress-complete' as any]: ctx.loadingProgress === 1 ? 1 : 0,
+    ['--logo-should-play-animation' as any]: ctx.loadingProgress === 1 ? '0s' : '1s',
   }}>
     <div id={styles.appLogoContainer}>
       <Image src="/images/logo.png" alt='Logo' width={1080} height={1080} loading='eager' id={styles.appLogo}/>

@@ -2,6 +2,10 @@
   display: none !important;
 }
 
+#basePage.unfocused {
+  filter: saturate(0.5);
+}
+
 #mainGrid {
   -webkit-user-select: none;
   user-select: none;
@@ -23,7 +27,6 @@
   width: 100%;
   position: relative;
   overflow: hidden;
-  border-radius: var(--application-border-radius);
   transition: height 0.5s ease-in-out;
 }
 
@@ -112,15 +115,15 @@
 }
 
 #appControlClose {
-  background: var(--bright-orange);
+  background: var(--close-control-button-color);
 }
 
 #appControlMinimize {
-  background: var(--light-purple);
+  background: var(--minimize-control-button-color);
 }
 
 #appControlMaximize {
-  background: var(--bright-blue);
+  background: var(--maximize-control-button-color);
 }
 
 #appControls.unfocused .appControl {
