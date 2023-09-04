@@ -10,17 +10,27 @@ jobs:
     - uses: actions/setup-node@master
       with:
         node-version: 16
+    - id: get_version
+      name: Get Version
+      run: echo ::set-output name=version::$(node -p "require('./package.json').version")
     - name: install dependencies
       run: npm install
     - name: build
       run: npm run build
     - uses: actions/upload-artifact@v3
       if: success()
-      name: Linux
+      name: Linux (DEB)
       with:
-          path: |
-            dist/*.deb
-            dist/*.appimage
+        name: SMP-Deb-v${{ steps.get_version.outputs.version }}.deb
+        path: |
+          dist/SMP-*.deb
+    - uses: actions/upload-artifact@v3
+      if: success()
+      name: Linux (AppImage)
+      with:
+        name: SMP-AppImage-v${{ steps.get_version.outputs.version }}.appimage
+        path: |
+          dist/SMP-*.appimage
 
   build_on_mac:
     runs-on: macos-latest
@@ -30,15 +40,19 @@ jobs:
     - uses: actions/setup-node@master
       with:
         node-version: 16
+    - id: get_version
+      name: Get Version
+      run: echo ::set-output name=version::$(node -p "require('./package.json').version")
     - name: install dependencies
       run: npm install
     - name: build
       run: npm run build
     - uses: actions/upload-artifact@v3
       if: success()
-      name: macOS
+      name: Upload Mac Distribution
       with:
-        path: dist/*.dmg
+        name: SMP-Darwin-v${{ steps.get_version.outputs.version }}.dmg
+        path: dist/SMP-*.dmg
 
   build_on_win:
     runs-on: windows-latest
@@ -48,12 +62,19 @@ jobs:
     - uses: actions/setup-node@master
       with:
         node-version: 16
+    - id: get_version
+      name: Get Version
+      run: echo ::set-output name=version::$(node -p "require('./package.json').version")
     - name: install dependencies
       run: npm install
     - name: build
       run: npm run build
     - uses: actions/upload-artifact@v3
       if: success()
-      name: Windows
+      name: Upload Windows Distribution
       with:
-        path: dist/*.exe
+        name: SMP-Win-v${{ steps.get_version.outputs.version }}.exe
+        path: |
+          dist/SMP-win-*.exe
+          !dist/SMP-win-ia32-*.exe
+          !dist/SMP-win-x64-*.exe

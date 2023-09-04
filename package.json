@@ -3,11 +3,15 @@
   "name": "spin-music-player",
   "description": "A powerful media player",
   "version": "2.0.0-ALPHA.0",
-  "author": "PromisePending Team",
+  "author": {
+    "name": "PromisePending Team",
+    "email": "contato@allonsve.com"
+  },
   "contributors": [
     "LoboMetalurgico",
     "SpaceFox__"
   ],
+  "license": "GPL-3.0",
   "main": "app/background.js",
   "scripts": {
     "dev": "nextron",
