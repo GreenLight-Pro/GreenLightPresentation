@@ -1,0 +1,104 @@
+#modalContainer {
+  --modal-background: var(--black);
+  --modal-text: var(--white);
+  --modal-accent-color: var(--bright-green);
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+#modalContainer.open {
+  display: flex;
+}
+
+#modalItem {
+  margin: auto;
+  padding: 2rem 3rem;
+  border-radius: var(--border-radius);
+  border: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  max-width: 75%;
+  background: var(--modal-background);
+  color: var(--modal-text);
+}
+
+#inputAreas {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+#closeModalButton {
+  margin-left: auto;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  border: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-top: -0.5rem;
+  margin-right: -0.5rem;
+  cursor: pointer;
+  background: transparent;
+}
+
+#closePart {
+  position: absolute;
+  width: 100%;
+  height: 25%;
+  background-color: var(--modal-text);
+  transform: rotate(45deg);
+  border-radius: 100vmax;
+  transition: transform 0.2s ease-in-out, background 0.2s ease-in-out;
+}
+
+#closePart:nth-child(2) {
+  transform: rotate(-45deg);
+}
+
+#closeModalButton:hover #closePart {
+  transform: rotate(-45deg);
+  background: var(--accent-color);
+}
+
+#closeModalButton:hover #closePart:nth-child(2) {
+  transform: rotate(225deg);
+}
+
+.modalButton {
+  width: 100%;
+  border-radius: var(--border-radius);
+  border: 0;
+  background: var(--modal-background);
+  color: var(--modal-text);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  cursor: pointer;
+  padding: 0.5rem;
+  font-size: 1.5rem;
+  transition: filter 0.2s ease-in-out;
+}
+
+.modalButton:hover {
+  filter: brightness(0.5);
+}
+
+.modalButton.mainAction {
+  background-color: var(--modal-accent-color);
+  color: var(--modal-background);
+}

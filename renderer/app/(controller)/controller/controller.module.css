@@ -1,0 +1,15 @@
+#controllerPage {
+  --controllerPage-background: var(--black);
+  --controllerPage-color: var(--white);
+
+  background: var(--controllerPage-background);
+  color: var(--controllerPage-color);
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 1rem;
+  overflow: hidden;
+}

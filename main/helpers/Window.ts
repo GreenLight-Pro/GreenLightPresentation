@@ -1,6 +1,7 @@
 import { screen, BrowserWindow, BrowserWindowConstructorOptions, Rectangle } from 'electron';
-import Store from 'electron-store';
 import { Backend } from '../backend';
+import Store from 'electron-store';
+import path from 'path';
 
 export class Window {
   private key = 'window-state';
@@ -26,7 +27,8 @@ export class Window {
       ...options,
       webPreferences: {
         nodeIntegration: true,
-        contextIsolation: false,
+        contextIsolation: true,
+        preload: path.join(__dirname, 'preload.js'),
         ...options.webPreferences,
       },
     };

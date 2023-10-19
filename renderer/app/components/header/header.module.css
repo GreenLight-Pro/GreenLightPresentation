@@ -1,0 +1,83 @@
+#headerTop {
+  --header-background: var(--black);
+  --header-text: var(--white);
+  --header-minimaze-button: var(--bright-yellow);
+  --header-maximaze-button: var(--bright-green);
+  --header-close-button: var(--bright-red);
+
+  background-color: var(--header-background);
+  color: var(--white);
+  height: var(--header-height);
+  padding: 0 1rem;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+#draggableRegion {
+  -webkit-app-region: drag;
+  height: var(--header-height);
+  width: 100%;
+  position: absolute;
+  z-index: 1;
+}
+
+#rightSide {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+  height: 100%;
+}
+
+#actionButtons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+  height: var(--header-height);
+
+  z-index: 5;
+  position: absolute;
+  -webkit-app-region: no-drag; 
+}
+
+#headerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+#minimize, #maximize, #close {
+  height: 50%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+#minimize {
+  background-color: var(--header-minimaze-button);
+}
+
+#maximize {
+  background-color: var(--header-maximaze-button);
+}
+
+#close {
+  background-color: var(--header-close-button);
+}
+
+#appTitle {
+  font-size: 1.5rem;
+  font-weight: 500;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

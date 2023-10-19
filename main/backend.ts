@@ -1,4 +1,4 @@
-import { app, ipcMain, IpcMainEvent, globalShortcut } from 'electron';
+import { app, IpcMainEvent, globalShortcut, ipcMain } from 'electron';
 import { Logger } from '@promisepending/logger.js';
 import { BaseEventStructure } from './structures';
 import { Window } from './helpers';
@@ -9,7 +9,7 @@ export class Backend {
   private readonly isProd: boolean = process.env.NODE_ENV === 'production';
   private logger: Logger;
   private controllerWindow: Window;
-  private exibitionWindow: Window;
+  private exhibitionWindow: Window;
 
   public static main(logger?: Logger): Backend {
     return new Backend(logger);
@@ -21,6 +21,10 @@ export class Backend {
       debug: !this.isProd,
       disableFatalCrash: true,
       allLineColored: true,
+      fileProperties: {
+        enable: this.isProd,
+        logFolderPath: './logs',
+      },
     });
 
     if (this.isProd) {
@@ -44,8 +48,8 @@ export class Backend {
       width: 800,
       height: 600,
       frame: false,
-      minHeight: 600,
       minWidth: 800,
+      minHeight: 600,
     });
     this.controllerWindow.windowInstance.removeMenu();
     this.controllerWindow.loadURL('/home');
@@ -55,17 +59,23 @@ export class Backend {
       this.controllerWindow.windowInstance.webContents.toggleDevTools();
     });
 
+    globalShortcut.register('Control+Shift+R', () => {
+      if (this.isProd) return false;
+      this.controllerWindow.windowInstance.reload();
+    });
+
     this.controllerWindow.windowInstance.on('close', (event: IpcMainEvent) => {
-      if (this.exibitionWindow && !this.exibitionWindow.windowInstance.isDestroyed()) {
+      if (this.exhibitionWindow && !this.exhibitionWindow.windowInstance.isDestroyed()) {
         event.preventDefault();
         // Ask user if he really wants to close the application
-        this.exibitionWindow.windowInstance.webContents.send('app.stop.ask');
+        this.controllerWindow.windowInstance.webContents.send('app.stop.ask');
+        this.logger.debug('Controller window close event received');
       }
     });
 
     this.controllerWindow.windowInstance.once('closed', () => {
-      if (this.exibitionWindow) {
-        this.exibitionWindow.destroy();
+      if (this.exhibitionWindow) {
+        this.exhibitionWindow.destroy();
       }
       process.exit(0);
     });
@@ -99,16 +109,16 @@ export class Backend {
     return this.controllerWindow;
   }
 
-  public getExibitionWindow(): Window {
-    return this.exibitionWindow;
+  public getExhibitionWindow(): Window {
+    return this.exhibitionWindow;
   }
 
   public setControllerWindow(window: Window): void {
     this.controllerWindow = window;
   }
 
-  public setExibitionWindow(window: Window): void {
-    this.exibitionWindow = window;
+  public setExhibitionWindow(window: Window): void {
+    this.exhibitionWindow = window;
   }
 
   public isProduction(): boolean {

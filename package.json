@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "spin-music-player",
+  "name": "spin-media-player",
   "description": "A powerful media player",
   "version": "2.0.0-ALPHA.0",
   "author": {
@@ -21,26 +21,27 @@
   },
   "dependencies": {
     "@promisepending/logger.js": "^1.1.1",
+    "@types/ws": "^8.5.8",
     "electron-serve": "^1.1.0",
-    "electron-store": "^8.1.0"
+    "electron-store": "^8.1.0",
+    "ws": "^8.14.2"
   },
   "devDependencies": {
-    "@next/eslint-plugin-next": "13.4.19",
-    "@types/next": "^9.0.0",
-    "@types/node": "^20.5.6",
-    "@types/react": "^18.0.26",
-    "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "@typescript-eslint/parser": "^6.0.0",
+    "@next/eslint-plugin-next": "^13.5.6",
+    "@types/node": "^16.18.59",
+    "@types/react": "^18.2.29",
+    "@typescript-eslint/eslint-plugin": "^6.8.0",
+    "@typescript-eslint/parser": "^6.8.0",
     "electron": "^21.4.4",
-    "electron-builder": "^24.6.3",
-    "eslint": "^8.42.0",
+    "electron-builder": "^24.6.4",
+    "eslint": "^8.51.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-electron": "^7.0.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.1.1",
-    "next": "^13.4.19",
-    "nextron": "^8.5.0",
+    "next": "^13.5.6",
+    "nextron": "file:../Nextron/nextron-8.12.0.tgz",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "typescript": "^5.2.2"

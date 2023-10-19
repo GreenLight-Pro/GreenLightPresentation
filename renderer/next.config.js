@@ -1,12 +1,18 @@
-module.exports = {
+const config = {
   webpack: (config, { isServer }) => {
     if (!isServer) {
-      config.target = 'electron-renderer';
+      //config.target = 'electron-renderer'
     }
-
-    return config;
+    return config
   },
   images: {
     unoptimized: true,
   }
-};
+}
+
+if (process.env.NODE_ENV === 'production') {
+	config.output = 'export'
+	config.distDir = '../app'
+}
+
+module.exports = config
