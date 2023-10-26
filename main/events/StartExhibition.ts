@@ -1,5 +1,5 @@
 import { BaseEventStructure } from '../structures';
-import { IpcMainEvent, screen } from 'electron';
+import { Display, IpcMainEvent, screen } from 'electron';
 import { Backend } from '../backend';
 import { Window } from '../helpers';
 
@@ -8,15 +8,18 @@ export class StartExhibition extends BaseEventStructure {
     super('exhibition.start', backend, false);
   }
 
-  override async execute(receivedEvent: IpcMainEvent): Promise<void> {
+  override async execute(receivedEvent: IpcMainEvent, screenId: number): Promise<void> {
     const exhibition = this.backend.getExhibitionWindow();
 
     if (exhibition && !exhibition.windowInstance.isDestroyed()) {
+      if (process.env.NODE_ENV !== 'production') return;
+
       exhibition.windowInstance.reload();
-      this.handlePosition(exhibition);
+      this.handlePosition(exhibition, screenId);
       exhibition.windowInstance.focus();
       exhibition.windowInstance.show();
       receivedEvent.reply('exhibition.start.done');
+
       return;
     }
 
@@ -31,17 +34,23 @@ export class StartExhibition extends BaseEventStructure {
       show: false,
     });
 
-    exhibitionWindow.windowInstance.removeMenu();
-
     this.backend.setExhibitionWindow(exhibitionWindow);
 
+    exhibitionWindow.windowInstance.removeMenu();
+
     // get second screen
-    this.handlePosition(exhibitionWindow);
+    if (!this.handlePosition(exhibitionWindow, screenId)) {
+      exhibitionWindow.destroy();
+      this.backend.setExhibitionWindow(null);
+      this.backend.getLogger().debug(screenId);
+      receivedEvent.reply('exhibition.start.error', 'Screen not found');
+      return;
+    }
 
     await exhibitionWindow.loadURL('/exhibition');
 
     exhibitionWindow.windowInstance.on('close', (event: IpcMainEvent) => {
-      this.backend.getLogger().debug('Exibition window close event received');
+      this.backend.getLogger().debug('Exhibition window close event received');
       this.handleClose(event, exhibitionWindow);
     });
 
@@ -49,18 +58,18 @@ export class StartExhibition extends BaseEventStructure {
     exhibitionWindow.windowInstance.once('closed', (event: IpcMainEvent) => {
       exhibitionWindow.windowInstance.removeAllListeners('close');
       this.handleClose(event, exhibitionWindow);
-      this.backend.getLogger().info('Exibition window closed');
+      this.backend.getLogger().info('Exhibition window closed');
     });
 
     exhibitionWindow.windowInstance.show();
     this.backend.getLogger().debug('FullScreen Enable?: ', exhibitionWindow.windowInstance.isFullScreen());
 
-    receivedEvent.reply('exibition.start.done');
+    receivedEvent.reply('exhibition.start.done');
   }
 
   private handleClose(event: IpcMainEvent, exibitionWindow: Window): void {
     event.preventDefault();
-    this.backend.getLogger().debug('Signal to close the exibition window received');
+    this.backend.getLogger().debug('Signal to close the exhibition window received');
 
     if (!this.backend.getExhibitionWindow()) {
       exibitionWindow.destroy();
@@ -71,26 +80,35 @@ export class StartExhibition extends BaseEventStructure {
     }
   }
 
-  private handlePosition(exhibitionWindow: Window): void {
+  private handlePosition(exhibitionWindow: Window, screenId: number): boolean {
     const displays = screen.getAllDisplays();
 
-    const externalDisplay = displays.find((display) => {
-      return display.bounds.x !== 0 || display.bounds.y !== 0;
-    });
+    const selectedDisplay = displays.find((display: Display) => display.id === screenId);
 
-    if (externalDisplay) {
-      this.backend.getLogger().debug('External display found');
+    if (!selectedDisplay) return false;
+
+    exhibitionWindow.windowInstance.setPosition(selectedDisplay.bounds.x, selectedDisplay.bounds.y);
+
+    if (displays.length > 1) {
       exhibitionWindow.setAlwaysOnTop(true);
-      exhibitionWindow.moveTo(externalDisplay.bounds.x, externalDisplay.bounds.y);
-      if (exhibitionWindow.isFullScreenable()) {
-        exhibitionWindow.setFullScreen(true);
+      if (exhibitionWindow.windowInstance.isFullScreenable()) {
+        exhibitionWindow.windowInstance.setFullScreen(true);
       } else {
-        this.backend.getLogger().warn('The exibition window is not fullscreenable!');
+        this.backend.getLogger().warn('The exhibition window is not fullscreenable!');
+      }
+
+      // Ensure that the controller windows is not on the same screen as the exhibition window
+      const controllerWindow = this.backend.getControllerWindow();
+      const controllerScreen = screen.getDisplayNearestPoint({ x: controllerWindow.getCurrentPosition().x, y: controllerWindow.getCurrentPosition().y });
+      if (controllerScreen.id === selectedDisplay.id) {
+        this.backend.getLogger().warn('The controller window is on the same screen as the exhibition window!');
+        const anyOtherScreen = displays.find((display: Display) => display.id !== screenId);
+        controllerWindow.windowInstance.setBounds(anyOtherScreen.bounds);
       }
     } else {
-      exhibitionWindow.moveTo(0, 0);
-      exhibitionWindow.setResizable(false);
-      this.backend.getLogger().warn('No external display found');
+      exhibitionWindow.windowInstance.setResizable(false);
+      this.backend.getLogger().warn('Single display set');
     }
+    return true;
   }
 }
