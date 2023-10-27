@@ -1,7 +1,7 @@
 #modalContainer {
   --modal-background: var(--black);
   --modal-text: var(--white);
-  --modal-accent-color: var(--bright-green);
+  --modal-accent-color: var(--bright-blue);
 
   position: fixed;
   top: 0;
@@ -100,5 +100,4 @@
 
 .modalButton.mainAction {
   background-color: var(--modal-accent-color);
-  color: var(--modal-background);
 }

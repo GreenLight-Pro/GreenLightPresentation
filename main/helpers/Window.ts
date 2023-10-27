@@ -38,6 +38,22 @@ export class Window {
     this.window.on('close', () => { this.saveState(); });
     this.window.on('blur', () => { this.window.webContents.send('window.state.blur'); });
     this.window.on('focus', () => { this.window.webContents.send('window.state.focus'); });
+
+    this.window.webContents.on('before-input-event', (_event, input) => {
+      if (input.control && input.shift && input.key.toLowerCase() === 'i') {
+        if (this.backend.isProduction()) return;
+        this.window.webContents.toggleDevTools();
+        _event.preventDefault();
+      }
+      if (input.control && input.shift && input.key.toLowerCase() === 'r') {
+        if (this.backend.isProduction()) return;
+        this.window.webContents.reload();
+        _event.preventDefault();
+      }
+      if (input.key.toLowerCase() === 'tab') {
+        _event.preventDefault();
+      }
+    });
   }
 
   public restore(): void {

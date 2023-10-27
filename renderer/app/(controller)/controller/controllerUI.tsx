@@ -1,25 +1,29 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { modalBuilder } from "../../components/modal/modal";
 import { useRouter } from "next/navigation";
 import styles from './controllerUI.module.css';
 
 export default function ControllerUI() {
   const router = useRouter();
-  const closeModal = modalBuilder(
-    (<h1>Do you really wanna exit the app? (Any unsaved progress will be lost!)</h1>),
-    'Yes',
-    () => { ((window as any).ipc)?.send('app.stop.answer', true); return true; },
-    () => { ((window as any).ipc)?.send('app.stop.answer', false); },
-    true
-  );
+  const closeModal = modalBuilder({
+    html: (<h1>Do you really wanna exit the app? (Any unsaved progress will be lost!)</h1>),
+    submitText: 'Yes',
+    onSubmit: () => { ((window as any).ipc)?.send('app.stop.answer', true); },
+    cancelable: true
+  });
 
-  const stopPresentingModal = modalBuilder(
-    (<h1>Do you really wanna exit the app? (Any unsaved progress will be lost!)</h1>),
-    'Yes',
-    () => { ((window as any).ipc)?.send('exhibition.stop'); router.push('/home'); return true;},
-    () => {},
-    true
-  );
+  const stopPresentingModal = modalBuilder({
+    html: (<h1>Do you really wanna exit the presentation? (Any unsaved progress will be lost!)</h1>),
+    submitText: 'Yes',
+    onSubmit: () => { ((window as any).ipc)?.send('exhibition.stop'); router.push('/home'); return true;},
+    cancelable: true
+  });
+
+  useEffect(() => {
+    ((window as any).ipc)?.on('app.stop.ask', () => {
+      closeModal.show();
+    });
+  });
 
   return (<div id={styles.controllerPage}>
     {stopPresentingModal.html}

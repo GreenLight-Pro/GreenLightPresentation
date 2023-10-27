@@ -1,4 +1,5 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
+import Store from 'electron-store';
 
 const handler = {
   send(channel: string, value: unknown): void {
@@ -28,6 +29,26 @@ const handler = {
   },
 };
 
+const store = {
+  createStore(options: any): {
+    get: (key: string) => any;
+    set: (key: string, value: any) => void;
+    delete: (key: string) => void;
+    clear: () => void;
+  } {
+    const createdStore = new Store(options);
+
+    return {
+      get: (key: string): any => { return createdStore.get(key); },
+      set: (key: string, value: any) => createdStore.set(key, value),
+      delete: (key: string) => createdStore.delete(key),
+      clear: () => createdStore.clear(),
+    };
+  },
+};
+
+contextBridge.exposeInMainWorld('store', store);
 contextBridge.exposeInMainWorld('ipc', handler);
 
 export type IpcHandler = typeof handler
+export type BackendStore = typeof store

@@ -1,4 +1,4 @@
-import { app, IpcMainEvent, globalShortcut, ipcMain } from 'electron';
+import { app, IpcMainEvent, ipcMain } from 'electron';
 import { Logger } from '@promisepending/logger.js';
 import { BaseEventStructure } from './structures';
 import { Window } from './helpers';
@@ -53,16 +53,6 @@ export class Backend {
     });
     this.controllerWindow.windowInstance.removeMenu();
     this.controllerWindow.loadURL('/home');
-
-    globalShortcut.register('Control+Shift+I', () => {
-      if (this.isProd) return false;
-      this.controllerWindow.windowInstance.webContents.toggleDevTools();
-    });
-
-    globalShortcut.register('Control+Shift+R', () => {
-      if (this.isProd) return false;
-      this.controllerWindow.windowInstance.reload();
-    });
 
     this.controllerWindow.windowInstance.on('close', (event: IpcMainEvent) => {
       if (this.exhibitionWindow && !this.exhibitionWindow.windowInstance.isDestroyed()) {
