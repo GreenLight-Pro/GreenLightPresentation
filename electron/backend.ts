@@ -1,15 +1,21 @@
 import { app, IpcMainEvent, ipcMain } from 'electron';
 import { Logger } from '@promisepending/logger.js';
 import { BaseEventStructure } from './structures';
+import isDev from 'electron-is-dev';
+import { createServer } from 'http';
 import { Window } from './helpers';
 import serve from 'electron-serve';
 import { events } from './events';
+// eslint-disable-next-line n/no-deprecated-api
+import { parse } from 'url';
+import next from 'next';
+import path from 'path';
 
 export class Backend {
   private readonly isProd: boolean = process.env.NODE_ENV === 'production';
+  private controllerWindow: Window | null = null;
+  private exhibitionWindow: Window | null = null;
   private logger: Logger;
-  private controllerWindow: Window;
-  private exhibitionWindow: Window;
 
   public static main(logger?: Logger): Backend {
     return new Backend(logger);
@@ -52,13 +58,15 @@ export class Backend {
       minHeight: 600,
     });
     this.controllerWindow.windowInstance.removeMenu();
-    this.controllerWindow.loadURL('/home');
+    // this.controllerWindow.loadURL('/home');
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     this.controllerWindow.windowInstance.on('close', (event: IpcMainEvent) => {
       if (this.exhibitionWindow && !this.exhibitionWindow.windowInstance.isDestroyed()) {
         event.preventDefault();
         // Ask user if he really wants to close the application
-        this.controllerWindow.windowInstance.webContents.send('app.stop.ask');
+        this.controllerWindow!.windowInstance.webContents.send('app.stop.ask');
         this.logger.debug('Controller window close event received');
       }
     });
@@ -69,6 +77,28 @@ export class Backend {
       }
       process.exit(0);
     });
+
+    this.logger.info(path.resolve(app.getAppPath(), 'renderer'));
+
+    const nextApp = next({
+      dev: isDev,
+      dir: path.resolve(app.getAppPath(), 'renderer'),
+    });
+    const requestHandler = nextApp.getRequestHandler();
+
+    // Build the renderer code and watch the files
+    await nextApp.prepare();
+
+    this.logger.info('> Starting on http://localhost:' + (process.argv[2] || 3000));
+    // Create a new native HTTP server (which supports hot code reloading)
+    createServer((req: any, res: any) => {
+      const parsedUrl = parse(req.url, true);
+      requestHandler(req, res, parsedUrl);
+    }).listen(process.argv[2] || 3000, () => {
+      this.logger.info('> Ready on http://localhost:' + (process.argv[2] || 3000));
+    });
+
+    this.controllerWindow.loadURL('/home');
   }
 
   private async registerEvents(): Promise<void> {
@@ -95,19 +125,19 @@ export class Backend {
     return this.logger;
   }
 
-  public getControllerWindow(): Window {
+  public getControllerWindow(): Window | null {
     return this.controllerWindow;
   }
 
-  public getExhibitionWindow(): Window {
+  public getExhibitionWindow(): Window | null {
     return this.exhibitionWindow;
   }
 
-  public setControllerWindow(window: Window): void {
+  public setControllerWindow(window: Window | null): void {
     this.controllerWindow = window;
   }
 
-  public setExhibitionWindow(window: Window): void {
+  public setExhibitionWindow(window: Window | null): void {
     this.exhibitionWindow = window;
   }
 

@@ -5,11 +5,13 @@ artifactName: SMP-${os}-${arch}-${version}.${ext}
 directories:
   output: dist
   buildResources: resources
+asar: true
 files:
   - from: .
     filter:
       - package.json
-      - app
+      - main
+      - renderer
 win:
   target:
     - target: nsis

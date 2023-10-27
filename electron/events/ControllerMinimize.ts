@@ -8,7 +8,7 @@ export class ControllerMinimize extends BaseEventStructure {
   }
 
   override async execute(receivedEvent: IpcMainEvent): Promise<void> {
-    this.backend.getControllerWindow().minimize();
+    this.backend.getControllerWindow()!.minimize();
     receivedEvent.reply('exibition.minimize.done');
   }
 }

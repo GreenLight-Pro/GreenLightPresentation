@@ -8,7 +8,7 @@ export class Window {
   private name: string;
   private options: BrowserWindowConstructorOptions;
   private store: Store;
-  private state: Rectangle;
+  private state: Rectangle | null = null;
   private window: BrowserWindow;
   private backend: Backend;
 
@@ -28,7 +28,7 @@ export class Window {
       webPreferences: {
         nodeIntegration: true,
         contextIsolation: true,
-        preload: path.join(__dirname, 'preload.js'),
+        preload: path.join(__dirname, '..', 'preload.js'),
         ...options.webPreferences,
       },
     };
@@ -39,14 +39,14 @@ export class Window {
     this.window.on('blur', () => { this.window.webContents.send('window.state.blur'); });
     this.window.on('focus', () => { this.window.webContents.send('window.state.focus'); });
 
-    this.window.webContents.on('before-input-event', (_event, input) => {
+    this.window.webContents.on('before-input-event', (_event: any, input: any) => {
       if (input.control && input.shift && input.key.toLowerCase() === 'i') {
-        if (this.backend.isProduction()) return;
+        // if (this.backend.isProduction()) return;
         this.window.webContents.toggleDevTools();
         _event.preventDefault();
       }
       if (input.control && input.shift && input.key.toLowerCase() === 'r') {
-        if (this.backend.isProduction()) return;
+        // if (this.backend.isProduction()) return;
         this.window.webContents.reload();
         _event.preventDefault();
       }
@@ -73,10 +73,10 @@ export class Window {
 
   public windowWithinBounds(bounds: Rectangle): boolean {
     return (
-      this.state.x >= bounds.x &&
-      this.state.y >= bounds.y &&
-      this.state.x + this.state.width <= bounds.x + bounds.width &&
-      this.state.y + this.state.height <= bounds.y + bounds.height
+      this.state!.x >= bounds.x &&
+      this.state!.y >= bounds.y &&
+      this.state!.x + this.state!.width <= bounds.x + bounds.width &&
+      this.state!.y + this.state!.height <= bounds.y + bounds.height
     );
   }
 
@@ -91,7 +91,7 @@ export class Window {
   }
 
   public ensureVisibleOnSomeDisplay(): void {
-    const visible = screen.getAllDisplays().some((display) => {
+    const visible = screen.getAllDisplays().some((display: any) => {
       return this.windowWithinBounds(display.bounds);
     });
     if (!visible) {
@@ -102,15 +102,15 @@ export class Window {
   }
 
   public moveTo(x: number, y: number): void {
-    this.state.x = x;
-    this.state.y = y;
+    this.state!.x = x;
+    this.state!.y = y;
     this.window.setPosition(x, y, false);
     return this.saveState();
   }
 
   public saveState(): void {
     if (!this.window.isMinimized() && !this.window.isMaximized()) {
-      Object.assign(this.state, this.getCurrentPosition());
+      Object.assign(this.state!, this.getCurrentPosition());
     }
     return this.store.set(this.key, this.state);
   }
@@ -158,12 +158,7 @@ export class Window {
    * @returns A promise that resolves when the URL is loaded.
    **/
   public async loadURL(url: string): Promise<void> {
-    if (this.backend.isProduction()) {
-      return this.window.loadURL(`app://.${url}.html`);
-    } else {
-      const port = process.argv[2];
-      return this.window.loadURL(`http://localhost:${port}${url}`);
-    }
+    return this.window.loadURL(`http://localhost:${process.argv[2] || 3000}${url}`);
   }
 
   get windowInstance(): BrowserWindow {

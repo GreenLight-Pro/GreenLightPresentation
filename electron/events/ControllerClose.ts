@@ -8,7 +8,7 @@ export class ControllerClose extends BaseEventStructure {
   }
 
   override async execute(receivedEvent: IpcMainEvent): Promise<void> {
-    this.backend.getControllerWindow().close();
+    this.backend.getControllerWindow()!.close();
     receivedEvent.reply('exibition.close.done');
   }
 }

@@ -49,6 +49,8 @@ export class StartExhibition extends BaseEventStructure {
 
     await exhibitionWindow.loadURL('/exhibition');
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore(2339)
     exhibitionWindow.windowInstance.on('close', (event: IpcMainEvent) => {
       this.backend.getLogger().debug('Exhibition window close event received');
       this.handleClose(event, exhibitionWindow);
@@ -99,11 +101,11 @@ export class StartExhibition extends BaseEventStructure {
 
       // Ensure that the controller windows is not on the same screen as the exhibition window
       const controllerWindow = this.backend.getControllerWindow();
-      const controllerScreen = screen.getDisplayNearestPoint({ x: controllerWindow.getCurrentPosition().x, y: controllerWindow.getCurrentPosition().y });
+      const controllerScreen = screen.getDisplayNearestPoint({ x: controllerWindow!.getCurrentPosition().x, y: controllerWindow!.getCurrentPosition().y });
       if (controllerScreen.id === selectedDisplay.id) {
         this.backend.getLogger().warn('The controller window is on the same screen as the exhibition window!');
         const anyOtherScreen = displays.find((display: Display) => display.id !== screenId);
-        controllerWindow.windowInstance.setBounds(anyOtherScreen.bounds);
+        controllerWindow!.windowInstance.setBounds(anyOtherScreen!.bounds);
       }
     } else {
       exhibitionWindow.windowInstance.setResizable(false);

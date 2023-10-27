@@ -8,11 +8,11 @@ export class ControllerMaximize extends BaseEventStructure {
   }
 
   override async execute(receivedEvent: IpcMainEvent): Promise<void> {
-    if (this.backend.getControllerWindow().windowInstance.isMaximized()) {
-      this.backend.getControllerWindow().unmaximize();
+    if (this.backend.getControllerWindow()!.windowInstance.isMaximized()) {
+      this.backend.getControllerWindow()!.unmaximize();
       receivedEvent.reply('exibition.maximize.done.unmaximized');
     } else {
-      this.backend.getControllerWindow().maximize();
+      this.backend.getControllerWindow()!.maximize();
       receivedEvent.reply('exibition.maximize.done.maximized');
     }
   }

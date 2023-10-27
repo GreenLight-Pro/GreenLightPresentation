@@ -12,25 +12,35 @@
     "SpaceFox__"
   ],
   "license": "GPL-3.0",
-  "main": "app/background.js",
+  "main": "main/background.js",
   "scripts": {
-    "dev": "nextron",
-    "build": "nextron build",
-    "postinstall": "electron-builder install-app-deps",
+    "clean": "rimraf dist main renderer/out renderer/.next",
+    "dev": "npm run build-electron && electron .",
+    "build-renderer": "next build renderer",
+    "build-electron": "tsc -p electron/",
+    "build": "npm run build-renderer && npm run build-electron",
+    "pack-app": "npm run build && electron-builder --dir",
+    "dist": "npm run clean && npm run build && electron-builder",
+    "type-check": "tsc -p ./renderer/tsconfig.json && tsc -p ./electron/tsconfig.json",
     "eslint:fix": "eslint --fix --ext .js,.ts,.tsx ."
   },
   "dependencies": {
     "@promisepending/logger.js": "^1.1.1",
+    "electron-is-dev": "^2.0.0",
+    "electron-next": "^3.1.5",
     "electron-serve": "^1.1.0",
-    "electron-store": "^8.1.0"
+    "electron-store": "^8.1.0",
+    "next": "^13.5.6",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^14.0.0",
-    "@types/node": "^20.8.9",
+    "@types/node": "^18.18.7",
     "@types/react": "^18.2.33",
     "@typescript-eslint/eslint-plugin": "^6.9.0",
     "@typescript-eslint/parser": "^6.9.0",
-    "electron": "^21.4.4",
+    "electron": "^27.0.2",
     "electron-builder": "^24.6.4",
     "eslint": "^8.52.0",
     "eslint-config-standard": "^17.1.0",
@@ -38,10 +48,6 @@
     "eslint-plugin-import": "^2.29.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.1.1",
-    "next": "^14.0.0",
-    "nextron": "file:../Nextron/nextron-8.12.0.tgz",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
     "typescript": "^5.2.2"
   }
 }

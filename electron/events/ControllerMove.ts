@@ -17,7 +17,7 @@ export class ControllerMove extends BaseEventStructure {
       return;
     }
 
-    const controller = this.backend.getControllerWindow().windowInstance;
+    const controller = this.backend.getControllerWindow()!.windowInstance;
 
     controller.setPosition(window.bounds.x, window.bounds.y, true);
 
