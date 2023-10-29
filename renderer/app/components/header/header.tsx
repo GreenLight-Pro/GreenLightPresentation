@@ -20,7 +20,7 @@ export default function Header(): React.ReactElement {
               ((window as any).ipc)?.send('controller.maximize');
             }}></div>
             <div id={styles.close} onClick={(): void => {
-              ((window as any).ipc)?.send('app.close');
+              ((window as any).ipc)?.send('app.stop');
             }}></div>
           </div>
         </div>
