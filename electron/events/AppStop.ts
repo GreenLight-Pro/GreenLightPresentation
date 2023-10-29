@@ -1,12 +1,12 @@
 import { BaseEventStructure } from '../structures';
 import { Backend } from '../backend';
 
-export class ControllerMinimize extends BaseEventStructure {
+export class AppStop extends BaseEventStructure {
   constructor(backend: Backend) {
-    super('controller.minimize', backend, false);
+    super('app.stop', backend, false);
   }
 
   override async execute(): Promise<void> {
-    this.backend.getMainWindow()!.minimize();
+    this.backend.getMainWindow()!.close();
   }
 }

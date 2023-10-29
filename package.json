@@ -1,7 +1,7 @@
 {
   "private": true,
-  "name": "spin-media-player",
-  "description": "A powerful media player",
+  "name": "greenlight-presentation",
+  "description": "A powerful media player, created for theater presentations and more.",
   "version": "2.0.0-ALPHA.0",
   "author": {
     "name": "PromisePending Team",
@@ -30,9 +30,10 @@
     "electron-next": "^3.1.5",
     "electron-serve": "^1.1.0",
     "electron-store": "^8.1.0",
-    "next": "^13.5.6",
+    "next": "^14.0.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "tcp-port-used": "^1.0.2"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^14.0.0",

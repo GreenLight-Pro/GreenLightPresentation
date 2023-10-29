@@ -1,19 +1,21 @@
 import { ControllerMaximize } from './ControllerMaximize';
 import { ControllerMinimize } from './ControllerMinimize';
-import { ControllerClose } from './ControllerClose';
 import { StartExhibition } from './StartExhibition';
 import { ControllerMove } from './ControllerMove';
 import { StopExhibition } from './StopExhibition';
 import { AppStopAnswer } from './AppStopAnswer';
-import { GetScreens } from './GetScreens';
+import { AppGetScreens } from './AppGetScreens';
+import { AppOpenDialog } from './AppOpenDialog';
+import { AppStop } from './AppStop';
 
 export const events = [
   ControllerMaximize,
   ControllerMinimize,
-  ControllerClose,
   StartExhibition,
   ControllerMove,
   StopExhibition,
   AppStopAnswer,
-  GetScreens,
+  AppGetScreens,
+  AppOpenDialog,
+  AppStop,
 ];

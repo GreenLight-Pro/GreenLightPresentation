@@ -1,7 +1,7 @@
 appId: com.allonsve.promisepending.spinapps.spinmusicplayer
-productName: Spin Music Player
-copyright: Copyright © 2019 - 2023 SpinApps
-artifactName: SMP-${os}-${arch}-${version}.${ext}
+productName: GreenLight Presentation
+copyright: Copyright © 2019 - 2023 GreenLightPro
+artifactName: GLP-${os}-${arch}-${version}.${ext}
 directories:
   output: dist
   buildResources: resources
@@ -12,6 +12,7 @@ files:
       - package.json
       - main
       - renderer
+icon: icon.png
 win:
   target:
     - target: nsis

@@ -1,9 +1,9 @@
 'use client';
 
 import selectionModal, { ISelectElement } from '../../components/selectionModal/selectionModal';
+import React, { useEffect, useState } from 'react';
 import styles from './controller.module.css';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { redirect } from 'next/navigation';
 import ControllerUI from './controllerUI';
 
 interface IScreen {
@@ -15,22 +15,19 @@ interface IScreen {
   }
 }
 
-export default function Controller() {
-  const router = useRouter();
-  const [screens, setScreens] = useState<IScreen[]>([]);
-  const [selected, setSelected] = useState<boolean>(false);
+export default function Controller(): React.ReactElement {
   const [selectedExhibition, setSelectedExhibition] = useState<any>({});
+  const [selected, setSelected] = useState<boolean>(false);
+  const [screens, setScreens] = useState<IScreen[]>([]);
 
   // app.getScreens.return
 
   const chooseControllerScreen = selectionModal({
-    items: screens.filter((item) => item.id !== selectedExhibition.id).map((item) => {
-      return {
-        id: item.id,
-        title: item.name,
-        description: `${item.size.width}x${item.size.height}`
-      }
-    }) as unknown as ISelectElement[],
+    items: screens.filter((item) => item.id !== selectedExhibition.id).map((item) => ({
+      id: item.id,
+      title: item.name,
+      description: `${item.size.width}x${item.size.height}`,
+    })) as ISelectElement[],
     prompt: 'Selecione uma Tela de Controle',
     storageKey: 'controllerScreen',
     cancelable: false,
@@ -42,53 +39,45 @@ export default function Controller() {
   });
 
   const chooseExibitionScreen = selectionModal({
-    items: screens.map((item) => {
-      return {
-        id: item.id,
-        title: item.name,
-        description: `${item.size.width}x${item.size.height}`
-      }
-    }) as unknown as ISelectElement[],
+    items: screens.map((item) => ({
+      id: item.id,
+      title: item.name,
+      description: `${item.size.width}x${item.size.height}`,
+    })) as ISelectElement[],
     prompt: 'Selecione uma Tela de Exibição',
     storageKey: 'exhibitionScreen',
     cancelable: false,
     callback: (selectedScreen) => {
       setSelectedExhibition(selectedScreen);
-      if (screens.length === 2) {
-        setSelected(true);
-        const otherScreen = screens.filter((item) => item.id !== selectedScreen.id)[0];
-        ((window as any).ipc)?.send('controller.move', otherScreen.id);
-        ((window as any).ipc)?.send('exhibition.start', selectedScreen.id);
-      }
-      else chooseControllerScreen.show();
+      if (screens.length !== 2) return chooseControllerScreen.show();
+
+      ((window as any).ipc)?.send('controller.move', screens.filter((item) => item.id !== selectedScreen.id)[0].id);
+      ((window as any).ipc)?.send('exhibition.start', selectedScreen.id);
+      setSelected(true);
     },
   });
 
   // app.getScreens
   useEffect(() => {
-    ((window as any).ipc)?.once('app.getScreens.return', (event: any[]) => {
-      event = event[0];
-      if (!event || !event.length) {
-        alert('No screens found!');
-        return router.push('/home');
-      }
+    const ipc = (window as any)?.ipc;
+    const alert = (window as any)?.alert;
 
-      ((window as any).ipc)?.on('exhibition.start.error', () => {
-        alert(`Error starting exhibition screen!`);
-      });
+    ipc?.once('app.getScreens.return', ([data]: any[]) => {
+      if (!data || !data.length) return redirect('/home');
 
-      setScreens(event);
-      if (event.length < 2) {
-        ((window as any).ipc)?.send('exhibition.start', event[0].id);
-      } else if (!selectedExhibition) {
-        chooseExibitionScreen.show();
-      }
+      ipc?.on('exhibition.start.error', () => alert(`Error starting exhibition screen!`));
+
+      setScreens(data);
+      if (data.length < 2) ipc?.send('exhibition.start', data[0].id);
+      else if (!selectedExhibition) chooseExibitionScreen.show();
     });
-    
-    ((window as any).ipc)?.send('app.getScreens');
+
+    ipc?.send('app.getScreens');
   }, []);
 
-  return screens.length < 2 || selected ? <ControllerUI /> : <div id={styles.modalsScreen}>
+  return screens.length < 2 || selected
+    ? <ControllerUI />
+    : <div id={styles.modalsScreen}>
       {chooseControllerScreen.html}
       {chooseExibitionScreen.html}
     </div>;

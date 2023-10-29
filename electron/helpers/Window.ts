@@ -158,7 +158,7 @@ export class Window {
    * @returns A promise that resolves when the URL is loaded.
    **/
   public async loadURL(url: string): Promise<void> {
-    return this.window.loadURL(`http://localhost:${process.argv[2] || 3000}${url}`);
+    return this.window.loadURL(`http://localhost:${process.env.SMP_PORT || 3000}${url}`);
   }
 
   get windowInstance(): BrowserWindow {

@@ -3,7 +3,7 @@ import Header from '../components/header/header';
 
 import styles from './general.module.css';
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }): React.ReactElement {
   return (
     <>
       <Header />
@@ -11,5 +11,5 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         {children}
       </div>
     </>
-  )
+  );
 }

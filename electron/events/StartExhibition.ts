@@ -100,7 +100,7 @@ export class StartExhibition extends BaseEventStructure {
       }
 
       // Ensure that the controller windows is not on the same screen as the exhibition window
-      const controllerWindow = this.backend.getControllerWindow();
+      const controllerWindow = this.backend.getMainWindow();
       const controllerScreen = screen.getDisplayNearestPoint({ x: controllerWindow!.getCurrentPosition().x, y: controllerWindow!.getCurrentPosition().y });
       if (controllerScreen.id === selectedDisplay.id) {
         this.backend.getLogger().warn('The controller window is on the same screen as the exhibition window!');

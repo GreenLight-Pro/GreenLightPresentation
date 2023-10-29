@@ -1,5 +1,4 @@
 import { BaseEventStructure } from '../structures';
-import { IpcMainEvent } from 'electron';
 import { Backend } from '../backend';
 
 export class ControllerMaximize extends BaseEventStructure {
@@ -7,13 +6,11 @@ export class ControllerMaximize extends BaseEventStructure {
     super('controller.maximize', backend, false);
   }
 
-  override async execute(receivedEvent: IpcMainEvent): Promise<void> {
-    if (this.backend.getControllerWindow()!.windowInstance.isMaximized()) {
-      this.backend.getControllerWindow()!.unmaximize();
-      receivedEvent.reply('exibition.maximize.done.unmaximized');
+  override async execute(): Promise<void> {
+    if (this.backend.getMainWindow()!.windowInstance.isMaximized()) {
+      this.backend.getMainWindow()!.unmaximize();
     } else {
-      this.backend.getControllerWindow()!.maximize();
-      receivedEvent.reply('exibition.maximize.done.maximized');
+      this.backend.getMainWindow()!.maximize();
     }
   }
 }

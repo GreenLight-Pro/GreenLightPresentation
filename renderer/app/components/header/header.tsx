@@ -1,30 +1,30 @@
 'use client';
 
+import React from 'react';
 import styles from './header.module.css';
-import { useEffect } from 'react';
 
-export default function Header() {
+export default function Header(): React.ReactElement {
   return (
     <div id={styles.headerTop}>
       <div id={styles.draggableRegion}></div>
       <div id={styles.headerContent}>
         <div id={styles.leftSide}>
-          <h1 id={styles.appTitle}>SpinMusicPlayer</h1>
+          <h1 id={styles.appTitle}>GreenLight Presentation</h1>
         </div>
         <div id={styles.rightSide}>
           <div id={styles.actionButtons}>
-            <div id={styles.minimize} onClick={() => {
+            <div id={styles.minimize} onClick={(): void => {
               ((window as any).ipc)?.send('controller.minimize');
             }}></div>
-            <div id={styles.maximize} onClick={() => {
+            <div id={styles.maximize} onClick={(): void => {
               ((window as any).ipc)?.send('controller.maximize');
             }}></div>
-            <div id={styles.close} onClick={() => {
-              ((window as any).ipc)?.send('controller.close');
+            <div id={styles.close} onClick={(): void => {
+              ((window as any).ipc)?.send('app.close');
             }}></div>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -2,7 +2,7 @@ import { BaseEventStructure } from '../structures';
 import { IpcMainEvent, screen } from 'electron';
 import { Backend } from '../backend';
 
-export class GetScreens extends BaseEventStructure {
+export class AppGetScreens extends BaseEventStructure {
   constructor(backend: Backend) {
     super('app.getScreens', backend, false);
   }

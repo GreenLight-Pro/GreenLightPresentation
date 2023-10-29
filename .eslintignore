@@ -1,5 +1,6 @@
 .vscode/
 node-modules/
-app/
-**/*.js
+.next/
 next-env.d.ts
+main/
+*.js

@@ -10,6 +10,6 @@ export class AppStopAnswer extends BaseEventStructure {
   override async execute(receivedEvent: IpcMainEvent, ...args: any[]): Promise<void> {
     if (!args[0]) return;
     receivedEvent.reply('goodbye');
-    this.backend.getControllerWindow()!.destroy();
+    this.backend.getMainWindow()!.destroy();
   }
 }

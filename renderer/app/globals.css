@@ -31,7 +31,7 @@ img {
 
 html, body {
   font-size: 16px;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Open Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
   color: var(--gray-800);
   -webkit-user-select: none;
   user-select: none;
@@ -39,6 +39,10 @@ html, body {
   width: 100vw;
   height: 100vh;
   overflow-x: hidden;
+}
+
+html::-webkit-scrollbar {
+  display: none;
 }
 
 #appContainer {
