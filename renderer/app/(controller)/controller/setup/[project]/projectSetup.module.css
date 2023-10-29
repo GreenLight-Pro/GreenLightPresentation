@@ -1,5 +1,5 @@
 #setupPage {
-    --setupPage-background: var(--black);
+    --setupPage-background: var(--gray-900);
     --setupPage-color: var(--white);
 
     background: var(--setupPage-background);

@@ -13,8 +13,8 @@ import path from 'path';
 
 export class Backend {
   private readonly isProd: boolean = process.env.NODE_ENV === 'production';
-  private mainWindow: Window | null = null;
   private exhibitionWindow: Window | null = null;
+  private mainWindow: Window | null = null;
   private logger: Logger;
 
   public static main(logger?: Logger): Backend {
@@ -44,8 +44,8 @@ export class Backend {
     });
 
     app.once('ready', async () => {
-      await this.start();
       await this.registerEvents();
+      await this.start();
     });
   }
 
@@ -57,8 +57,8 @@ export class Backend {
       minWidth: 800,
       minHeight: 600,
     });
+
     this.mainWindow.windowInstance.removeMenu();
-    // this.controllerWindow.loadURL('/home');
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -67,7 +67,7 @@ export class Backend {
         event.preventDefault();
         // Ask user if he really wants to close the application
         this.mainWindow!.windowInstance.webContents.send('app.stop.ask');
-        this.logger.debug('Controller window close event received');
+        this.logger.debug('Main window close event received');
       }
     });
 
@@ -77,8 +77,6 @@ export class Backend {
       }
       process.exit(0);
     });
-
-    this.logger.info(path.resolve(app.getAppPath(), 'renderer'));
 
     const nextApp = next({
       dev: isDev,

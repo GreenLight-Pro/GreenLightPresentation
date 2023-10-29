@@ -1,7 +1,8 @@
 #modalContainer {
-  --modal-background: var(--black);
+  --modal-background: var(--gray-700);
   --modal-text: var(--white);
-  --modal-accent-color: var(--bright-blue);
+  --accent-color: var(--bright-blue);
+  --negate-color: var(--gray-900);
 
   position: fixed;
   top: 0;
@@ -62,7 +63,7 @@
   position: absolute;
   width: 100%;
   height: 25%;
-  background-color: var(--modal-text);
+  background-color: var(--negate-color);
   transform: rotate(45deg);
   border-radius: 100vmax;
   transition: transform 0.2s ease-in-out, background 0.2s ease-in-out;
@@ -73,19 +74,19 @@
 }
 
 #closeModalButton:hover #closePart {
-  transform: rotate(-45deg);
-  background: var(--accent-color);
+  transform: rotate(135deg);
+  background: var(--modal-text);
 }
 
 #closeModalButton:hover #closePart:nth-child(2) {
-  transform: rotate(225deg);
+  transform: rotate(45deg);
 }
 
 .modalButton {
   width: 100%;
   border-radius: var(--border-radius);
   border: 0;
-  background: var(--modal-background);
+  background: var(--negate-color);
   color: var(--modal-text);
   box-shadow: 0 2px 4px rgba(0,0,0,0.5);
   cursor: pointer;
@@ -95,9 +96,9 @@
 }
 
 .modalButton:hover {
-  filter: brightness(0.5);
+  filter: contrast(1.5);
 }
 
 .modalButton.mainAction {
-  background-color: var(--modal-accent-color);
+  background-color: var(--accent-color);
 }

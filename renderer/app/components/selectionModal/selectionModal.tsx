@@ -47,7 +47,7 @@ export default function selectionModal({ items, prompt, cancelable, storageKey, 
       if (!selectedItem) return;
 
       const storedData: Store = (window as any).store.createStore({
-        name: 'MODAL-STORE-' + storageKey,
+        name: storageKey,
       });
 
       storedData.set(storageKey, selectedItem);
@@ -63,7 +63,7 @@ export default function selectionModal({ items, prompt, cancelable, storageKey, 
 
     // check if storage key has any data
     const storedData: Store = (window as any).store.createStore({
-      name: 'MODAL-STORE-' + storageKey,
+      name: storageKey,
     });
 
     const storedKey = storedData.get(storageKey) as ISelectElement;

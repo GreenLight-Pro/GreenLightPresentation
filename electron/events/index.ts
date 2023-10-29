@@ -1,3 +1,4 @@
+import { AppGenerateThumbnail } from './AppGenerateThumbnail';
 import { ControllerMaximize } from './ControllerMaximize';
 import { ControllerMinimize } from './ControllerMinimize';
 import { StartExhibition } from './StartExhibition';
@@ -9,6 +10,7 @@ import { AppOpenDialog } from './AppOpenDialog';
 import { AppStop } from './AppStop';
 
 export const events = [
+  AppGenerateThumbnail,
   ControllerMaximize,
   ControllerMinimize,
   StartExhibition,

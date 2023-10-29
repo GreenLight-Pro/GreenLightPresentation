@@ -1,5 +1,5 @@
 #headerTop {
-  --header-background: var(--black);
+  --header-background: var(--gray-800);
   --header-text: var(--white);
   --header-minimaze-button: var(--bright-yellow);
   --header-maximaze-button: var(--bright-green);
@@ -8,7 +8,7 @@
   background-color: var(--header-background);
   color: var(--white);
   height: var(--header-height);
-  padding: 0 1rem;
+  padding: 0 0.5rem;
   z-index: 100;
   display: flex;
   justify-content: center;
@@ -57,6 +57,11 @@
   aspect-ratio: 1;
   border-radius: 50%;
   cursor: pointer;
+  transition: filter 0.25s ease;
+}
+
+#minimize:hover, #maximize:hover, #close:hover {
+  filter: contrast(1.5) saturate(1.5) brightness(1.5);
 }
 
 #minimize {

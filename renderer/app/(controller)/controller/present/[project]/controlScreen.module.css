@@ -1,0 +1,63 @@
+#controlScreen {
+  --controllerPage-background: var(--gray-900);
+  --controllerPage-color: var(--white);
+
+  background: var(--controllerPage-background);
+  color: var(--controllerPage-color);
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  overflow: hidden;
+}
+
+#leftPanel {
+  --leftPanel-background: var(--gray-800);
+  --leftPanel-color: var(--white);
+
+  background: var(--leftPanel-background);
+  color: var(--leftPanel-color);
+  border-right: 1px solid var(--leftPanel-color);
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.2s ease-in-out;
+  width: 20%;
+  height: 100%;
+}
+
+#scenesPanel {
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.2s ease-in-out;
+  width: 100%;
+  height: 100%;
+  border-bottom: 1px solid var(--leftPanel-color);
+}
+
+#fileExplorer {
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.2s ease-in-out;
+  width: 100%;
+  height: 100%;
+}
+
+#mainRegion {
+  width: 100%;
+  height: 100%;
+}

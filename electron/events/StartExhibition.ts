@@ -42,7 +42,6 @@ export class StartExhibition extends BaseEventStructure {
     if (!this.handlePosition(exhibitionWindow, screenId)) {
       exhibitionWindow.destroy();
       this.backend.setExhibitionWindow(null);
-      this.backend.getLogger().debug(screenId);
       receivedEvent.reply('exhibition.start.error', 'Screen not found');
       return;
     }
@@ -66,7 +65,7 @@ export class StartExhibition extends BaseEventStructure {
     exhibitionWindow.windowInstance.show();
     this.backend.getLogger().debug('FullScreen Enable?: ', exhibitionWindow.windowInstance.isFullScreen());
 
-    receivedEvent.reply('exhibition.start.done');
+    this.backend.getMainWindow()!.windowInstance.focus();
   }
 
   private handleClose(event: IpcMainEvent, exibitionWindow: Window): void {
@@ -78,7 +77,7 @@ export class StartExhibition extends BaseEventStructure {
       this.backend.setExhibitionWindow(null);
       this.backend.getLogger().debug('Close tasks completed');
     } else {
-      this.backend.getLogger().warn('An attempt to close the exibiiton window was made, but it was not from the controller');
+      this.backend.getLogger().warn('An attempt to close the exhibition window was made, but it was not from the controller');
     }
   }
 
@@ -100,12 +99,14 @@ export class StartExhibition extends BaseEventStructure {
       }
 
       // Ensure that the controller windows is not on the same screen as the exhibition window
-      const controllerWindow = this.backend.getMainWindow();
-      const controllerScreen = screen.getDisplayNearestPoint({ x: controllerWindow!.getCurrentPosition().x, y: controllerWindow!.getCurrentPosition().y });
+      const controllerWindow = this.backend.getMainWindow()!;
+      const controllerScreen = screen.getDisplayNearestPoint(controllerWindow.windowInstance.getBounds());
       if (controllerScreen.id === selectedDisplay.id) {
         this.backend.getLogger().warn('The controller window is on the same screen as the exhibition window!');
-        const anyOtherScreen = displays.find((display: Display) => display.id !== screenId);
-        controllerWindow!.windowInstance.setBounds(anyOtherScreen!.bounds);
+        const anyOtherScreen = displays.find((display: Display) => display.id !== screenId)!;
+        controllerWindow.unmaximize();
+        controllerWindow.windowInstance.setPosition(anyOtherScreen.bounds.x, anyOtherScreen.bounds.y);
+        controllerWindow.maximize();
       }
     } else {
       exhibitionWindow.windowInstance.setResizable(false);
